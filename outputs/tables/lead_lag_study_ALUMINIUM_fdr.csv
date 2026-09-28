@@ -1,0 +1,11 @@
+indicator,peak_correlation,optimal_lead_months,corr_lag_0,corr_lag_1,corr_lag_2,corr_lag_3,corr_lag_4,corr_lag_5,corr_lag_6,granger_p_value,granger_lead_lag,statistically_significant,granger_p_fdr,significant_fdr_q010
+Geopolitical Risk (GPR),-0.3252,1,-0.2704,-0.3252,-0.2531,-0.2012,-0.1436,-0.104,-0.0277,0.0117,1,True,0.0334,True
+Copper Price (Base Metals Spillover),0.2448,6,0.1354,0.0886,0.0667,0.0685,0.1041,0.1888,0.2448,0.006,3,True,0.02,True
+Energy Smelting Pressure,-0.2267,6,0.1195,0.1268,0.0961,0.0126,-0.0891,-0.1684,-0.2267,0.0005,3,True,0.0033,True
+China Manufacturing PMI,0.2176,0,0.2176,0.105,0.0275,0.0219,0.0492,0.0333,0.0019,0.268,1,False,0.2978,False
+Maritime Freight (BDI),0.1991,0,0.1991,0.1164,0.0722,0.0673,0.1096,0.1068,0.0758,0.5361,1,False,0.5643,False
+Economic Policy Uncertainty,0.1682,2,0.1199,0.14,0.1682,0.1464,0.1444,0.1223,0.1351,0.1618,2,False,0.2157,False
+USD/INR Exchange Rate,-0.1641,4,-0.0714,-0.0404,-0.0626,-0.137,-0.1641,-0.1356,-0.0524,0.0974,3,True,0.1498,False
+China Coal Price,0.1409,3,0.0227,0.0958,0.1212,0.1409,0.134,0.055,-0.0712,0.1199,1,False,0.1713,False
+Alumina Price Index,0.0875,5,0.0244,0.0761,0.0756,0.0516,0.0663,0.0875,0.063,0.0301,3,True,0.0502,True
+LME Stocks,-0.0777,6,0.005,0.0434,0.0045,0.0061,0.0238,-0.0107,-0.0777,0.0007,3,True,0.0035,True

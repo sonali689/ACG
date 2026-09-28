@@ -1,0 +1,16 @@
+{
+  "material": "aluminium",
+  "n_months": 78,
+  "avg_baseline_price_usd": 2187.86,
+  "avg_smartbuy_price_usd": 2171.04,
+  "price_saving_pct": 0.77,
+  "avg_inventory_days_smartbuy": 48.8,
+  "inventory_days_reduced": -3.8,
+  "saving_per_100cr_spend": 0.77,
+  "working_capital_released_per_100cr": -1.05,
+  "signal_distribution": {
+    "BUY NORMAL": 65,
+    "BUY NOW": 7,
+    "DEFER": 6
+  }
+}

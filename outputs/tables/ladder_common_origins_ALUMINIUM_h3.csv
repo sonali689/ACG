@@ -1,0 +1,10 @@
+model,mape,skill_vs_naive_pct,directional_accuracy_pct,hac_dm_stat,hac_dm_p_value,mean_ensemble_weight
+nbeats,7.34,15.86,68.75,1.755,0.0421,0.1276
+bayesian_ridge,7.84,10.13,59.38,0.958,0.1709,0.1749
+Smart Buy Expanding Ensemble (Zero Leakage),7.9,9.39,71.88,2.245,0.0141,1.0
+elasticnet,8.04,7.81,57.81,0.865,0.1952,0.171
+lightgbm,8.48,2.78,57.81,0.521,0.3021,0.1768
+seasonal_naive,8.53,2.15,62.5,0.267,0.395,0.1413
+naive,8.72,0.0,0.0,0.0,1.0,0.0
+ets,8.74,-0.25,48.44,-0.227,0.5894,0.1309
+lstm,9.28,-6.39,54.69,-0.535,0.7026,0.0775

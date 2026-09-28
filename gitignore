@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# VS Code (keep shared settings, ignore personal)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large raw pulls — regenerate with src/ingestion/downloaders.py
+# (comment these two lines out if you want the repo fully self-contained)
+data/raw/*.xls
+data/raw/*.xlsx
+
+# Never commit credentials
+.env
+*.key

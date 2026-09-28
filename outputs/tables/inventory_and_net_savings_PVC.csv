@@ -1,0 +1,2 @@
+material,n_months,weighted_avg_purchase_price_baseline_usd,weighted_avg_purchase_price_smartbuy_usd,gross_price_saving_pct,gross_spend_saving_per_100cr,baseline_inventory_days,smartbuy_average_inventory_days,inventory_days_change,working_capital_shift_per_100cr,net_saving_after_carry_pct,net_annual_saving_per_100cr
+PVC,78,767.51,743.36,3.15,3.15,45.0,47.3,2.3,0.63,3.01,3.01

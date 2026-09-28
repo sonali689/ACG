@@ -1,0 +1,5 @@
+regime,n_months,ensemble_mape,naive_mape,skill_vs_naive_pct,directional_accuracy_pct,band_coverage_p10_p90_pct,bias_pct
+Calm (2018-2019),24,4.01,4.88,17.77,75.0,79.17,2.25
+COVID Shock (2020),12,9.26,11.13,16.79,75.0,33.33,-2.39
+Spike / Rally (2021-2022 H1),18,12.12,14.24,14.86,88.89,33.33,1.12
+Slide / Normalization (2022 H2-2024),24,5.22,5.49,4.88,58.33,79.17,-1.16

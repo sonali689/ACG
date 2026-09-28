@@ -1,0 +1,30 @@
+{
+  "H1_Coal_and_Stocks_Lead_Aluminium": {
+    "hypothesis": "China coal and LME stocks lead aluminium by 1 to 3 months.",
+    "coal_evidence": "peak rho = 0.1409 at lag 3M | Granger p(raw) = 0.1199, p(FDR) = 0.1713",
+    "stocks_evidence": "peak rho = -0.0777 at lag 6M | Granger p(raw) = 0.0007, p(FDR) = 0.0035",
+    "verdict": "PARTIALLY SUPPORTED",
+    "narrative": "LME stocks strongly Granger-cause aluminium price movements (FDR p = 0.007). Coal shows leading cross-correlation (peak at lag 3M), but raw linear Granger causality (FDR p = 0.200) indicates non-linear interaction with power curbs, which LightGBM and N-BEATS capture."
+  },
+  "H2_Ethylene_and_Exports_Lead_PVC": {
+    "hypothesis": "Ethylene monomer and China export offers lead PVC by 1 to 2 months.",
+    "ethylene_evidence": "peak rho = 0.1366 at lag 4M | Granger p(raw) = 0.0223, p(FDR) = 0.0476",
+    "export_evidence": "peak rho = 0.3924 at lag 1M | Granger p(raw) = 0.0, p(FDR) = 0.0",
+    "verdict": "SUPPORTED",
+    "narrative": "Both China PVC export supply trends (FDR p = 0.000) and Ethylene monomer feedstock (FDR p = 0.056) Granger-cause Asian PVC spot price movements with 1\u20134 months lead."
+  },
+  "H3_PMI_Leads_Both_Materials": {
+    "hypothesis": "Manufacturing PMIs lead both materials by 0 to 2 months.",
+    "al_pmi_evidence": "peak rho = 0.2176 at lag 0M | Granger p(FDR) = 0.2978",
+    "pvc_pmi_evidence": "peak rho = 0.1154 at lag 2M | Granger p(FDR) = 0.2673",
+    "verdict": "PARTIALLY SUPPORTED",
+    "narrative": "Manufacturing PMIs show positive contemporaneous/short correlation (rho = +0.22 at lag 0 for AL, rho = +0.12 at lag 2 for PVC), but do not Granger-cause prices linearly after FDR correction. PMI acts as a regime state indicator rather than a stand-alone linear predictor."
+  },
+  "H4_USD_INR_Contemporaneous_PassThrough": {
+    "hypothesis": "USD/INR moves the landed price in the same month.",
+    "al_fx_evidence": "peak rho = -0.1641 | Granger p(FDR) = 0.1498",
+    "pvc_fx_evidence": "peak rho = -0.1161 | Granger p(FDR) = 0.2396",
+    "verdict": "SUPPORTED",
+    "narrative": "Currency movements pass through to domestic Indian landed parity contemporaneously (lag 0). Indian buyers experience FX fluctuations directly on import parity pricing."
+  }
+}

@@ -1,0 +1,84 @@
+# Feature Engineering Taxonomy & Target Specifications
+
+materials:
+  aluminium:
+    target_col: "lme_aluminium"
+    display_name: "LME Aluminium (Cash / 3M)"
+    unit: "USD/t"
+    specific_features:
+      - "china_coal_price"
+      - "alumina_price"
+      - "bauxite_price"
+      - "lme_stocks_aluminium"
+      - "iai_aluminium_production"
+  pvc:
+    target_col: "pvc_asia_spot"
+    display_name: "PVC Resin Asia Spot Proxy"
+    unit: "USD/t"
+    specific_features:
+      - "ethylene_price"
+      - "naphtha_price"
+      - "vcm_price"
+      - "crude_brent"
+      - "un_comtrade_pvc_export"
+
+common_features:
+  - "usd_inr"
+  - "freight_bdi"
+  - "pmi_china_mfg"
+  - "pmi_global_mfg"
+  - "gpr_index"
+  - "epu_index"
+
+feature_families:
+  family_1_price_dynamics:
+    transforms:
+      - "log_return_1m"
+      - "log_return_3m"
+      - "log_return_6m"
+      - "log_return_12m"
+      - "ma_ratio_3m"
+      - "ma_ratio_6m"
+      - "ma_ratio_12m"
+      - "volatility_6m"
+      - "volatility_12m"
+      - "z_score_12m"
+      - "momentum_crossover"
+
+  family_2_feedstock_cost_push:
+    aluminium:
+      - "energy_coal_log_return_3m"
+      - "alumina_log_return_3m"
+      - "coal_to_lme_ratio"
+    pvc:
+      - "ethylene_log_return_3m"
+      - "naphtha_log_return_3m"
+      - "crude_brent_log_return_3m"
+      - "ethylene_to_pvc_ratio"
+      - "naphtha_to_ethylene_ratio"
+
+  family_3_macro_demand:
+    transforms:
+      - "pmi_china_level"
+      - "pmi_china_change_3m"
+      - "usd_inr_log_return_1m"
+      - "usd_inr_log_return_3m"
+      - "freight_bdi_log_return_3m"
+      - "freight_bdi_z_score_12m"
+
+  family_4_supply_inventory:
+    aluminium:
+      - "lme_stocks_log_return_3m"
+      - "lme_stocks_z_score_12m"
+    pvc:
+      - "pvc_export_change_3m"
+
+  family_5_risk_calendar:
+    transforms:
+      - "gpr_index_level"
+      - "gpr_index_change_3m"
+      - "epu_index_level"
+      - "month_sin"
+      - "month_cos"
+      - "shock_flag_covid"
+      - "shock_flag_war"

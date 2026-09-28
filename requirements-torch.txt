@@ -1,0 +1,4 @@
+# Only needed to RE-TRAIN the LSTM / N-BEATS models.
+# The corrected scorecard, replay, dashboard and deck all read saved
+# predictions and do NOT need torch. Install only if re-running walk_forward.py.
+torch>=2.0

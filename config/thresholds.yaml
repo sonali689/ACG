@@ -1,0 +1,44 @@
+# Acceptance Criteria & Gates for Model Evaluation
+
+gates:
+  naive_gate_required: true
+  min_skill_vs_naive_pct:
+    h1: 10.0
+    h3: 15.0
+    h6: 10.0
+  min_directional_accuracy_pct:
+    h1: 65.0
+    h3: 62.0
+    h6: 58.0
+  band_coverage_target_pct:
+    nominal: 80.0
+    acceptable_range: [75.0, 85.0]
+  bias_tolerance_pct: 1.0
+  dm_test_significance_level: 0.10
+
+decision_rules:
+  default_monthly_carrying_cost_rate: 0.010  # 1.0% per month (~12% WACC + handling)
+  buy_now_threshold_pct: 2.0                 # Expected saving > +2%
+  buy_now_min_pup: 0.60                      # P(up) >= 60%
+  defer_threshold_pct: -2.0                  # Expected saving < -2%
+  defer_min_pdown: 0.60                      # P(down) >= 60%
+  standard_cover_months: 1.5
+  max_forward_cover_months: 3.0
+  min_safety_cover_months: 1.0
+
+regimes:
+  calm:
+    start: "2018-01-01"
+    end: "2019-12-31"
+  covid:
+    start: "2020-01-01"
+    end: "2020-12-31"
+  spike:
+    start: "2021-01-01"
+    end: "2022-06-30"
+  slide:
+    start: "2022-07-01"
+    end: "2024-12-31"
+  holdout:
+    start: "2025-01-01"
+    end: "2025-12-31"

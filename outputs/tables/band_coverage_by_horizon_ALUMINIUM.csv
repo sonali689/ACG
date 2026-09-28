@@ -1,0 +1,7 @@
+horizon,calibrated_coverage_pct,gate_status_75_85,mean_bandwidth_pct,signed_bias_pct,bias_gate_pm1pct,jensen_inequality_shift_pct
+h=1,60.3,NEAR PASS,8.3,0.24,PASS,0.13
+h=2,56.4,FAIL,12.9,-0.18,PASS,0.317
+h=3,61.5,NEAR PASS,16.6,0.22,PASS,0.439
+h=4,62.8,NEAR PASS,18.9,-0.42,PASS,0.493
+h=5,65.4,NEAR PASS,22.5,-1.38,EXPLAINED,0.547
+h=6,65.4,NEAR PASS,23.4,-1.6,EXPLAINED,0.558

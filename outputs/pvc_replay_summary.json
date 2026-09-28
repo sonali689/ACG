@@ -1,0 +1,16 @@
+{
+  "material": "pvc",
+  "n_months": 78,
+  "avg_baseline_price_usd": 767.51,
+  "avg_smartbuy_price_usd": 743.36,
+  "price_saving_pct": 3.15,
+  "avg_inventory_days_smartbuy": 47.3,
+  "inventory_days_reduced": -2.3,
+  "saving_per_100cr_spend": 3.15,
+  "working_capital_released_per_100cr": -0.63,
+  "signal_distribution": {
+    "BUY NORMAL": 54,
+    "DEFER": 19,
+    "BUY NOW": 5
+  }
+}

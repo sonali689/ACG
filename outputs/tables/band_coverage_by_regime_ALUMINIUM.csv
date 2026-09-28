@@ -1,0 +1,5 @@
+regime,n_origins,coverage_pct,bandwidth_pct,signed_bias_pct
+Calm (2018-2019),24,79.2,12.8,2.25
+COVID Shock (2020),12,33.3,14.5,-2.39
+Spike / Rally (2021-2022 H1),18,33.3,20.2,1.12
+Slide / Normalization (2022 H2-2024),24,79.2,18.7,-1.16

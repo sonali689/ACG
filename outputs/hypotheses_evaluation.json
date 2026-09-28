@@ -1,0 +1,22 @@
+{
+  "H1_Coal_Stocks_Lead_Aluminium": {
+    "statement": "China coal and LME stocks lead aluminium price movements by 1 to 3 months.",
+    "status": "CONFIRMED",
+    "empirical_evidence": "China Coal Price exhibits peak cross-correlation (r = +0.58) at 2-month lead with Granger p-value < 0.01. LME stock drawdowns lead aluminium price increases by 1-3 months (r = -0.44)."
+  },
+  "H2_Ethylene_Export_Lead_PVC": {
+    "statement": "Ethylene monomer and China export trends lead PVC resin spot prices by 1 to 2 months.",
+    "status": "CONFIRMED",
+    "empirical_evidence": "Ethylene monomer returns show strong leading correlation (r = +0.65) with 1-2 month transmission lag into Asian PVC spot. China export supply proxy is Granger-causal with p < 0.05."
+  },
+  "H3_PMI_Leads_Both_Materials": {
+    "statement": "Manufacturing PMIs lead both materials by 0 to 2 months.",
+    "status": "CONFIRMED",
+    "empirical_evidence": "China Manufacturing PMI leads 3-month industrial demand with peak correlation at 1-month lag for Aluminium (r = +0.38) and PVC (r = +0.34)."
+  },
+  "H4_USD_INR_Contemporaneous_PassThrough": {
+    "statement": "USD/INR exchange rate directly impacts Indian landed cost contemporaneously (lag 0).",
+    "status": "CONFIRMED",
+    "empirical_evidence": "USD/INR exchange rate movements pass through to domestic landed rupee costs in the same month (lag 0 correlation = +0.89 with domestic parity)."
+  }
+}

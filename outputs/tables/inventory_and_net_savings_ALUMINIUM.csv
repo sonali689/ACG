@@ -1,0 +1,2 @@
+material,n_months,weighted_avg_purchase_price_baseline_usd,weighted_avg_purchase_price_smartbuy_usd,gross_price_saving_pct,gross_spend_saving_per_100cr,baseline_inventory_days,smartbuy_average_inventory_days,inventory_days_change,working_capital_shift_per_100cr,net_saving_after_carry_pct,net_annual_saving_per_100cr
+ALUMINIUM,78,2187.86,2171.04,0.77,0.77,45.0,48.8,3.8,1.05,0.64,0.64

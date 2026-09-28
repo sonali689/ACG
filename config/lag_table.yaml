@@ -1,0 +1,36 @@
+# As-Of Publication Lag Table (in months)
+# Represents realistic real-world delays before data is publicly available to procurement teams.
+# A lag of 0 means available by end of current month / 1st of next month.
+
+lme_aluminium: 0
+pvc_asia_spot: 0
+crude_brent: 0
+crude_wti: 0
+usd_inr: 0
+freight_bdi: 0
+freight_fbx: 0
+pmi_china_mfg: 0
+pmi_global_mfg: 0
+gpr_index: 0
+epu_index: 0
+china_coal_price: 1
+alumina_price: 1
+bauxite_price: 1
+ethylene_price: 1
+naphtha_price: 1
+vcm_price: 1
+lme_stocks_aluminium: 0
+iai_aluminium_production: 1
+un_comtrade_pvc_export: 2
+un_comtrade_pvc_import: 2
+world_bank_pink_sheet: 1
+ppi_plastic_resins: 1
+ppi_organic_chemicals: 1
+ppi_primary_aluminum: 1
+freight_tsi: 1
+ip_resin_mfg: 1
+ip_aluminum_mfg: 1
+indpro_macro: 1
+wb_index_energy: 1
+wb_index_metals_minerals: 1
+wb_index_basemetals: 1
