@@ -1,0 +1,60 @@
+{
+ "aluminium": {
+  "development": {
+   "months": 78,
+   "signals": {
+    "BUY NORMAL": 72,
+    "DEFER": 4,
+    "BUY NOW": 2
+   },
+   "gross_price_saving_pct": -0.16,
+   "net_saving_after_carry_pct": -0.19,
+   "permutation_p_value": 0.826,
+   "random_timing_median_pct": -0.02,
+   "perfect_foresight_net_pct": 2.93,
+   "inventory_days_baseline": 45.7,
+   "inventory_days_smartbuy": 46.2,
+   "inventory_days_change": 0.6,
+   "rupees_cr_saved_per_100cr_spend": -0.19,
+   "extra_working_capital_cr_per_100cr_spend": 0.16
+  }
+ },
+ "pvc": {
+  "development": {
+   "months": 78,
+   "signals": {
+    "BUY NORMAL": 59,
+    "DEFER": 14,
+    "BUY NOW": 5
+   },
+   "gross_price_saving_pct": 0.45,
+   "net_saving_after_carry_pct": 0.41,
+   "permutation_p_value": 0.003,
+   "random_timing_median_pct": -0.03,
+   "perfect_foresight_net_pct": 1.31,
+   "inventory_days_baseline": 45.7,
+   "inventory_days_smartbuy": 46.2,
+   "inventory_days_change": 0.6,
+   "rupees_cr_saved_per_100cr_spend": 0.41,
+   "extra_working_capital_cr_per_100cr_spend": 0.16
+  },
+  "holdout": {
+   "months": 17,
+   "signals": {
+    "BUY NORMAL": 14,
+    "DEFER": 2,
+    "BUY NOW": 1
+   },
+   "gross_price_saving_pct": -0.9,
+   "net_saving_after_carry_pct": -0.08,
+   "permutation_p_value": 0.439,
+   "random_timing_median_pct": -0.11,
+   "perfect_foresight_net_pct": 1.67,
+   "inventory_days_baseline": 45.7,
+   "inventory_days_smartbuy": 46.6,
+   "inventory_days_change": 0.9,
+   "rupees_cr_saved_per_100cr_spend": -0.08,
+   "extra_working_capital_cr_per_100cr_spend": 0.25
+  }
+ }
+}

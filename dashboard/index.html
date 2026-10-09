@@ -157,298 +157,360 @@ td.r,th.r{text-align:right}
 .flag b{color:var(--acg-dk)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<style>
+.chip.ok{white-space:nowrap}.sep td{background:var(--shell);font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--mute);font-weight:600}
+.notebox{padding:14px 18px;font-size:13px;line-height:1.6;color:var(--ink2)}
+.shapl{padding:4px 18px 14px}
+</style>
 </head>
 <body>
 
 <header class="mast">
-  <div class="mast-in">
-    <div class="brand">
-      <b>Smart Buy</b>
-      <span>ACG Films &amp; Foils &nbsp;/&nbsp; Procurement decision desk</span>
-    </div>
-    <div class="mast-meta">
-      <span>Forecast origin <b id="mOrigin">—</b></span>
-      <span>78 walk-forward folds</span>
-      <span>Public data only</span>
-    </div>
-  </div>
+<div class="mast-in">
+<div class="brand">
+<b>Smart Buy</b>
+<span>ACG Films &amp; Foils &nbsp;/&nbsp; Procurement decision desk</span>
+</div>
+<div class="mast-meta">
+<span>Forecast origin <b id="mOrigin">—</b></span>
+<span id="mFolds">—</span>
+<span>Public data only · leakage-tested</span>
+</div>
+</div>
 </header>
 
 <div class="strip">
-  <div class="strip-in">
-    <span class="striplab">Material</span>
-    <div class="seg" id="matSeg">
-      <button data-mat="aluminium" aria-pressed="true">LME Aluminium</button>
-      <button data-mat="pvc" aria-pressed="false">PVC resin</button>
-    </div>
-    <span class="striplab">Horizon</span>
-    <div class="seg small" id="hSeg"></div>
-    <span style="margin-left:auto;font-size:11px;color:var(--mute)">
-      Carrying cost <b class="num">1.0%</b>/month · thresholds ±2%, P(dir) ≥ 60%
-    </span>
-  </div>
+<div class="strip-in">
+<span class="striplab">Material</span>
+<div class="seg" id="matSeg">
+<button data-mat="aluminium" aria-pressed="true">LME Aluminium</button>
+<button data-mat="pvc" aria-pressed="false">PVC proxy (US resin PPI)</button>
+</div>
+<span class="striplab">Horizon</span>
+<div class="seg small" id="hSeg"></div>
+<span style="margin-left:auto;font-size:11px;color:var(--mute)">
+Carrying cost <b class="num">1.0%</b>/month · thresholds ±2%, P(dir) ≥ 60%
+</span>
+</div>
 </div>
 
 <main class="wrap">
-  <div class="grid">
+<div class="grid">
 
-    <!-- decision -->
-    <section class="panel c4">
-      <div class="ph"><h2>Recommendation</h2><span class="sub" id="decH">3 months ahead</span></div>
-      <div class="dec">
-        <div class="decband hold" id="decBand">
-          <div class="dectag">Signal</div>
-          <div class="decsig hold" id="decSig">—</div>
-          <div class="decsub" id="decSub">—</div>
-        </div>
-        <div class="decrows">
-          <div class="drow"><span class="k">Expected saving, net of carry</span><span class="v" id="decSav">—</span></div>
-          <div class="drow"><span class="k">P(price up)</span><span class="v" id="decPup">—</span></div>
-          <div class="drow"><span class="k">Recommended cover</span><span class="v" id="decCov">—</span></div>
-          <div class="drow"><span class="k">P10 – P90 range</span><span class="v" id="decBandR">—</span></div>
-        </div>
-      </div>
-    </section>
+<section class="panel c12" id="staleBox" style="display:none">
+<div class="flag"><span>⚑</span><span id="staleTxt"></span></div>
+</section>
 
-    <!-- forecast -->
-    <section class="panel c8">
-      <div class="ph"><h2 id="fcTitle">Price and six-month forecast</h2>
-        <span class="sub">US$ / tonne · P10–P90 band</span></div>
-      <div class="prices">
-        <div class="pcell"><div class="k">Spot</div><div class="v" id="pSpot">—</div>
-          <div class="d" id="pOrigin">—</div></div>
-        <div class="pcell"><div class="k">P50, selected horizon</div><div class="v" id="pP50">—</div>
-          <div class="d" id="pChg">—</div></div>
-        <div class="pcell"><div class="k">P10</div><div class="v" id="pP10">—</div>
-          <div class="d">10th percentile</div></div>
-        <div class="pcell"><div class="k">P90</div><div class="v" id="pP90">—</div>
-          <div class="d">90th percentile</div></div>
-      </div>
-      <div class="chartbox"><canvas id="fcChart" height="118"></canvas></div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>Recommendation</h2><span class="sub" id="decH">3 months ahead</span></div>
+<div class="dec">
+<div class="decband hold" id="decBand">
+<div class="dectag">Signal</div>
+<div class="decsig hold" id="decSig">—</div>
+<div class="decsub" id="decSub">—</div>
+</div>
+<div class="decrows">
+<div class="drow"><span class="k">Expected saving, net of carry</span><span class="v" id="decSav">—</span></div>
+<div class="drow"><span class="k">P(price up)</span><span class="v" id="decPup">—</span></div>
+<div class="drow"><span class="k">Recommended cover</span><span class="v" id="decCov">—</span></div>
+<div class="drow"><span class="k">P10 – P90 range</span><span class="v" id="decBandR">—</span></div>
+<div class="drow"><span class="k">Models trusted at this horizon</span><span class="v" id="decModels" style="font-size:11px;text-align:right">—</span></div>
+</div>
+</div>
+</section>
 
-    <!-- order calculator -->
-    <section class="panel c4">
-      <div class="ph"><h2>Purchase order</h2><span class="sub">Enter your numbers</span></div>
-      <div class="pb">
-        <div class="field"><label for="bom">Monthly BoM requirement (t)</label>
-          <input id="bom" type="number" value="1000" min="0" step="50"></div>
-        <div class="field"><label for="oh">On hand (t)</label>
-          <input id="oh" type="number" value="600" min="0" step="50"></div>
-        <div class="field"><label for="it">In transit (t)</label>
-          <input id="it" type="number" value="400" min="0" step="50"></div>
-        <div class="calcout">
-          <div class="k">Order quantity</div>
-          <div class="v" id="calcQty">—</div>
-          <div class="f" id="calcFormula">—</div>
-        </div>
-      </div>
-      <div class="note">Cover × BoM − on-hand − in-transit, floored at zero.
-        The buyer decides; overrides are logged.</div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2 id="fcTitle">Price and six-month forecast</h2>
+<span class="sub" id="fcSub">—</span></div>
+<div class="prices">
+<div class="pcell"><div class="k">Latest</div><div class="v" id="pSpot">—</div>
+<div class="d" id="pOrigin">—</div></div>
+<div class="pcell"><div class="k">P50, selected horizon</div><div class="v" id="pP50">—</div>
+<div class="d" id="pChg">—</div></div>
+<div class="pcell"><div class="k">P10</div><div class="v" id="pP10">—</div>
+<div class="d">10th percentile</div></div>
+<div class="pcell"><div class="k">P90</div><div class="v" id="pP90">—</div>
+<div class="d">90th percentile</div></div>
+</div>
+<div class="chartbox"><canvas id="fcChart" height="118"></canvas></div>
+</section>
 
-    <!-- accuracy scorecard -->
-    <section class="panel c8">
-      <div class="ph"><h2>Accuracy against the naïve forecast</h2>
-        <span class="sub">78 rolling origins, Jan 2018 – Jun 2024</span></div>
-      <div class="tw"><table id="scTable">
-        <thead><tr><th>Horizon</th><th class="r">Model MAPE</th><th class="r">Naïve MAPE</th>
-          <th class="r">Skill</th><th class="r">Direction</th><th class="r">DM p</th>
-          <th class="r">Gate</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="flag"><span>⚑</span><span><b>Gate missed at h=3.</b>
-        We published a ≥15% skill threshold before modelling and report it unchanged.</span></div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2>Why: the note the buyer receives</h2><span class="sub">generated from the model outputs</span></div>
+<div class="notebox" id="noteTxt">—</div>
+<div class="note" id="landedTxt" style="display:none"></div>
+</section>
 
-    <!-- drivers -->
-    <section class="panel c6">
-      <div class="ph"><h2>What leads the price</h2>
-        <span class="sub">Peak cross-correlation of log-returns, lags 0–6</span></div>
-      <div class="pb" id="drvList"></div>
-      <div class="note">Bars show correlation at each driver's best lag, signed.
-        Granger p-values are FDR-corrected. Predictive precedence, not causation.</div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>What pushed the 3-month forecast</h2><span class="sub">SHAP, LightGBM + drivers</span></div>
+<div class="pb shapl" id="shapList"></div>
+<div class="note">TreeSHAP contributions to the predicted 3-month change, grouped by driver.
+They explain one member of the ensemble, not the ensemble itself.</div>
+</section>
 
-    <!-- model ladder -->
-    <section class="panel c6">
-      <div class="ph"><h2>Model ladder</h2>
-        <span class="sub">h=3, common origins, leak-free weights</span></div>
-      <div class="tw"><table id="ldTable">
-        <thead><tr><th>Model</th><th class="r">MAPE</th><th class="r">Skill</th>
-          <th class="r">Direction</th><th class="r">Weight</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="note" id="ldNote">—</div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>Purchase order</h2><span class="sub">Enter your numbers</span></div>
+<div class="pb">
+<div class="field"><label for="bom">Monthly BoM requirement (t)</label>
+<input id="bom" type="number" value="1000" min="0" step="50"></div>
+<div class="field"><label for="oh">On hand (t)</label>
+<input id="oh" type="number" value="600" min="0" step="50"></div>
+<div class="field"><label for="it">In transit (t)</label>
+<input id="it" type="number" value="400" min="0" step="50"></div>
+<div class="calcout">
+<div class="k">Order quantity</div>
+<div class="v" id="calcQty">—</div>
+<div class="f" id="calcFormula">—</div>
+</div>
+</div>
+<div class="note">Cover × BoM − on-hand − in-transit, floored at zero.
+The buyer decides; overrides are logged.</div>
+</section>
 
-    <!-- backtest -->
-    <section class="panel c7">
-      <div class="ph"><h2>What the model actually did</h2>
-        <span class="sub">Three-month-ahead forecast vs realised, every origin</span></div>
-      <div class="chartbox"><canvas id="btChart" height="150"></canvas></div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2>Accuracy against the naïve forecast</h2>
+<span class="sub" id="scSub">—</span></div>
+<div class="tw"><table id="scTable">
+<thead><tr><th>Horizon</th><th class="r">n</th><th class="r">Model MAPE</th><th class="r">Naïve MAPE</th>
+<th class="r">Skill</th><th class="r">Direction</th><th class="r">DM p</th>
+<th class="r">Skill gate</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="flag"><span>⚑</span><span id="scFlag">—</span></div>
+</section>
 
-    <!-- regimes + bands -->
-    <section class="panel c5">
-      <div class="ph"><h2>By regime, and band calibration</h2><span class="sub">h=3</span></div>
-      <div class="tw"><table id="rgTable">
-        <thead><tr><th>Regime</th><th class="r">n</th><th class="r">MAPE</th>
-          <th class="r">Skill</th><th class="r">Direction</th><th class="r">Coverage</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="tw" style="border-top:1px solid var(--rule)"><table id="bdTable">
-        <thead><tr><th>Horizon</th><th class="r">P10–P90 coverage</th>
-          <th class="r">Band width</th><th class="r">Bias</th><th class="r">Gate</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="flag"><span>⚑</span><span><b>Coverage runs 55–65% against a 75–85% gate.</b>
-        The bands are too narrow. Reported, not hidden.</span></div>
-    </section>
+<section class="panel c6">
+<div class="ph"><h2>What leads the price</h2>
+<span class="sub">Real series, 2000–2024, monthly log-returns</span></div>
+<div class="pb" id="drvList"></div>
+<div class="note">Bar = correlation at each driver's best lead (0–6 months).
+"Granger" = significant at a fixed 3-month lag after FDR correction (q &lt; 0.10).
+"Same month" relationships explain moves but cannot forecast them.</div>
+</section>
 
-    <!-- replay -->
-    <section class="panel c12">
-      <div class="ph"><h2>Buying replay, 2018–2024</h2>
-        <span class="sub">Signal-driven cover vs buying one month at a time</span></div>
-      <div class="kpis" id="rpKpis"></div>
-      <div class="grid" style="padding:0;gap:0;border-top:1px solid var(--rule2)">
-        <div class="c8" style="border-right:1px solid var(--rule2)">
-          <div class="chartbox"><canvas id="rpChart" height="96"></canvas></div>
-        </div>
-        <div class="c4"><div class="pb" id="rpSignals"></div></div>
-      </div>
-      <div class="note" id="rpNote">—</div>
-    </section>
+<section class="panel c6">
+<div class="ph"><h2>Model ladder</h2>
+<span class="sub">h=3, development window</span></div>
+<div class="tw"><table id="ldTable">
+<thead><tr><th>Model</th><th class="r">MAPE</th><th class="r">Skill</th>
+<th class="r">Direction</th><th class="r">DM p</th><th class="r">Weight</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="note" id="ldNote">—</div>
+</section>
 
-  </div>
+<section class="panel c7">
+<div class="ph"><h2>What the model actually did</h2>
+<span class="sub">Three-month-ahead forecast vs realised, every origin, with the 80% band</span></div>
+<div class="chartbox"><canvas id="btChart" height="150"></canvas></div>
+</section>
+
+<section class="panel c5">
+<div class="ph"><h2>By regime, and band calibration</h2><span class="sub">h=3</span></div>
+<div class="tw"><table id="rgTable">
+<thead><tr><th>Regime</th><th class="r">n</th><th class="r">MAPE</th>
+<th class="r">Skill</th><th class="r">Direction</th><th class="r">Coverage</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="tw" style="border-top:1px solid var(--rule)"><table id="bdTable">
+<thead><tr><th>Horizon</th><th class="r">Coverage, calibrated</th><th class="r">Uncalibrated</th>
+<th class="r">Width</th><th class="r">Gate 75–85%</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="flag"><span>⚑</span><span id="bdFlag">—</span></div>
+</section>
+
+<section class="panel c12">
+<div class="ph"><h2 id="rpTitle">Buying replay</h2>
+<span class="sub">Signal-driven cover vs buying the normal 1.5 months every month · execution at next month's price</span></div>
+<div class="kpis" id="rpKpis"></div>
+<div class="grid" style="padding:0;gap:0;border-top:1px solid var(--rule2)">
+<div class="c8" style="border-right:1px solid var(--rule2)">
+<div class="chartbox"><canvas id="rpChart" height="96"></canvas></div>
+</div>
+<div class="c4"><div class="pb" id="rpSignals"></div></div>
+</div>
+<div class="note" id="rpNote">—</div>
+</section>
+
+</div>
 </main>
 
 <footer class="foot">
-  <b>Sources.</b> World Bank Commodity Price Data (Pink Sheet) · ECB reference rates ·
-  Caldara &amp; Iacoviello Geopolitical Risk index · Baker, Bloom &amp; Davis Economic Policy
-  Uncertainty · OECD composite leading indicators · UN Comtrade. Public data only.<br>
-  <b>Method.</b> Direct multi-horizon models on log-returns, one per month ahead. Every feature
-  carries its real publication lag. Ensemble weights are estimated on strictly prior folds only.
-  Bands are conformally calibrated; coverage is reported as measured. Carrying cost of 1.0% per
-  month is a placeholder pending ACG Finance inputs.<br>
-  <b>Prototype.</b> Forecast origin is the last validated walk-forward origin. Figures are model
-  outputs, not illustrations.
+<b>Sources.</b> World Bank Commodity Price Data (Pink Sheet) · BLS producer price indices and
+Federal Reserve industrial production via FRED · BTS freight index via FRED · ECB reference rates ·
+Caldara &amp; Iacoviello Geopolitical Risk index · Baker, Bloom &amp; Davis Economic Policy Uncertainty ·
+OECD composite leading indicators. Public data only; no simulated series.<br>
+<b>Method.</b> Direct multi-horizon models on log-returns. Every feature carries its publication lag,
+and every training row is embargoed: its outcome must have been published before the forecast day.
+A future-perturbation test confirms no forecast changes when post-origin data is scrambled.
+Models earn ensemble weight only by beating naïve on their own realised past forecasts.
+Bands: split-conformal, scaled by a GARCH(1,1) volatility forecast; coverage reported as measured.
+Carrying cost of 1.0% per month is a placeholder pending ACG Finance inputs.<br>
+<b>Generated</b> <span id="genDate">—</span> from the pipeline outputs. No value on this page is typed by hand.
 </footer>
 
 <script id="payload" type="application/json">{
  "materials": {
   "aluminium": {
-   "name": "LME Aluminium",
+   "name": "LME aluminium (World Bank monthly average)",
    "short": "Aluminium",
-   "unit": "US$ / tonne",
-   "spot": 2497.6,
-   "origin": "Jun 2024",
+   "unit": "US$/t",
+   "cur": "$",
+   "spot": 2541.0,
+   "origin": "Dec 2024",
+   "stale": "Latest published price is Dec 2024. Refresh data/raw to forecast from today. These driver inputs are more than 3 months older than the forecast date and are treated as missing, so the driver models are running blind on them: OECD China leading indicator. Refresh data/raw (see SETUP.md).",
+   "note": "LME aluminium (World Bank monthly average): latest Dec 2024 = 2,541.0 US$/t. Three-month median forecast 2,551.1 (+0.4%), 80% range 2,249.6 to 2,893.0. Probability the price is higher: 52%. After 3% carrying cost, buying ahead now is worth -2.6% (threshold +/-2%, confidence 52% vs 60% needed): BUY NORMAL. Largest pushes in the tree model: copper (-1.4%), China leading indicator (+0.8%), own price momentum (-0.8%). Models currently trusted at this horizon: arima, lgb_local, lgb_global, nbeats. Caution: some driver inputs are stale (see warning).",
+   "shap": [
+    {
+     "driver": "copper",
+     "contribution_pct": -1.38
+    },
+    {
+     "driver": "China leading indicator",
+     "contribution_pct": 0.81
+    },
+    {
+     "driver": "own price momentum",
+     "contribution_pct": -0.79
+    },
+    {
+     "driver": "US sector output",
+     "contribution_pct": 0.38
+    },
+    {
+     "driver": "nickel",
+     "contribution_pct": 0.36
+    },
+    {
+     "driver": "zinc",
+     "contribution_pct": -0.26
+    },
+    {
+     "driver": "seasonality",
+     "contribution_pct": 0.24
+    },
+    {
+     "driver": "policy uncertainty",
+     "contribution_pct": 0.2
+    }
+   ],
+   "landed": {
+    "usd_inr_latest": 95.45,
+    "usd_inr_month": "Aug 2026",
+    "lme_in_inr_per_t": 242533.0,
+    "note": "Index converted at latest USD/INR only. Premium, freight, BCD, SWS and ADD to be calibrated on ACG POs."
+   },
    "horizons": {
     "1": {
-     "p50": 2525.6,
-     "p10": 2429.3,
-     "p90": 2616.2,
-     "change_pct": 1.12,
-     "p_up": 60.8,
-     "exp_saving_pct": 0.12,
+     "p50": 2539.0,
+     "p10": 2420.5,
+     "p90": 2663.2,
+     "change_pct": -0.08,
+     "p_up": 49.1,
+     "exp_saving_pct": -1.08,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "arima|enet|lgb_global|nbeats"
     },
     "2": {
-     "p50": 2484.1,
-     "p10": 2370.0,
-     "p90": 2704.9,
-     "change_pct": -0.54,
-     "p_up": 59.5,
-     "exp_saving_pct": -2.54,
+     "p50": 2553.3,
+     "p10": 2314.6,
+     "p90": 2816.7,
+     "change_pct": 0.48,
+     "p_up": 52.5,
+     "exp_saving_pct": -1.52,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "arima|enet|lgb_local|lgb_global|nbeats"
     },
     "3": {
-     "p50": 2518.8,
-     "p10": 2320.8,
-     "p90": 2809.2,
-     "change_pct": 0.85,
-     "p_up": 61.0,
-     "exp_saving_pct": -2.15,
+     "p50": 2551.1,
+     "p10": 2249.6,
+     "p90": 2893.0,
+     "change_pct": 0.4,
+     "p_up": 51.6,
+     "exp_saving_pct": -2.6,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "arima|lgb_local|lgb_global|nbeats"
     },
     "4": {
-     "p50": 2525.0,
-     "p10": 2334.6,
-     "p90": 2807.6,
-     "change_pct": 1.1,
-     "p_up": 62.4,
-     "exp_saving_pct": -2.9,
+     "p50": 2532.6,
+     "p10": 2207.1,
+     "p90": 2906.0,
+     "change_pct": -0.33,
+     "p_up": 48.8,
+     "exp_saving_pct": -4.33,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "ets|arima|lgb_local|lgb_global|nbeats"
     },
     "5": {
-     "p50": 2530.1,
-     "p10": 2233.1,
-     "p90": 2845.2,
-     "change_pct": 1.3,
-     "p_up": 55.4,
-     "exp_saving_pct": -3.7,
+     "p50": 2521.3,
+     "p10": 2159.5,
+     "p90": 2943.6,
+     "change_pct": -0.78,
+     "p_up": 47.4,
+     "exp_saving_pct": -5.78,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "ets|arima|lgb_local|lgb_global|nbeats"
     },
     "6": {
-     "p50": 2534.3,
-     "p10": 2280.7,
-     "p90": 2741.7,
-     "change_pct": 1.47,
-     "p_up": 52.4,
-     "exp_saving_pct": -4.53,
+     "p50": 2512.9,
+     "p10": 2089.1,
+     "p90": 3022.7,
+     "change_pct": -1.11,
+     "p_up": 46.9,
+     "exp_saving_pct": -7.11,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "ets|arima|lgb_local|lgb_global|nbeats"
     }
    },
    "series": {
     "labels": [
-     "2021-12",
-     "2022-01",
-     "2022-02",
-     "2022-03",
-     "2022-04",
-     "2022-05",
-     "2022-06",
-     "2022-07",
-     "2022-08",
-     "2022-09",
-     "2022-10",
-     "2022-11",
-     "2022-12",
-     "2023-01",
-     "2023-02",
-     "2023-03",
-     "2023-04",
-     "2023-05",
-     "2023-06",
-     "2023-07",
-     "2023-08",
-     "2023-09",
-     "2023-10",
-     "2023-11",
-     "2023-12",
-     "2024-01",
-     "2024-02",
-     "2024-03",
-     "2024-04",
-     "2024-05",
-     "2024-06",
-     "2024-07",
-     "2024-08",
-     "2024-09",
-     "2024-10",
-     "2024-11",
-     "2024-12",
-     "2024-07",
-     "2024-08",
-     "2024-09",
-     "2024-10",
-     "2024-11",
-     "2024-12"
+     "Jan 22",
+     "Feb 22",
+     "Mar 22",
+     "Apr 22",
+     "May 22",
+     "Jun 22",
+     "Jul 22",
+     "Aug 22",
+     "Sep 22",
+     "Oct 22",
+     "Nov 22",
+     "Dec 22",
+     "Jan 23",
+     "Feb 23",
+     "Mar 23",
+     "Apr 23",
+     "May 23",
+     "Jun 23",
+     "Jul 23",
+     "Aug 23",
+     "Sep 23",
+     "Oct 23",
+     "Nov 23",
+     "Dec 23",
+     "Jan 24",
+     "Feb 24",
+     "Mar 24",
+     "Apr 24",
+     "May 24",
+     "Jun 24",
+     "Jul 24",
+     "Aug 24",
+     "Sep 24",
+     "Oct 24",
+     "Nov 24",
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25"
     ],
     "actual": [
-     2695.5,
      3006.0,
      3245.8,
      3498.4,
@@ -466,7 +528,7 @@ td.r,th.r{text-align:right}
      2296.4,
      2343.2,
      2268.6,
-     2184.8,
+     2184.7,
      2159.7,
      2136.6,
      2184.7,
@@ -528,14 +590,13 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
      2541.0,
-     2525.6,
-     2484.1,
-     2518.8,
-     2525.0,
-     2530.1,
-     2534.3
+     2539.0,
+     2553.3,
+     2551.1,
+     2532.6,
+     2521.3,
+     2512.9
     ],
     "p10": [
      null,
@@ -573,14 +634,13 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
      2541.0,
-     2429.3,
-     2370.0,
-     2320.8,
-     2334.6,
-     2233.1,
-     2280.7
+     2420.5,
+     2314.6,
+     2249.6,
+     2207.1,
+     2159.5,
+     2089.1
     ],
     "p90": [
      null,
@@ -618,17 +678,15 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
      2541.0,
-     2616.2,
-     2704.9,
-     2809.2,
-     2807.6,
-     2845.2,
-     2741.7
+     2663.2,
+     2816.7,
+     2893.0,
+     2906.0,
+     2943.6,
+     3022.7
     ],
     "naive": [
-     null,
      null,
      null,
      null,
@@ -675,84 +733,87 @@ td.r,th.r{text-align:right}
    },
    "backtest": {
     "labels": [
-     "2018-04",
-     "2018-05",
-     "2018-06",
-     "2018-07",
-     "2018-08",
-     "2018-09",
-     "2018-10",
-     "2018-11",
-     "2018-12",
-     "2019-01",
-     "2019-02",
-     "2019-03",
-     "2019-04",
-     "2019-05",
-     "2019-06",
-     "2019-07",
-     "2019-08",
-     "2019-09",
-     "2019-10",
-     "2019-11",
-     "2019-12",
-     "2020-01",
-     "2020-02",
-     "2020-03",
-     "2020-04",
-     "2020-05",
-     "2020-06",
-     "2020-07",
-     "2020-08",
-     "2020-09",
-     "2020-10",
-     "2020-11",
-     "2020-12",
-     "2021-01",
-     "2021-02",
-     "2021-03",
-     "2021-04",
-     "2021-05",
-     "2021-06",
-     "2021-07",
-     "2021-08",
-     "2021-09",
-     "2021-10",
-     "2021-11",
-     "2021-12",
-     "2022-01",
-     "2022-02",
-     "2022-03",
-     "2022-04",
-     "2022-05",
-     "2022-06",
-     "2022-07",
-     "2022-08",
-     "2022-09",
-     "2022-10",
-     "2022-11",
-     "2022-12",
-     "2023-01",
-     "2023-02",
-     "2023-03",
-     "2023-04",
-     "2023-05",
-     "2023-06",
-     "2023-07",
-     "2023-08",
-     "2023-09",
-     "2023-10",
-     "2023-11",
-     "2023-12",
-     "2024-01",
-     "2024-02",
-     "2024-03",
-     "2024-04",
-     "2024-05",
-     "2024-06",
-     "2024-07",
-     "2024-08",
-     "2024-09"
+     "Apr 18",
+     "May 18",
+     "Jun 18",
+     "Jul 18",
+     "Aug 18",
+     "Sep 18",
+     "Oct 18",
+     "Nov 18",
+     "Dec 18",
+     "Jan 19",
+     "Feb 19",
+     "Mar 19",
+     "Apr 19",
+     "May 19",
+     "Jun 19",
+     "Jul 19",
+     "Aug 19",
+     "Sep 19",
+     "Oct 19",
+     "Nov 19",
+     "Dec 19",
+     "Jan 20",
+     "Feb 20",
+     "Mar 20",
+     "Apr 20",
+     "May 20",
+     "Jun 20",
+     "Jul 20",
+     "Aug 20",
+     "Sep 20",
+     "Oct 20",
+     "Nov 20",
+     "Dec 20",
+     "Jan 21",
+     "Feb 21",
+     "Mar 21",
+     "Apr 21",
+     "May 21",
+     "Jun 21",
+     "Jul 21",
+     "Aug 21",
+     "Sep 21",
+     "Oct 21",
+     "Nov 21",
+     "Dec 21",
+     "Jan 22",
+     "Feb 22",
+     "Mar 22",
+     "Apr 22",
+     "May 22",
+     "Jun 22",
+     "Jul 22",
+     "Aug 22",
+     "Sep 22",
+     "Oct 22",
+     "Nov 22",
+     "Dec 22",
+     "Jan 23",
+     "Feb 23",
+     "Mar 23",
+     "Apr 23",
+     "May 23",
+     "Jun 23",
+     "Jul 23",
+     "Aug 23",
+     "Sep 23",
+     "Oct 23",
+     "Nov 23",
+     "Dec 23",
+     "Jan 24",
+     "Feb 24",
+     "Mar 24",
+     "Apr 24",
+     "May 24",
+     "Jun 24",
+     "Jul 24",
+     "Aug 24",
+     "Sep 24",
+     "Oct 24",
+     "Nov 24",
+     "Dec 24"
     ],
     "actual": [
      2254.7,
@@ -798,7 +859,7 @@ td.r,th.r{text-align:right}
      2603.0,
      2834.6,
      2934.4,
-     2636.4,
+     2636.5,
      2695.5,
      3006.0,
      3245.8,
@@ -832,786 +893,750 @@ td.r,th.r{text-align:right}
      2497.6,
      2349.1,
      2343.7,
-     2449.9
+     2449.9,
+     2595.6,
+     2582.2,
+     2541.0
     ],
     "pred": [
-     2242.6,
-     2161.2,
-     2101.2,
-     2302.8,
-     2277.9,
-     2182.6,
-     2075.0,
-     2021.3,
-     1974.2,
-     1978.6,
-     1873.4,
-     1869.4,
-     1824.8,
-     1843.4,
-     1849.4,
-     1817.1,
-     1775.3,
-     1760.6,
-     1763.3,
-     1713.3,
-     1748.2,
-     1728.1,
-     1782.0,
-     1758.6,
-     1783.5,
-     1745.9,
-     1532.2,
-     1409.8,
-     1483.2,
-     1595.9,
-     1707.3,
-     1830.4,
-     1836.7,
-     1899.2,
-     2044.8,
-     2110.3,
-     2136.1,
-     2208.7,
-     2306.9,
-     2397.8,
-     2488.2,
-     2532.9,
-     2592.8,
-     2708.9,
-     2886.0,
-     2946.0,
-     2705.8,
-     2742.7,
-     3074.5,
-     3354.8,
-     3410.3,
-     3193.4,
-     2736.1,
-     2506.1,
-     2363.3,
-     2299.4,
-     2156.9,
-     2208.7,
-     2347.0,
-     2374.6,
-     2429.2,
-     2343.5,
-     2257.8,
-     2288.4,
-     2213.6,
-     2151.8,
-     2144.7,
-     2119.0,
-     2181.8,
-     2103.7,
-     2155.8,
-     2153.8,
-     2150.9,
-     2246.6,
-     2316.8,
-     2548.7,
-     2562.8,
-     2518.8
+     2274.9,
+     2196.4,
+     2025.7,
+     2313.2,
+     2335.7,
+     2241.6,
+     2033.3,
+     2020.3,
+     1994.1,
+     2014.4,
+     1920.4,
+     1914.5,
+     1838.1,
+     1863.8,
+     1869.5,
+     1839.6,
+     1768.6,
+     1756.9,
+     1813.3,
+     1734.0,
+     1761.1,
+     1726.5,
+     1790.1,
+     1786.1,
+     1780.4,
+     1688.6,
+     1587.7,
+     1426.3,
+     1469.1,
+     1586.8,
+     1674.5,
+     1776.3,
+     1773.6,
+     1839.6,
+     1976.9,
+     2074.7,
+     2037.3,
+     2126.3,
+     2251.7,
+     2410.7,
+     2529.1,
+     2487.2,
+     2547.6,
+     2656.9,
+     2978.5,
+     3083.7,
+     2588.1,
+     2718.9,
+     3095.8,
+     3332.0,
+     3602.9,
+     3224.2,
+     2730.3,
+     2480.2,
+     2358.5,
+     2379.3,
+     2127.0,
+     2240.4,
+     2381.4,
+     2411.5,
+     2549.8,
+     2371.0,
+     2241.0,
+     2340.6,
+     2248.1,
+     2177.2,
+     2171.9,
+     2147.2,
+     2219.6,
+     2215.6,
+     2216.9,
+     2177.6,
+     2198.0,
+     2173.2,
+     2247.2,
+     2556.2,
+     2621.9,
+     2515.8,
+     2342.2,
+     2348.5,
+     2470.7
     ],
     "p10": [
-     2040.9,
-     2100.8,
-     1929.3,
-     2050.7,
-     2112.0,
-     2017.1,
-     1927.9,
-     1918.8,
-     1883.2,
-     1953.2,
-     1827.3,
-     1822.4,
-     1768.9,
-     1747.9,
-     1748.2,
-     1746.1,
-     1680.0,
-     1662.8,
-     1714.5,
-     1671.3,
-     1675.2,
-     1659.3,
-     1706.9,
-     1697.3,
-     1684.2,
-     1572.2,
-     1493.5,
-     1331.7,
-     1362.4,
-     1449.2,
-     1504.2,
-     1576.0,
-     1649.5,
-     1705.5,
-     1845.9,
-     1922.3,
-     1920.0,
-     1993.1,
-     2015.2,
-     2191.7,
-     2283.1,
-     2354.5,
-     2404.4,
-     2520.9,
-     2774.9,
-     2824.0,
-     2452.1,
-     2458.8,
-     2826.4,
-     3128.0,
-     3258.1,
-     2852.7,
-     2293.4,
-     2244.8,
-     2110.7,
-     2122.7,
-     1980.3,
-     1914.8,
-     2168.7,
-     2209.3,
-     2277.4,
-     2155.1,
-     2085.5,
-     2197.7,
-     2110.3,
-     2021.6,
-     2034.9,
-     2016.5,
-     2035.8,
-     1925.3,
-     2045.3,
-     2006.3,
-     2083.4,
-     2074.3,
-     2095.8,
-     2175.0,
-     2399.9,
-     2320.8
+     2141.6,
+     2069.4,
+     1899.2,
+     2153.3,
+     2174.5,
+     2085.8,
+     1878.1,
+     1841.7,
+     1798.0,
+     1819.0,
+     1758.1,
+     1754.6,
+     1684.0,
+     1709.0,
+     1716.0,
+     1699.9,
+     1633.5,
+     1623.6,
+     1681.0,
+     1607.0,
+     1642.7,
+     1611.1,
+     1674.9,
+     1673.2,
+     1679.4,
+     1589.3,
+     1484.8,
+     1312.8,
+     1344.9,
+     1447.2,
+     1518.6,
+     1582.5,
+     1583.3,
+     1643.6,
+     1755.4,
+     1844.3,
+     1818.4,
+     1908.3,
+     2018.7,
+     2148.7,
+     2254.3,
+     2219.5,
+     2274.9,
+     2372.8,
+     2637.4,
+     2731.6,
+     2191.2,
+     2344.0,
+     2557.7,
+     2730.1,
+     2962.5,
+     2632.7,
+     2096.0,
+     1873.8,
+     1812.7,
+     1915.8,
+     1685.5,
+     1839.9,
+     1988.3,
+     2064.6,
+     2210.5,
+     2060.7,
+     1930.2,
+     2045.0,
+     1968.8,
+     1907.8,
+     1924.1,
+     1915.9,
+     1985.1,
+     1993.6,
+     2014.0,
+     1984.2,
+     2012.5,
+     1997.1,
+     2058.8,
+     2111.8,
+     2225.4,
+     2163.4,
+     1991.9,
+     2037.1,
+     2148.9
     ],
     "p90": [
-     2384.2,
-     2307.3,
-     2233.8,
-     2447.2,
-     2510.0,
-     2401.9,
-     2250.8,
-     2217.7,
-     2147.2,
-     2137.0,
-     2041.8,
-     2026.1,
-     1972.0,
-     1957.6,
-     1956.5,
-     1964.7,
-     1934.1,
-     1894.7,
-     1945.4,
-     1859.8,
-     1877.4,
-     1824.7,
-     1880.5,
-     1895.8,
-     1924.4,
-     1779.4,
-     1702.4,
-     1541.2,
-     1581.4,
-     1678.9,
-     1812.5,
-     1862.9,
-     1907.8,
-     1997.9,
-     2127.1,
-     2228.7,
-     2210.1,
-     2299.8,
-     2444.1,
-     2580.9,
-     2719.9,
-     2739.0,
-     2858.1,
-     2998.3,
-     3242.8,
-     3391.7,
-     3025.8,
-     2991.9,
-     3419.4,
-     3632.9,
-     3987.6,
-     3886.1,
-     3338.8,
-     3015.9,
-     2857.5,
-     2775.6,
-     2474.7,
-     2514.0,
-     2584.9,
-     2615.1,
-     2710.0,
-     2617.1,
-     2546.2,
-     2626.2,
-     2483.3,
-     2382.3,
-     2312.9,
-     2297.3,
-     2333.6,
-     2339.2,
-     2350.6,
-     2329.8,
-     2326.1,
-     2408.7,
-     2488.1,
-     2757.7,
-     2875.3,
-     2809.2
+     2416.6,
+     2331.3,
+     2160.8,
+     2485.0,
+     2508.9,
+     2409.0,
+     2201.3,
+     2216.2,
+     2211.7,
+     2230.7,
+     2097.8,
+     2088.9,
+     2006.3,
+     2032.6,
+     2036.7,
+     1990.7,
+     1914.8,
+     1901.3,
+     1956.1,
+     1871.0,
+     1888.0,
+     1850.1,
+     1913.2,
+     1906.7,
+     1887.5,
+     1794.0,
+     1697.7,
+     1549.5,
+     1604.7,
+     1739.9,
+     1846.4,
+     1993.8,
+     1986.9,
+     2059.0,
+     2226.2,
+     2333.9,
+     2282.5,
+     2369.3,
+     2511.7,
+     2704.8,
+     2837.4,
+     2787.0,
+     2853.1,
+     2974.9,
+     3363.7,
+     3481.2,
+     3057.0,
+     3153.7,
+     3747.3,
+     4066.6,
+     4381.6,
+     3948.6,
+     3556.5,
+     3282.8,
+     3068.6,
+     2955.0,
+     2684.0,
+     2728.2,
+     2852.1,
+     2816.7,
+     2941.2,
+     2728.1,
+     2601.9,
+     2678.9,
+     2567.0,
+     2484.7,
+     2451.7,
+     2406.5,
+     2481.7,
+     2462.4,
+     2440.2,
+     2389.8,
+     2400.7,
+     2364.8,
+     2452.9,
+     3094.1,
+     3089.1,
+     2925.5,
+     2754.1,
+     2707.4,
+     2840.8
     ]
    },
-   "ladder": [
-    {
-     "model": "N-BEATS",
-     "is_ensemble": false,
-     "mape": 7.34,
-     "skill": 15.86,
-     "dir": 68.75,
-     "dm_p": 0.0421,
-     "weight": 12.8,
-     "gated_out": false
-    },
-    {
-     "model": "Bayesian ridge",
-     "is_ensemble": false,
-     "mape": 7.84,
-     "skill": 10.13,
-     "dir": 59.38,
-     "dm_p": 0.1709,
-     "weight": 17.5,
-     "gated_out": false
-    },
-    {
-     "model": "Smart Buy ensemble",
-     "is_ensemble": true,
-     "mape": 7.9,
-     "skill": 9.39,
-     "dir": 71.88,
-     "dm_p": 0.0141,
-     "weight": 100.0,
-     "gated_out": false
-    },
-    {
-     "model": "ElasticNet",
-     "is_ensemble": false,
-     "mape": 8.04,
-     "skill": 7.81,
-     "dir": 57.81,
-     "dm_p": 0.1952,
-     "weight": 17.1,
-     "gated_out": false
-    },
-    {
-     "model": "LightGBM",
-     "is_ensemble": false,
-     "mape": 8.48,
-     "skill": 2.78,
-     "dir": 57.81,
-     "dm_p": 0.3021,
-     "weight": 17.7,
-     "gated_out": false
-    },
-    {
-     "model": "Seasonal naive",
-     "is_ensemble": false,
-     "mape": 8.53,
-     "skill": 2.15,
-     "dir": 62.5,
-     "dm_p": 0.395,
-     "weight": 14.1,
-     "gated_out": false
-    },
-    {
-     "model": "Naive",
-     "is_ensemble": false,
-     "mape": 8.72,
-     "skill": 0.0,
-     "dir": 0.0,
-     "dm_p": 1.0,
-     "weight": 0.0,
-     "gated_out": false
-    },
-    {
-     "model": "Holt-Winters ETS",
-     "is_ensemble": false,
-     "mape": 8.74,
-     "skill": -0.25,
-     "dir": 48.44,
-     "dm_p": 0.5894,
-     "weight": 13.1,
-     "gated_out": true
-    },
-    {
-     "model": "LSTM",
-     "is_ensemble": false,
-     "mape": 9.28,
-     "skill": -6.39,
-     "dir": 54.69,
-     "dm_p": 0.7026,
-     "weight": 7.8,
-     "gated_out": true
-    }
-   ],
-   "drivers": [
-    {
-     "name": "Geopolitical Risk (GPR)",
-     "rho": -0.3252,
-     "lead": 1,
-     "granger_p": 0.0117,
-     "sig": true
-    },
-    {
-     "name": "Copper Price (Base Metals Spillover)",
-     "rho": 0.2448,
-     "lead": 6,
-     "granger_p": 0.006,
-     "sig": true
-    },
-    {
-     "name": "Energy Smelting Pressure",
-     "rho": -0.2267,
-     "lead": 6,
-     "granger_p": 0.0005,
-     "sig": true
-    },
-    {
-     "name": "China Manufacturing PMI",
-     "rho": 0.2176,
-     "lead": 0,
-     "granger_p": 0.268,
-     "sig": false
-    },
-    {
-     "name": "Maritime Freight (BDI)",
-     "rho": 0.1991,
-     "lead": 0,
-     "granger_p": 0.5361,
-     "sig": false
-    },
-    {
-     "name": "Economic Policy Uncertainty",
-     "rho": 0.1682,
-     "lead": 2,
-     "granger_p": 0.1618,
-     "sig": false
-    },
-    {
-     "name": "USD/INR Exchange Rate",
-     "rho": -0.1641,
-     "lead": 4,
-     "granger_p": 0.0974,
-     "sig": true
-    },
-    {
-     "name": "China Coal Price",
-     "rho": 0.1409,
-     "lead": 3,
-     "granger_p": 0.1199,
-     "sig": false
-    }
-   ],
    "scorecard": [
     {
+     "window": "development",
      "h": 1,
-     "ens": 4.0,
-     "naive": 3.89,
-     "skill": -2.86,
-     "dir": 40.91,
-     "dm_p": 0.2505
+     "n": 78,
+     "ens": 3.73,
+     "naive": 3.79,
+     "skill": 1.5,
+     "dir": 51.3,
+     "dm_p": 0.2881,
+     "gate_skill": 10,
+     "gate_dir": 65
     },
     {
+     "window": "development",
      "h": 2,
-     "ens": 6.4,
-     "naive": 6.59,
-     "skill": 2.95,
-     "dir": 62.12,
-     "dm_p": 0.2649
+     "n": 78,
+     "ens": 6.13,
+     "naive": 6.37,
+     "skill": 3.8,
+     "dir": 53.8,
+     "dm_p": 0.1583,
+     "gate_skill": 12,
+     "gate_dir": 63
     },
     {
+     "window": "development",
      "h": 3,
-     "ens": 7.73,
-     "naive": 8.53,
-     "skill": 9.45,
-     "dir": 71.21,
-     "dm_p": 0.0409
+     "n": 78,
+     "ens": 7.87,
+     "naive": 8.19,
+     "skill": 3.9,
+     "dir": 64.1,
+     "dm_p": 0.1419,
+     "gate_skill": 15,
+     "gate_dir": 62
     },
     {
+     "window": "development",
      "h": 4,
-     "ens": 8.63,
-     "naive": 9.93,
-     "skill": 13.16,
-     "dir": 71.21,
-     "dm_p": 0.0548
+     "n": 78,
+     "ens": 8.98,
+     "naive": 9.44,
+     "skill": 4.9,
+     "dir": 64.1,
+     "dm_p": 0.1147,
+     "gate_skill": 12,
+     "gate_dir": 60
     },
     {
+     "window": "development",
      "h": 5,
-     "ens": 9.82,
-     "naive": 11.05,
-     "skill": 11.14,
-     "dir": 75.76,
-     "dm_p": 0.2104
+     "n": 78,
+     "ens": 10.15,
+     "naive": 10.59,
+     "skill": 4.2,
+     "dir": 57.7,
+     "dm_p": 0.1618,
+     "gate_skill": 10,
+     "gate_dir": 59
     },
     {
+     "window": "development",
      "h": 6,
-     "ens": 9.75,
-     "naive": 12.06,
-     "skill": 19.15,
-     "dir": 74.24,
-     "dm_p": 0.0904
+     "n": 78,
+     "ens": 11.22,
+     "naive": 11.74,
+     "skill": 4.4,
+     "dir": 62.8,
+     "dm_p": 0.1298,
+     "gate_skill": 10,
+     "gate_dir": 58
+    }
+   ],
+   "ladder": [
+    {
+     "model": "N-BEATS, global panel",
+     "key": "nbeats",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 7.53,
+     "skill": 8.1,
+     "dir": 65.4,
+     "dm_p": 0.0847,
+     "weight": 19.7
+    },
+    {
+     "model": "LightGBM + drivers",
+     "key": "lgb_local",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 7.71,
+     "skill": 5.9,
+     "dir": 66.7,
+     "dm_p": 0.1047,
+     "weight": 19.7
+    },
+    {
+     "model": "LightGBM, global panel",
+     "key": "lgb_global",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 7.76,
+     "skill": 5.2,
+     "dir": 66.7,
+     "dm_p": 0.1951,
+     "weight": 19.7
+    },
+    {
+     "model": "Smart Buy ensemble (headline)",
+     "key": "gated_equal_weight",
+     "is_ensemble": true,
+     "is_headline": true,
+     "mape": 7.87,
+     "skill": 3.9,
+     "dir": 64.1,
+     "dm_p": 0.1419,
+     "weight": null
+    },
+    {
+     "model": "Ensemble, inverse-MSE",
+     "key": "gated_inv_mse",
+     "is_ensemble": true,
+     "is_headline": false,
+     "mape": 7.87,
+     "skill": 3.9,
+     "dir": 64.1,
+     "dm_p": 0.1367,
+     "weight": null
+    },
+    {
+     "model": "Na\u00efve (no change)",
+     "key": "naive",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.19,
+     "skill": 0.0,
+     "dir": null,
+     "dm_p": null,
+     "weight": null
+    },
+    {
+     "model": "Average of all, no gate",
+     "key": "all_equal",
+     "is_ensemble": true,
+     "is_headline": false,
+     "mape": 8.21,
+     "skill": -0.2,
+     "dir": 59.0,
+     "dm_p": 0.527,
+     "weight": null
+    },
+    {
+     "model": "ARIMA",
+     "key": "arima",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.24,
+     "skill": -0.6,
+     "dir": 61.5,
+     "dm_p": 0.6029,
+     "weight": 19.7
+    },
+    {
+     "model": "VECM (cost drivers)",
+     "key": "vecm",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.31,
+     "skill": -1.5,
+     "dir": 60.3,
+     "dm_p": 0.5976,
+     "weight": 0.0
+    },
+    {
+     "model": "Drift",
+     "key": "drift",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.33,
+     "skill": -1.7,
+     "dir": 51.3,
+     "dm_p": 0.7034,
+     "weight": 0.0
+    },
+    {
+     "model": "ETS (damped)",
+     "key": "ets",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.44,
+     "skill": -3.1,
+     "dir": 44.9,
+     "dm_p": 0.7455,
+     "weight": 19.7
+    },
+    {
+     "model": "ElasticNet + drivers",
+     "key": "enet",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 8.57,
+     "skill": -4.7,
+     "dir": 62.8,
+     "dm_p": 0.7231,
+     "weight": 1.5
+    },
+    {
+     "model": "Seasonal na\u00efve",
+     "key": "seasonal_naive",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 12.85,
+     "skill": -56.9,
+     "dir": 47.4,
+     "dm_p": 1.0,
+     "weight": 0.0
+    }
+   ],
+   "fallback_pct": 0.0,
+   "err_corr": {
+    "mean_off_diag": 0.87,
+    "most_diversifying": "ElasticNet + drivers",
+    "its_mean_corr": 0.71
+   },
+   "drivers": [
+    {
+     "name": "LME copper (US$/t)",
+     "rho": 0.677,
+     "lead": 0,
+     "q": 0.0747,
+     "sig": true
+    },
+    {
+     "name": "LME zinc (US$/t)",
+     "rho": 0.632,
+     "lead": 0,
+     "q": 0.4908,
+     "sig": false
+    },
+    {
+     "name": "WB energy price index",
+     "rho": 0.458,
+     "lead": 0,
+     "q": 0.5148,
+     "sig": false
+    },
+    {
+     "name": "Brent crude (US$/bbl)",
+     "rho": 0.437,
+     "lead": 0,
+     "q": 0.492,
+     "sig": false
+    },
+    {
+     "name": "Australian thermal coal (US$/t)",
+     "rho": 0.356,
+     "lead": 0,
+     "q": 0.8271,
+     "sig": false
+    },
+    {
+     "name": "USD/INR",
+     "rho": -0.3,
+     "lead": 0,
+     "q": 0.3655,
+     "sig": false
+    },
+    {
+     "name": "US industrial production, total (INDPRO)",
+     "rho": 0.228,
+     "lead": 0,
+     "q": 0.8271,
+     "sig": false
+    },
+    {
+     "name": "OECD China leading indicator",
+     "rho": 0.2,
+     "lead": 2,
+     "q": 0.0192,
+     "sig": true
+    },
+    {
+     "name": "Global Economic Policy Uncertainty",
+     "rho": -0.162,
+     "lead": 0,
+     "q": 0.6332,
+     "sig": false
+    },
+    {
+     "name": "US freight transportation services index (TSIFRGHT)",
+     "rho": 0.153,
+     "lead": 1,
+     "q": 0.5757,
+     "sig": false
     }
    ],
    "bands": [
     {
-     "h": "h=1",
-     "cov": 56.06,
-     "status": "NEAR PASS",
-     "width": 8.3,
-     "bias": 0.03
+     "window": "development",
+     "h": 1,
+     "cov": 78.2,
+     "width": 10.8,
+     "n": 78
     },
     {
-     "h": "h=2",
-     "cov": 56.06,
-     "status": "FAIL",
-     "width": 12.9,
-     "bias": -0.33
+     "window": "development",
+     "h": 2,
+     "cov": 73.1,
+     "width": 19.4,
+     "n": 78
     },
     {
-     "h": "h=3",
-     "cov": 57.58,
-     "status": "NEAR PASS",
-     "width": 16.6,
-     "bias": -0.13
+     "window": "development",
+     "h": 3,
+     "cov": 71.8,
+     "width": 24.0,
+     "n": 78
     },
     {
-     "h": "h=4",
-     "cov": 57.58,
-     "status": "NEAR PASS",
-     "width": 18.9,
-     "bias": -0.89
+     "window": "development",
+     "h": 4,
+     "cov": 71.8,
+     "width": 26.5,
+     "n": 78
     },
     {
-     "h": "h=5",
-     "cov": 63.64,
-     "status": "NEAR PASS",
-     "width": 22.5,
-     "bias": -0.99
+     "window": "development",
+     "h": 5,
+     "cov": 71.8,
+     "width": 31.2,
+     "n": 78
     },
     {
-     "h": "h=6",
-     "cov": 63.64,
-     "status": "NEAR PASS",
-     "width": 23.4,
-     "bias": -1.93
+     "window": "development",
+     "h": 6,
+     "cov": 70.5,
+     "width": 35.4,
+     "n": 78
     }
    ],
-   "weights": [
-    {
-     "h": "h=1",
-     "naive": 13.6,
-     "seasonal_naive": 38.3,
-     "ets": 15.9,
-     "elasticnet": 6.5,
-     "bayesian_ridge": 16.0,
-     "lightgbm": 9.6,
-     "lstm": 0.0,
-     "nbeats": 0.0
-    },
-    {
-     "h": "h=2",
-     "naive": 0.0,
-     "seasonal_naive": 7.7,
-     "ets": 11.2,
-     "elasticnet": 23.6,
-     "bayesian_ridge": 20.1,
-     "lightgbm": 22.7,
-     "lstm": 14.8,
-     "nbeats": 0.0
-    },
-    {
-     "h": "h=3",
-     "naive": 0.0,
-     "seasonal_naive": 14.0,
-     "ets": 13.0,
-     "elasticnet": 17.1,
-     "bayesian_ridge": 17.4,
-     "lightgbm": 17.9,
-     "lstm": 8.0,
-     "nbeats": 12.7
-    },
-    {
-     "h": "h=4",
-     "naive": 0.0,
-     "seasonal_naive": 12.9,
-     "ets": 11.3,
-     "elasticnet": 15.9,
-     "bayesian_ridge": 17.3,
-     "lightgbm": 16.6,
-     "lstm": 14.6,
-     "nbeats": 11.3
-    },
-    {
-     "h": "h=5",
-     "naive": 0.0,
-     "seasonal_naive": 12.2,
-     "ets": 11.6,
-     "elasticnet": 20.6,
-     "bayesian_ridge": 25.1,
-     "lightgbm": 16.7,
-     "lstm": 10.1,
-     "nbeats": 3.7
-    },
-    {
-     "h": "h=6",
-     "naive": 0.0,
-     "seasonal_naive": 10.4,
-     "ets": 9.2,
-     "elasticnet": 20.7,
-     "bayesian_ridge": 25.6,
-     "lightgbm": 12.4,
-     "lstm": 10.9,
-     "nbeats": 10.7
-    }
-   ],
+   "bands_gauss": {
+    "1": 76.9,
+    "2": 65.4,
+    "3": 65.4,
+    "4": 64.1,
+    "5": 60.3,
+    "6": 57.7
+   },
    "regimes": [
     {
-     "name": "Calm (2018-2019)",
+     "name": "Calm",
      "n": 24,
-     "mape": 4.01,
-     "skill": 17.77,
-     "dir": 75.0,
-     "cov": 79.17
+     "mape": 4.83,
+     "skill": 1.1,
+     "dir": 58.3,
+     "cov": 79.2
     },
     {
-     "name": "COVID Shock (2020)",
+     "name": "Covid",
      "n": 12,
-     "mape": 9.26,
-     "skill": 16.79,
+     "mape": 10.15,
+     "skill": 8.8,
      "dir": 75.0,
-     "cov": 33.33
+     "cov": 50.0
     },
     {
-     "name": "Spike / Rally (2021-2022 H1)",
+     "name": "Spike",
      "n": 18,
-     "mape": 12.12,
-     "skill": 14.86,
-     "dir": 88.89,
-     "cov": 33.33
+     "mape": 13.41,
+     "skill": 5.8,
+     "dir": 77.8,
+     "cov": 55.6
     },
     {
-     "name": "Slide / Normalization (2022 H2-2024)",
-     "n": 24,
-     "mape": 5.22,
-     "skill": 4.88,
-     "dir": 58.33,
-     "cov": 79.17
+     "name": "Slide",
+     "n": 27,
+     "mape": 5.8,
+     "skill": -1.6,
+     "dir": 55.6,
+     "cov": 88.9
     }
    ],
    "replay": {
-    "months": 66,
-    "base_price": 2202.3,
-    "sb_price": 2197.16,
-    "gross_pct": 0.23,
-    "net_pct": 0.19,
-    "inv_base": 45.7,
-    "inv_sb": 47.0,
-    "inv_delta": 1.4,
-    "wc_shift": 0.38,
+    "months": 78,
     "signals": {
-     "BUY NORMAL": 63,
-     "BUY NOW": 2,
-     "DEFER": 1
+     "BUY NORMAL": 72,
+     "DEFER": 4,
+     "BUY NOW": 2
     },
+    "gross_price_saving_pct": -0.16,
+    "net_saving_after_carry_pct": -0.19,
+    "permutation_p_value": 0.826,
+    "random_timing_median_pct": -0.02,
+    "perfect_foresight_net_pct": 2.93,
+    "inventory_days_baseline": 45.7,
+    "inventory_days_smartbuy": 46.2,
+    "inventory_days_change": 0.6,
+    "rupees_cr_saved_per_100cr_spend": -0.19,
+    "extra_working_capital_cr_per_100cr_spend": 0.16,
     "curve": {
      "labels": [
-      "2019-01",
-      "2019-02",
-      "2019-03",
-      "2019-04",
-      "2019-05",
-      "2019-06",
-      "2019-07",
-      "2019-08",
-      "2019-09",
-      "2019-10",
-      "2019-11",
-      "2019-12",
-      "2020-01",
-      "2020-02",
-      "2020-03",
-      "2020-04",
-      "2020-05",
-      "2020-06",
-      "2020-07",
-      "2020-08",
-      "2020-09",
-      "2020-10",
-      "2020-11",
-      "2020-12",
-      "2021-01",
-      "2021-02",
-      "2021-03",
-      "2021-04",
-      "2021-05",
-      "2021-06",
-      "2021-07",
-      "2021-08",
-      "2021-09",
-      "2021-10",
-      "2021-11",
-      "2021-12",
-      "2022-01",
-      "2022-02",
-      "2022-03",
-      "2022-04",
-      "2022-05",
-      "2022-06",
-      "2022-07",
-      "2022-08",
-      "2022-09",
-      "2022-10",
-      "2022-11",
-      "2022-12",
-      "2023-01",
-      "2023-02",
-      "2023-03",
-      "2023-04",
-      "2023-05",
-      "2023-06",
-      "2023-07",
-      "2023-08",
-      "2023-09",
-      "2023-10",
-      "2023-11",
-      "2023-12",
-      "2024-01",
-      "2024-02",
-      "2024-03",
-      "2024-04",
-      "2024-05",
-      "2024-06"
-     ],
-     "cum": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      -0.787,
-      -0.715,
-      0.159,
-      0.681,
-      0.649,
-      0.621,
-      0.594,
-      0.568,
-      0.543,
-      0.519,
-      0.499,
-      0.48,
-      0.461,
-      0.442,
-      0.423,
-      0.407,
-      0.393,
-      0.382,
-      0.372,
-      0.363,
-      0.354,
-      0.346,
-      0.338,
-      0.331,
-      0.323,
-      0.316,
-      0.309,
-      0.303,
-      0.297,
-      0.291,
-      0.286,
-      0.281,
-      0.276,
-      0.276,
-      0.263,
-      0.259,
-      0.254,
-      0.25,
-      0.246,
-      0.242,
-      0.237,
-      0.233
+      "Jan 18",
+      "Feb 18",
+      "Mar 18",
+      "Apr 18",
+      "May 18",
+      "Jun 18",
+      "Jul 18",
+      "Aug 18",
+      "Sep 18",
+      "Oct 18",
+      "Nov 18",
+      "Dec 18",
+      "Jan 19",
+      "Feb 19",
+      "Mar 19",
+      "Apr 19",
+      "May 19",
+      "Jun 19",
+      "Jul 19",
+      "Aug 19",
+      "Sep 19",
+      "Oct 19",
+      "Nov 19",
+      "Dec 19",
+      "Jan 20",
+      "Feb 20",
+      "Mar 20",
+      "Apr 20",
+      "May 20",
+      "Jun 20",
+      "Jul 20",
+      "Aug 20",
+      "Sep 20",
+      "Oct 20",
+      "Nov 20",
+      "Dec 20",
+      "Jan 21",
+      "Feb 21",
+      "Mar 21",
+      "Apr 21",
+      "May 21",
+      "Jun 21",
+      "Jul 21",
+      "Aug 21",
+      "Sep 21",
+      "Oct 21",
+      "Nov 21",
+      "Dec 21",
+      "Jan 22",
+      "Feb 22",
+      "Mar 22",
+      "Apr 22",
+      "May 22",
+      "Jun 22",
+      "Jul 22",
+      "Aug 22",
+      "Sep 22",
+      "Oct 22",
+      "Nov 22",
+      "Dec 22",
+      "Jan 23",
+      "Feb 23",
+      "Mar 23",
+      "Apr 23",
+      "May 23",
+      "Jun 23",
+      "Jul 23",
+      "Aug 23",
+      "Sep 23",
+      "Oct 23",
+      "Nov 23",
+      "Dec 23",
+      "Jan 24",
+      "Feb 24",
+      "Mar 24",
+      "Apr 24",
+      "May 24",
+      "Jun 24"
      ],
      "signal": [
       "BUY NORMAL",
       "BUY NORMAL",
+      "DEFER",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NOW",
-      "BUY NOW",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
+      "DEFER",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
@@ -1632,6 +1657,49 @@ td.r,th.r{text-align:right}
       "BUY NORMAL",
       "BUY NORMAL",
       "DEFER",
+      "DEFER",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NOW",
+      "BUY NOW",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
@@ -1642,12 +1710,23 @@ td.r,th.r{text-align:right}
       "BUY NORMAL"
      ],
      "price": [
+      2181.8,
+      2069.2,
+      2254.7,
+      2299.7,
+      2237.6,
+      2082.2,
+      2051.5,
+      2026.5,
+      2029.9,
+      1938.5,
+      1920.4,
       1853.7,
       1863.0,
       1871.2,
       1845.4,
       1781.3,
-      1756.0,
+      1755.9,
       1797.0,
       1740.7,
       1753.5,
@@ -1676,7 +1755,7 @@ td.r,th.r{text-align:right}
       2603.0,
       2834.6,
       2934.4,
-      2636.4,
+      2636.5,
       2695.5,
       3006.0,
       3245.8,
@@ -1695,7 +1774,7 @@ td.r,th.r{text-align:right}
       2296.4,
       2343.2,
       2268.6,
-      2184.8,
+      2184.7,
       2159.7,
       2136.6,
       2184.7,
@@ -1707,167 +1786,207 @@ td.r,th.r{text-align:right}
       2226.2,
       2506.1,
       2564.5,
-      2497.6
+      2497.6,
+      2349.1
      ]
-    }
-   },
-   "err_corr": {
-    "mean_off_diag": 0.864,
-    "nbeats_vs_rest": 0.779
+    },
+    "holdout": null
    }
   },
   "pvc": {
-   "name": "PVC resin, Asia spot",
-   "short": "PVC resin",
-   "unit": "US$ / tonne",
-   "spot": 680.1,
-   "origin": "Jun 2024",
+   "name": "US PPI, plastic resins & materials (BLS WPU066), PVC proxy",
+   "short": "PVC proxy",
+   "unit": "index (1982=100)",
+   "cur": "",
+   "spot": 280.6,
+   "origin": "Aug 2026",
+   "stale": "These driver inputs are more than 3 months older than the forecast date and are treated as missing, so the driver models are running blind on them: Brent crude (US$/bbl); OECD China leading indicator; US natural gas (US$/mmbtu); WB energy price index. Refresh data/raw (see SETUP.md).",
+   "note": "US PPI, plastic resins & materials (BLS WPU066), PVC proxy: latest Aug 2026 = 280.6 index (1982=100). Three-month median forecast 278.6 (-0.7%), 80% range 257.4 to 301.6. Probability the price is higher: 46%. After 3% carrying cost, buying ahead now is worth -3.7% (threshold +/-2%, confidence 54% vs 60% needed): BUY NORMAL. Largest pushes in the tree model: own price momentum (-0.4%), Brent crude (-0.3%), geopolitical risk (-0.3%). Models currently trusted at this horizon: enet, lgb_local, nbeats. Caution: some driver inputs are stale (see warning).",
+   "shap": [
+    {
+     "driver": "seasonality",
+     "contribution_pct": -1.13
+    },
+    {
+     "driver": "own price momentum",
+     "contribution_pct": -0.38
+    },
+    {
+     "driver": "Brent crude",
+     "contribution_pct": -0.34
+    },
+    {
+     "driver": "geopolitical risk",
+     "contribution_pct": -0.31
+    },
+    {
+     "driver": "China leading indicator",
+     "contribution_pct": -0.26
+    },
+    {
+     "driver": "energy index",
+     "contribution_pct": -0.16
+    },
+    {
+     "driver": "policy uncertainty",
+     "contribution_pct": -0.14
+    },
+    {
+     "driver": "US sector output",
+     "contribution_pct": -0.09
+    }
+   ],
+   "landed": null,
    "horizons": {
     "1": {
-     "p50": 680.1,
-     "p10": 668.2,
-     "p90": 690.2,
-     "change_pct": 0.0,
-     "p_up": 46.6,
-     "exp_saving_pct": -1.0,
+     "p50": 279.3,
+     "p10": 271.0,
+     "p90": 287.8,
+     "change_pct": -0.47,
+     "p_up": 42.1,
+     "exp_saving_pct": -1.47,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "ets|arima|vecm|enet|lgb_local|lgb_global|nbeats"
     },
     "2": {
-     "p50": 680.1,
-     "p10": 664.7,
-     "p90": 739.6,
-     "change_pct": 0.0,
-     "p_up": 73.6,
-     "exp_saving_pct": -2.0,
+     "p50": 278.3,
+     "p10": 263.3,
+     "p90": 294.1,
+     "change_pct": -0.81,
+     "p_up": 42.6,
+     "exp_saving_pct": -2.81,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "ets|arima|vecm|enet|lgb_local|lgb_global|nbeats"
     },
     "3": {
-     "p50": 685.4,
-     "p10": 652.8,
-     "p90": 726.8,
-     "change_pct": 0.78,
-     "p_up": 60.5,
-     "exp_saving_pct": -2.22,
+     "p50": 278.6,
+     "p10": 257.4,
+     "p90": 301.6,
+     "change_pct": -0.69,
+     "p_up": 45.5,
+     "exp_saving_pct": -3.69,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "enet|lgb_local|nbeats"
     },
     "4": {
-     "p50": 668.2,
-     "p10": 653.8,
-     "p90": 718.4,
-     "change_pct": -1.76,
-     "p_up": 57.4,
-     "exp_saving_pct": -5.76,
+     "p50": 280.2,
+     "p10": 251.9,
+     "p90": 311.7,
+     "change_pct": -0.13,
+     "p_up": 49.4,
+     "exp_saving_pct": -4.13,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "nbeats"
     },
     "5": {
-     "p50": 682.7,
-     "p10": 646.8,
-     "p90": 821.1,
-     "change_pct": 0.38,
-     "p_up": 74.7,
-     "exp_saving_pct": -4.62,
+     "p50": 279.1,
+     "p10": 248.4,
+     "p90": 313.6,
+     "change_pct": -0.52,
+     "p_up": 47.7,
+     "exp_saving_pct": -5.52,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "arima|nbeats"
     },
     "6": {
-     "p50": 681.6,
-     "p10": 653.0,
-     "p90": 750.9,
-     "change_pct": 0.22,
-     "p_up": 67.8,
-     "exp_saving_pct": -5.78,
+     "p50": 281.9,
+     "p10": 249.7,
+     "p90": 318.2,
+     "change_pct": 0.46,
+     "p_up": 51.9,
+     "exp_saving_pct": -5.54,
      "signal": "BUY NORMAL",
-     "cover": 1.5
+     "cover": 1.5,
+     "models": "nbeats"
     }
    },
    "series": {
     "labels": [
-     "2021-12",
-     "2022-01",
-     "2022-02",
-     "2022-03",
-     "2022-04",
-     "2022-05",
-     "2022-06",
-     "2022-07",
-     "2022-08",
-     "2022-09",
-     "2022-10",
-     "2022-11",
-     "2022-12",
-     "2023-01",
-     "2023-02",
-     "2023-03",
-     "2023-04",
-     "2023-05",
-     "2023-06",
-     "2023-07",
-     "2023-08",
-     "2023-09",
-     "2023-10",
-     "2023-11",
-     "2023-12",
-     "2024-01",
-     "2024-02",
-     "2024-03",
-     "2024-04",
-     "2024-05",
-     "2024-06",
-     "2024-07",
-     "2024-08",
-     "2024-09",
-     "2024-10",
-     "2024-11",
-     "2024-12",
-     "2024-07",
-     "2024-08",
-     "2024-09",
-     "2024-10",
-     "2024-11",
-     "2024-12"
+     "Sep 23",
+     "Oct 23",
+     "Nov 23",
+     "Dec 23",
+     "Jan 24",
+     "Feb 24",
+     "Mar 24",
+     "Apr 24",
+     "May 24",
+     "Jun 24",
+     "Jul 24",
+     "Aug 24",
+     "Sep 24",
+     "Oct 24",
+     "Nov 24",
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Aug 25",
+     "Sep 25",
+     "Oct 25",
+     "Nov 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26",
+     "Sep 26",
+     "Oct 26",
+     "Nov 26",
+     "Dec 26",
+     "Jan 27",
+     "Feb 27"
     ],
     "actual": [
-     755.9,
-     830.7,
-     1121.9,
-     1327.4,
-     1263.6,
-     1086.2,
-     1126.1,
-     1090.1,
-     1042.1,
-     1016.7,
-     1002.9,
-     959.5,
-     934.7,
-     794.6,
-     725.2,
-     694.4,
-     723.2,
-     665.7,
-     649.2,
-     672.7,
-     706.6,
-     747.0,
-     721.7,
-     677.8,
-     663.7,
-     663.7,
-     678.7,
-     690.6,
-     712.9,
-     681.9,
-     680.1,
-     693.6,
-     679.2,
-     646.4,
-     657.0,
-     648.7,
-     638.7,
+     267.3,
+     266.0,
+     266.5,
+     265.4,
+     262.3,
+     268.0,
+     265.4,
+     268.2,
+     267.9,
+     267.3,
+     271.5,
+     270.6,
+     263.9,
+     267.2,
+     265.3,
+     263.7,
+     262.7,
+     269.7,
+     272.4,
+     270.5,
+     267.3,
+     265.1,
+     264.6,
+     263.1,
+     259.4,
+     259.3,
+     257.3,
+     253.6,
+     253.0,
+     258.5,
+     263.5,
+     277.0,
+     306.6,
+     296.7,
+     283.3,
+     280.6,
      null,
      null,
      null,
@@ -1911,14 +2030,13 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
-     638.7,
-     680.1,
-     680.1,
-     685.4,
-     668.2,
-     682.7,
-     681.6
+     280.6,
+     279.3,
+     278.3,
+     278.6,
+     280.2,
+     279.1,
+     281.9
     ],
     "p10": [
      null,
@@ -1956,14 +2074,13 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
-     638.7,
-     668.2,
-     664.7,
-     652.8,
-     653.8,
-     646.8,
-     653.0
+     280.6,
+     271.0,
+     263.3,
+     257.4,
+     251.9,
+     248.4,
+     249.7
     ],
     "p90": [
      null,
@@ -2001,14 +2118,13 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
-     638.7,
-     690.2,
-     739.6,
-     726.8,
-     718.4,
-     821.1,
-     750.9
+     280.6,
+     287.8,
+     294.1,
+     301.6,
+     311.7,
+     313.6,
+     318.2
     ],
     "naive": [
      null,
@@ -2046,941 +2162,1149 @@ td.r,th.r{text-align:right}
      null,
      null,
      null,
-     null,
-     638.7,
-     638.7,
-     638.7,
-     638.7,
-     638.7,
-     638.7,
-     638.7
+     280.6,
+     280.6,
+     280.6,
+     280.6,
+     280.6,
+     280.6,
+     280.6
     ]
    },
    "backtest": {
     "labels": [
-     "2018-04",
-     "2018-05",
-     "2018-06",
-     "2018-07",
-     "2018-08",
-     "2018-09",
-     "2018-10",
-     "2018-11",
-     "2018-12",
-     "2019-01",
-     "2019-02",
-     "2019-03",
-     "2019-04",
-     "2019-05",
-     "2019-06",
-     "2019-07",
-     "2019-08",
-     "2019-09",
-     "2019-10",
-     "2019-11",
-     "2019-12",
-     "2020-01",
-     "2020-02",
-     "2020-03",
-     "2020-04",
-     "2020-05",
-     "2020-06",
-     "2020-07",
-     "2020-08",
-     "2020-09",
-     "2020-10",
-     "2020-11",
-     "2020-12",
-     "2021-01",
-     "2021-02",
-     "2021-03",
-     "2021-04",
-     "2021-05",
-     "2021-06",
-     "2021-07",
-     "2021-08",
-     "2021-09",
-     "2021-10",
-     "2021-11",
-     "2021-12",
-     "2022-01",
-     "2022-02",
-     "2022-03",
-     "2022-04",
-     "2022-05",
-     "2022-06",
-     "2022-07",
-     "2022-08",
-     "2022-09",
-     "2022-10",
-     "2022-11",
-     "2022-12",
-     "2023-01",
-     "2023-02",
-     "2023-03",
-     "2023-04",
-     "2023-05",
-     "2023-06",
-     "2023-07",
-     "2023-08",
-     "2023-09",
-     "2023-10",
-     "2023-11",
-     "2023-12",
-     "2024-01",
-     "2024-02",
-     "2024-03",
-     "2024-04",
-     "2024-05",
-     "2024-06",
-     "2024-07",
-     "2024-08",
-     "2024-09"
+     "Apr 18",
+     "May 18",
+     "Jun 18",
+     "Jul 18",
+     "Aug 18",
+     "Sep 18",
+     "Oct 18",
+     "Nov 18",
+     "Dec 18",
+     "Jan 19",
+     "Feb 19",
+     "Mar 19",
+     "Apr 19",
+     "May 19",
+     "Jun 19",
+     "Jul 19",
+     "Aug 19",
+     "Sep 19",
+     "Oct 19",
+     "Nov 19",
+     "Dec 19",
+     "Jan 20",
+     "Feb 20",
+     "Mar 20",
+     "Apr 20",
+     "May 20",
+     "Jun 20",
+     "Jul 20",
+     "Aug 20",
+     "Sep 20",
+     "Oct 20",
+     "Nov 20",
+     "Dec 20",
+     "Jan 21",
+     "Feb 21",
+     "Mar 21",
+     "Apr 21",
+     "May 21",
+     "Jun 21",
+     "Jul 21",
+     "Aug 21",
+     "Sep 21",
+     "Oct 21",
+     "Nov 21",
+     "Dec 21",
+     "Jan 22",
+     "Feb 22",
+     "Mar 22",
+     "Apr 22",
+     "May 22",
+     "Jun 22",
+     "Jul 22",
+     "Aug 22",
+     "Sep 22",
+     "Oct 22",
+     "Nov 22",
+     "Dec 22",
+     "Jan 23",
+     "Feb 23",
+     "Mar 23",
+     "Apr 23",
+     "May 23",
+     "Jun 23",
+     "Jul 23",
+     "Aug 23",
+     "Sep 23",
+     "Oct 23",
+     "Nov 23",
+     "Dec 23",
+     "Jan 24",
+     "Feb 24",
+     "Mar 24",
+     "Apr 24",
+     "May 24",
+     "Jun 24",
+     "Jul 24",
+     "Aug 24",
+     "Sep 24",
+     "Oct 24",
+     "Nov 24",
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Aug 25",
+     "Sep 25",
+     "Oct 25",
+     "Nov 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ],
     "actual": [
-     689.6,
-     722.7,
-     721.7,
-     721.7,
-     713.6,
-     739.9,
-     744.1,
-     662.4,
-     620.0,
-     631.5,
-     653.5,
-     663.3,
-     682.7,
-     676.2,
-     633.4,
-     636.6,
-     620.0,
-     624.0,
-     620.0,
-     626.8,
-     641.7,
-     632.9,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     620.0,
-     859.5,
-     888.9,
-     883.6,
-     919.5,
-     722.1,
-     744.0,
-     734.5,
-     1245.0,
-     1361.8,
-     1262.9,
-     755.9,
-     830.7,
-     1121.9,
-     1327.4,
-     1263.6,
-     1086.2,
-     1126.1,
-     1090.1,
-     1042.1,
-     1016.7,
-     1002.9,
-     959.5,
-     934.7,
-     794.6,
-     725.2,
-     694.4,
-     723.2,
-     665.7,
-     649.2,
-     672.7,
-     706.6,
-     747.0,
-     721.7,
-     677.8,
-     663.7,
-     663.7,
-     678.7,
-     690.6,
-     712.9,
-     681.9,
-     680.1,
-     693.6,
-     679.2,
-     646.4
+     238.3,
+     241.9,
+     243.8,
+     248.5,
+     252.3,
+     250.2,
+     251.2,
+     246.7,
+     242.4,
+     235.9,
+     230.8,
+     226.6,
+     225.0,
+     227.4,
+     223.9,
+     223.9,
+     224.7,
+     224.2,
+     224.6,
+     222.0,
+     217.3,
+     216.8,
+     220.9,
+     220.1,
+     207.9,
+     201.5,
+     202.4,
+     206.3,
+     212.1,
+     214.1,
+     223.7,
+     224.7,
+     229.7,
+     237.7,
+     249.9,
+     274.0,
+     289.7,
+     298.5,
+     311.4,
+     320.2,
+     326.9,
+     325.8,
+     326.7,
+     323.2,
+     313.8,
+     304.4,
+     304.6,
+     304.7,
+     316.9,
+     322.4,
+     326.3,
+     319.8,
+     309.9,
+     306.8,
+     299.7,
+     283.8,
+     280.4,
+     275.8,
+     282.0,
+     284.5,
+     289.1,
+     285.9,
+     280.4,
+     270.7,
+     267.6,
+     267.3,
+     266.0,
+     266.5,
+     265.4,
+     262.3,
+     268.0,
+     265.4,
+     268.2,
+     267.9,
+     267.3,
+     271.5,
+     270.6,
+     263.9,
+     267.2,
+     265.3,
+     263.7,
+     262.7,
+     269.7,
+     272.4,
+     270.5,
+     267.3,
+     265.1,
+     264.6,
+     263.1,
+     259.4,
+     259.3,
+     257.3,
+     253.6,
+     253.0,
+     258.5,
+     263.5,
+     277.0,
+     306.6,
+     296.7,
+     283.3,
+     280.6
     ],
     "pred": [
-     697.8,
-     678.5,
-     677.5,
-     698.9,
-     733.4,
-     732.6,
-     732.9,
-     727.3,
-     749.0,
-     716.9,
-     640.7,
-     624.1,
-     648.5,
-     669.9,
-     674.5,
-     678.4,
-     665.7,
-     629.3,
-     639.7,
-     609.5,
-     628.4,
-     616.6,
-     634.3,
-     632.6,
-     615.8,
-     377.2,
-     623.1,
-     618.0,
-     628.9,
-     623.7,
-     619.3,
-     626.3,
-     621.0,
-     628.8,
-     618.2,
-     645.0,
-     631.2,
-     866.9,
-     909.1,
-     789.7,
-     855.4,
-     678.6,
-     865.2,
-     893.7,
-     1137.4,
-     972.3,
-     967.8,
-     1024.1,
-     921.4,
-     1002.1,
-     1105.5,
-     1153.8,
-     1066.9,
-     1111.9,
-     1095.4,
-     1019.4,
-     1025.5,
-     1000.6,
-     948.3,
-     896.9,
-     743.1,
-     689.5,
-     682.0,
-     689.1,
-     616.1,
-     636.7,
-     690.6,
-     712.5,
-     731.2,
-     664.1,
-     652.9,
-     669.2,
-     719.1,
-     666.8,
-     675.1,
-     683.8,
-     659.6,
-     685.4
+     241.5,
+     238.0,
+     243.8,
+     238.7,
+     245.6,
+     245.9,
+     251.5,
+     253.5,
+     251.2,
+     253.2,
+     246.1,
+     240.7,
+     235.0,
+     230.8,
+     227.5,
+     226.7,
+     229.3,
+     222.7,
+     223.0,
+     222.4,
+     224.5,
+     224.3,
+     223.2,
+     217.1,
+     217.8,
+     217.9,
+     212.2,
+     195.3,
+     198.9,
+     205.1,
+     212.1,
+     218.3,
+     216.3,
+     227.8,
+     227.2,
+     236.5,
+     246.7,
+     263.4,
+     294.3,
+     305.9,
+     309.7,
+     329.3,
+     336.8,
+     338.2,
+     330.6,
+     333.2,
+     323.3,
+     307.1,
+     300.6,
+     308.2,
+     310.9,
+     327.3,
+     333.2,
+     332.1,
+     313.6,
+     297.2,
+     297.8,
+     290.1,
+     268.9,
+     273.1,
+     270.4,
+     284.1,
+     285.5,
+     293.7,
+     283.8,
+     277.1,
+     265.3,
+     267.0,
+     269.4,
+     266.5,
+     267.0,
+     264.6,
+     261.2,
+     273.0,
+     265.4,
+     272.6,
+     269.7,
+     269.6,
+     276.5,
+     270.3,
+     258.5,
+     268.4,
+     265.3,
+     265.2,
+     264.4,
+     275.9,
+     276.4,
+     271.2,
+     267.2,
+     264.8,
+     265.4,
+     262.5,
+     257.2,
+     259.2,
+     256.3,
+     251.4,
+     253.1,
+     263.3,
+     268.7,
+     288.6,
+     335.0
     ],
     "p10": [
-     656.3,
-     638.7,
-     656.5,
-     671.7,
-     695.4,
-     708.7,
-     722.3,
-     711.9,
-     710.5,
-     668.5,
-     577.0,
-     570.5,
-     591.7,
-     615.0,
-     608.0,
-     634.9,
-     644.3,
-     594.8,
-     617.0,
-     588.0,
-     600.7,
-     610.5,
-     617.7,
-     615.5,
-     616.4,
-     608.8,
-     605.1,
-     611.7,
-     615.6,
-     612.8,
-     615.7,
-     607.8,
-     607.4,
-     604.7,
-     614.2,
-     614.0,
-     615.3,
-     829.5,
-     854.2,
-     811.9,
-     798.1,
-     648.1,
-     661.8,
-     694.9,
-     1044.7,
-     1098.4,
-     963.6,
-     689.3,
-     688.6,
-     889.2,
-     956.9,
-     928.9,
-     1046.0,
-     1063.9,
-     939.8,
-     933.5,
-     951.6,
-     924.0,
-     887.6,
-     829.2,
-     604.7,
-     591.1,
-     601.5,
-     578.8,
-     584.5,
-     596.2,
-     623.5,
-     627.0,
-     654.8,
-     583.6,
-     624.2,
-     596.7,
-     634.7,
-     648.3,
-     656.5,
-     660.9,
-     651.9,
-     652.8
+     233.3,
+     230.6,
+     236.2,
+     231.5,
+     238.2,
+     239.0,
+     244.0,
+     246.0,
+     243.9,
+     246.1,
+     238.2,
+     232.2,
+     224.0,
+     219.2,
+     215.4,
+     216.5,
+     219.8,
+     213.2,
+     214.6,
+     214.8,
+     217.7,
+     218.2,
+     216.5,
+     207.8,
+     210.2,
+     208.9,
+     205.1,
+     181.0,
+     186.1,
+     195.8,
+     202.5,
+     206.9,
+     206.8,
+     212.1,
+     214.5,
+     223.8,
+     231.3,
+     239.3,
+     242.8,
+     256.8,
+     269.7,
+     289.4,
+     303.1,
+     311.4,
+     311.6,
+     318.2,
+     308.4,
+     286.2,
+     277.3,
+     289.8,
+     296.3,
+     301.3,
+     309.7,
+     311.7,
+     293.9,
+     274.5,
+     278.3,
+     270.2,
+     236.8,
+     246.9,
+     247.7,
+     261.3,
+     266.2,
+     275.4,
+     268.0,
+     261.1,
+     245.5,
+     249.7,
+     254.3,
+     253.1,
+     254.2,
+     252.3,
+     248.8,
+     256.5,
+     250.9,
+     257.9,
+     256.1,
+     256.4,
+     261.2,
+     256.7,
+     243.3,
+     253.2,
+     251.8,
+     252.8,
+     252.7,
+     260.9,
+     262.0,
+     258.0,
+     254.4,
+     252.6,
+     254.6,
+     252.4,
+     246.8,
+     249.2,
+     246.5,
+     241.2,
+     243.5,
+     251.0,
+     255.3,
+     262.4,
+     270.5
     ],
     "p90": [
-     748.1,
-     714.4,
-     709.1,
-     743.3,
-     768.4,
-     758.1,
-     750.7,
-     741.8,
-     789.3,
-     785.4,
-     689.1,
-     639.8,
-     646.5,
-     676.7,
-     693.6,
-     710.6,
-     699.9,
-     667.0,
-     667.3,
-     648.8,
-     647.1,
-     642.2,
-     643.0,
-     662.6,
-     655.7,
-     644.7,
-     646.8,
-     630.6,
-     628.1,
-     626.1,
-     628.6,
-     624.8,
-     626.2,
-     625.5,
-     624.9,
-     639.6,
-     709.1,
-     954.7,
-     995.2,
-     1016.6,
-     1025.2,
-     751.7,
-     953.5,
-     1039.6,
-     1792.2,
-     1913.2,
-     1781.5,
-     1146.6,
-     1326.0,
-     1650.9,
-     1803.9,
-     1733.4,
-     1547.4,
-     1789.6,
-     1716.5,
-     1392.1,
-     1072.7,
-     1033.7,
-     988.1,
-     986.1,
-     1000.4,
-     1049.3,
-     893.5,
-     751.6,
-     675.7,
-     688.3,
-     772.9,
-     799.0,
-     882.5,
-     889.9,
-     824.6,
-     766.3,
-     812.4,
-     727.2,
-     736.0,
-     772.1,
-     730.4,
-     726.8
+     250.0,
+     245.7,
+     251.6,
+     246.2,
+     253.2,
+     253.1,
+     259.3,
+     261.3,
+     258.8,
+     260.5,
+     254.1,
+     249.5,
+     246.5,
+     243.0,
+     240.2,
+     237.4,
+     239.2,
+     232.6,
+     231.8,
+     230.3,
+     231.5,
+     230.5,
+     230.0,
+     226.8,
+     225.6,
+     227.3,
+     219.5,
+     210.8,
+     212.7,
+     214.9,
+     222.3,
+     230.4,
+     226.2,
+     244.7,
+     240.7,
+     250.0,
+     263.0,
+     290.0,
+     356.7,
+     364.4,
+     355.5,
+     374.6,
+     374.1,
+     367.3,
+     350.8,
+     348.8,
+     339.0,
+     329.5,
+     325.8,
+     327.7,
+     326.2,
+     355.6,
+     358.5,
+     353.8,
+     334.7,
+     321.9,
+     318.6,
+     311.5,
+     305.4,
+     302.0,
+     295.2,
+     308.8,
+     306.3,
+     313.3,
+     300.6,
+     294.0,
+     286.8,
+     285.5,
+     285.4,
+     280.7,
+     280.5,
+     277.4,
+     274.2,
+     290.5,
+     280.6,
+     288.1,
+     284.0,
+     283.4,
+     292.8,
+     284.6,
+     274.6,
+     284.5,
+     279.5,
+     278.3,
+     276.7,
+     291.8,
+     291.5,
+     285.2,
+     280.7,
+     277.6,
+     276.6,
+     273.0,
+     268.1,
+     269.6,
+     266.5,
+     262.0,
+     263.2,
+     276.3,
+     282.8,
+     317.4,
+     414.8
     ]
    },
-   "ladder": [
-    {
-     "model": "N-BEATS",
-     "is_ensemble": false,
-     "mape": 10.71,
-     "skill": 16.86,
-     "dir": 64.06,
-     "dm_p": 0.0809,
-     "weight": 36.1,
-     "gated_out": false
-    },
-    {
-     "model": "Smart Buy ensemble",
-     "is_ensemble": true,
-     "mape": 11.21,
-     "skill": 12.94,
-     "dir": 62.5,
-     "dm_p": 0.0816,
-     "weight": 100.0,
-     "gated_out": false
-    },
-    {
-     "model": "LightGBM",
-     "is_ensemble": false,
-     "mape": 12.27,
-     "skill": 4.71,
-     "dir": 60.94,
-     "dm_p": 0.0221,
-     "weight": 17.1,
-     "gated_out": false
-    },
-    {
-     "model": "ElasticNet",
-     "is_ensemble": false,
-     "mape": 12.56,
-     "skill": 2.42,
-     "dir": 45.31,
-     "dm_p": 0.3665,
-     "weight": 14.2,
-     "gated_out": false
-    },
-    {
-     "model": "Naive",
-     "is_ensemble": false,
-     "mape": 12.88,
-     "skill": 0.0,
-     "dir": 14.06,
-     "dm_p": 1.0,
-     "weight": 26.6,
-     "gated_out": false
-    },
-    {
-     "model": "Holt-Winters ETS",
-     "is_ensemble": false,
-     "mape": 13.11,
-     "skill": -1.82,
-     "dir": 37.5,
-     "dm_p": 0.9905,
-     "weight": 3.2,
-     "gated_out": true
-    },
-    {
-     "model": "Bayesian ridge",
-     "is_ensemble": false,
-     "mape": 13.84,
-     "skill": -7.47,
-     "dir": 43.75,
-     "dm_p": 0.7975,
-     "weight": 1.4,
-     "gated_out": true
-    },
-    {
-     "model": "LSTM",
-     "is_ensemble": false,
-     "mape": 14.37,
-     "skill": -11.58,
-     "dir": 53.12,
-     "dm_p": 0.8796,
-     "weight": 0.0,
-     "gated_out": true
-    },
-    {
-     "model": "Seasonal naive",
-     "is_ensemble": false,
-     "mape": 14.79,
-     "skill": -14.9,
-     "dir": 43.75,
-     "dm_p": 0.9319,
-     "weight": 1.5,
-     "gated_out": true
-    }
-   ],
-   "drivers": [
-    {
-     "name": "China PVC Exports Proxy",
-     "rho": 0.3924,
-     "lead": 1,
-     "granger_p": 0.0,
-     "sig": true
-    },
-    {
-     "name": "Maritime Freight (BDI)",
-     "rho": 0.295,
-     "lead": 5,
-     "granger_p": 0.001,
-     "sig": true
-    },
-    {
-     "name": "Cracker Spread",
-     "rho": -0.2409,
-     "lead": 6,
-     "granger_p": 0.0003,
-     "sig": true
-    },
-    {
-     "name": "Geopolitical Risk (GPR)",
-     "rho": -0.2266,
-     "lead": 1,
-     "granger_p": 0.0249,
-     "sig": true
-    },
-    {
-     "name": "Crude Oil Brent",
-     "rho": 0.1594,
-     "lead": 5,
-     "granger_p": 0.0262,
-     "sig": true
-    },
-    {
-     "name": "Naphtha Feedstock",
-     "rho": 0.15,
-     "lead": 4,
-     "granger_p": 0.0184,
-     "sig": true
-    },
-    {
-     "name": "Ethylene Monomer Price",
-     "rho": 0.1366,
-     "lead": 4,
-     "granger_p": 0.0223,
-     "sig": true
-    },
-    {
-     "name": "USD/INR Exchange Rate",
-     "rho": -0.1161,
-     "lead": 4,
-     "granger_p": 0.1917,
-     "sig": false
-    }
-   ],
    "scorecard": [
     {
+     "window": "development",
      "h": 1,
-     "ens": 6.05,
-     "naive": 6.05,
-     "skill": 0.0,
-     "dir": 16.67,
-     "dm_p": 0.5
+     "n": 78,
+     "ens": 1.4,
+     "naive": 1.78,
+     "skill": 21.4,
+     "dir": 71.4,
+     "dm_p": 0.0004,
+     "gate_skill": 10,
+     "gate_dir": 65
     },
     {
+     "window": "development",
      "h": 2,
-     "ens": 11.39,
-     "naive": 10.01,
-     "skill": -13.79,
-     "dir": 30.3,
-     "dm_p": 0.1015
+     "n": 78,
+     "ens": 2.65,
+     "naive": 3.15,
+     "skill": 16.0,
+     "dir": 66.7,
+     "dm_p": 0.0286,
+     "gate_skill": 12,
+     "gate_dir": 63
     },
     {
+     "window": "development",
      "h": 3,
-     "ens": 10.69,
-     "naive": 12.65,
-     "skill": 15.47,
-     "dir": 63.64,
-     "dm_p": 0.0894
+     "n": 78,
+     "ens": 3.94,
+     "naive": 4.37,
+     "skill": 10.0,
+     "dir": 61.5,
+     "dm_p": 0.1164,
+     "gate_skill": 15,
+     "gate_dir": 62
     },
     {
+     "window": "development",
      "h": 4,
-     "ens": 9.68,
-     "naive": 12.34,
-     "skill": 21.56,
-     "dir": 69.7,
-     "dm_p": 0.0557
+     "n": 78,
+     "ens": 5.41,
+     "naive": 5.43,
+     "skill": 0.2,
+     "dir": 43.8,
+     "dm_p": 0.4896,
+     "gate_skill": 12,
+     "gate_dir": 60
     },
     {
+     "window": "development",
      "h": 5,
-     "ens": 11.58,
-     "naive": 11.92,
-     "skill": 2.81,
-     "dir": 54.55,
-     "dm_p": 0.4321
+     "n": 78,
+     "ens": 6.16,
+     "naive": 6.25,
+     "skill": 1.4,
+     "dir": 52.6,
+     "dm_p": 0.4218,
+     "gate_skill": 10,
+     "gate_dir": 59
     },
     {
+     "window": "development",
      "h": 6,
-     "ens": 10.99,
-     "naive": 13.16,
-     "skill": 16.45,
-     "dir": 66.67,
-     "dm_p": 0.1697
+     "n": 78,
+     "ens": 6.77,
+     "naive": 6.81,
+     "skill": 0.5,
+     "dir": 51.3,
+     "dm_p": 0.4733,
+     "gate_skill": 10,
+     "gate_dir": 58
+    },
+    {
+     "window": "holdout",
+     "h": 1,
+     "n": 19,
+     "ens": 2.0,
+     "naive": 2.03,
+     "skill": 1.7,
+     "dir": 78.9,
+     "dm_p": 0.4523,
+     "gate_skill": 10,
+     "gate_dir": 65
+    },
+    {
+     "window": "holdout",
+     "h": 2,
+     "n": 18,
+     "ens": 3.74,
+     "naive": 3.62,
+     "skill": -3.4,
+     "dir": 77.8,
+     "dm_p": 0.6302,
+     "gate_skill": 12,
+     "gate_dir": 63
+    },
+    {
+     "window": "holdout",
+     "h": 3,
+     "n": 17,
+     "ens": 4.88,
+     "naive": 4.3,
+     "skill": -13.7,
+     "dir": 58.8,
+     "dm_p": 0.8347,
+     "gate_skill": 15,
+     "gate_dir": 62
+    },
+    {
+     "window": "holdout",
+     "h": 4,
+     "n": 16,
+     "ens": 4.68,
+     "naive": 4.59,
+     "skill": -2.1,
+     "dir": 68.8,
+     "dm_p": 0.689,
+     "gate_skill": 12,
+     "gate_dir": 60
+    },
+    {
+     "window": "holdout",
+     "h": 5,
+     "n": 15,
+     "ens": 5.45,
+     "naive": 5.41,
+     "skill": -0.7,
+     "dir": 53.3,
+     "dm_p": 0.5425,
+     "gate_skill": 10,
+     "gate_dir": 59
+    },
+    {
+     "window": "holdout",
+     "h": 6,
+     "n": 14,
+     "ens": 6.39,
+     "naive": 6.04,
+     "skill": -5.8,
+     "dir": 28.6,
+     "dm_p": 0.9312,
+     "gate_skill": 10,
+     "gate_dir": 58
+    }
+   ],
+   "ladder": [
+    {
+     "model": "Smart Buy ensemble (headline)",
+     "key": "gated_equal_weight",
+     "is_ensemble": true,
+     "is_headline": true,
+     "mape": 3.94,
+     "skill": 10.0,
+     "dir": 61.5,
+     "dm_p": 0.1164,
+     "weight": null
+    },
+    {
+     "model": "Ensemble, inverse-MSE",
+     "key": "gated_inv_mse",
+     "is_ensemble": true,
+     "is_headline": false,
+     "mape": 3.95,
+     "skill": 9.8,
+     "dir": 62.8,
+     "dm_p": 0.1189,
+     "weight": null
+    },
+    {
+     "model": "N-BEATS, global panel",
+     "key": "nbeats",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 3.96,
+     "skill": 9.5,
+     "dir": 62.8,
+     "dm_p": 0.1098,
+     "weight": 7.4
+    },
+    {
+     "model": "ARIMA",
+     "key": "arima",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.06,
+     "skill": 7.1,
+     "dir": 66.7,
+     "dm_p": 0.2112,
+     "weight": 14.4
+    },
+    {
+     "model": "Average of all, no gate",
+     "key": "all_equal",
+     "is_ensemble": true,
+     "is_headline": false,
+     "mape": 4.06,
+     "skill": 7.3,
+     "dir": 67.9,
+     "dm_p": 0.1442,
+     "weight": null
+    },
+    {
+     "model": "VECM (cost drivers)",
+     "key": "vecm",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.08,
+     "skill": 6.8,
+     "dir": 61.5,
+     "dm_p": 0.2957,
+     "weight": 7.7
+    },
+    {
+     "model": "ETS (damped)",
+     "key": "ets",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.17,
+     "skill": 4.6,
+     "dir": 56.4,
+     "dm_p": 0.3624,
+     "weight": 18.1
+    },
+    {
+     "model": "ElasticNet + drivers",
+     "key": "enet",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.18,
+     "skill": 4.5,
+     "dir": 61.5,
+     "dm_p": 0.2907,
+     "weight": 24.1
+    },
+    {
+     "model": "LightGBM + drivers",
+     "key": "lgb_local",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.2,
+     "skill": 4.0,
+     "dir": 60.3,
+     "dm_p": 0.2734,
+     "weight": 21.7
+    },
+    {
+     "model": "LightGBM, global panel",
+     "key": "lgb_global",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.22,
+     "skill": 3.5,
+     "dir": 57.7,
+     "dm_p": 0.3266,
+     "weight": 6.0
+    },
+    {
+     "model": "Na\u00efve (no change)",
+     "key": "naive",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.37,
+     "skill": 0.0,
+     "dir": null,
+     "dm_p": null,
+     "weight": null
+    },
+    {
+     "model": "Drift",
+     "key": "drift",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 4.46,
+     "skill": -2.0,
+     "dir": 48.7,
+     "dm_p": 0.6794,
+     "weight": 0.6
+    },
+    {
+     "model": "Seasonal na\u00efve",
+     "key": "seasonal_naive",
+     "is_ensemble": false,
+     "is_headline": false,
+     "mape": 6.77,
+     "skill": -54.8,
+     "dir": 52.6,
+     "dm_p": 0.9983,
+     "weight": 0.0
+    }
+   ],
+   "fallback_pct": 0.0,
+   "err_corr": {
+    "mean_off_diag": 0.84,
+    "most_diversifying": "Seasonal na\u00efve",
+    "its_mean_corr": 0.68
+   },
+   "drivers": [
+    {
+     "name": "WB energy price index",
+     "rho": 0.442,
+     "lead": 1,
+     "q": 0.0,
+     "sig": true
+    },
+    {
+     "name": "Brent crude (US$/bbl)",
+     "rho": 0.411,
+     "lead": 1,
+     "q": 0.0,
+     "sig": true
+    },
+    {
+     "name": "US industrial production, total (INDPRO)",
+     "rho": 0.264,
+     "lead": 0,
+     "q": 0.6238,
+     "sig": false
+    },
+    {
+     "name": "USD/INR",
+     "rho": -0.232,
+     "lead": 1,
+     "q": 0.002,
+     "sig": true
+    },
+    {
+     "name": "PPI basic organic chemicals (WPU0613)",
+     "rho": -0.228,
+     "lead": 6,
+     "q": 0.6256,
+     "sig": false
+    },
+    {
+     "name": "US natural gas (US$/mmbtu)",
+     "rho": 0.217,
+     "lead": 2,
+     "q": 0.0001,
+     "sig": true
+    },
+    {
+     "name": "US freight transportation services index (TSIFRGHT)",
+     "rho": 0.207,
+     "lead": 0,
+     "q": 0.3685,
+     "sig": false
+    },
+    {
+     "name": "US industrial production: resins (IPG3252N)",
+     "rho": 0.179,
+     "lead": 0,
+     "q": 0.1619,
+     "sig": false
+    },
+    {
+     "name": "OECD China leading indicator",
+     "rho": 0.178,
+     "lead": 2,
+     "q": 0.0036,
+     "sig": true
+    },
+    {
+     "name": "Geopolitical Risk index",
+     "rho": 0.11,
+     "lead": 2,
+     "q": 0.1959,
+     "sig": false
     }
    ],
    "bands": [
     {
-     "h": "h=1",
-     "cov": 63.64,
-     "status": "NEAR PASS",
-     "width": 8.3,
-     "bias": 0.58
+     "window": "development",
+     "h": 1,
+     "cov": 76.9,
+     "width": 4.8,
+     "n": 78
     },
     {
-     "h": "h=2",
-     "cov": 65.15,
-     "status": "NEAR PASS",
-     "width": 17.6,
-     "bias": -0.44
+     "window": "development",
+     "h": 2,
+     "cov": 74.4,
+     "width": 9.6,
+     "n": 78
     },
     {
-     "h": "h=3",
-     "cov": 56.06,
-     "status": "NEAR PASS",
-     "width": 22.9,
-     "bias": -1.32
+     "window": "development",
+     "h": 3,
+     "cov": 71.8,
+     "width": 12.2,
+     "n": 78
     },
     {
-     "h": "h=4",
-     "cov": 51.52,
-     "status": "FAIL",
-     "width": 21.5,
-     "bias": -1.19
+     "window": "development",
+     "h": 4,
+     "cov": 67.9,
+     "width": 16.3,
+     "n": 78
     },
     {
-     "h": "h=5",
-     "cov": 53.03,
-     "status": "NEAR PASS",
-     "width": 21.7,
-     "bias": 0.59
+     "window": "development",
+     "h": 5,
+     "cov": 66.7,
+     "width": 18.2,
+     "n": 78
     },
     {
-     "h": "h=6",
-     "cov": 54.55,
-     "status": "NEAR PASS",
-     "width": 23.1,
-     "bias": -0.25
+     "window": "development",
+     "h": 6,
+     "cov": 67.9,
+     "width": 20.9,
+     "n": 78
+    },
+    {
+     "window": "holdout",
+     "h": 1,
+     "cov": 78.9,
+     "width": 5.4,
+     "n": 19
+    },
+    {
+     "window": "holdout",
+     "h": 2,
+     "cov": 77.8,
+     "width": 9.4,
+     "n": 18
+    },
+    {
+     "window": "holdout",
+     "h": 3,
+     "cov": 76.5,
+     "width": 12.0,
+     "n": 17
+    },
+    {
+     "window": "holdout",
+     "h": 4,
+     "cov": 81.2,
+     "width": 13.8,
+     "n": 16
+    },
+    {
+     "window": "holdout",
+     "h": 5,
+     "cov": 73.3,
+     "width": 14.1,
+     "n": 15
+    },
+    {
+     "window": "holdout",
+     "h": 6,
+     "cov": 78.6,
+     "width": 15.4,
+     "n": 14
     }
    ],
-   "weights": [
-    {
-     "h": "h=1",
-     "naive": 100.0,
-     "seasonal_naive": 0.0,
-     "ets": 0.0,
-     "elasticnet": 0.0,
-     "bayesian_ridge": 0.0,
-     "lightgbm": 0.0,
-     "lstm": 0.0,
-     "nbeats": 0.0
-    },
-    {
-     "h": "h=2",
-     "naive": 62.1,
-     "seasonal_naive": 1.2,
-     "ets": 0.5,
-     "elasticnet": 14.4,
-     "bayesian_ridge": 2.3,
-     "lightgbm": 0.0,
-     "lstm": 0.0,
-     "nbeats": 19.6
-    },
-    {
-     "h": "h=3",
-     "naive": 25.8,
-     "seasonal_naive": 1.4,
-     "ets": 3.1,
-     "elasticnet": 13.7,
-     "bayesian_ridge": 1.4,
-     "lightgbm": 16.6,
-     "lstm": 0.0,
-     "nbeats": 38.0
-    },
-    {
-     "h": "h=4",
-     "naive": 0.0,
-     "seasonal_naive": 0.7,
-     "ets": 3.0,
-     "elasticnet": 4.6,
-     "bayesian_ridge": 1.0,
-     "lightgbm": 26.0,
-     "lstm": 35.2,
-     "nbeats": 29.4
-    },
-    {
-     "h": "h=5",
-     "naive": 9.1,
-     "seasonal_naive": 1.5,
-     "ets": 4.7,
-     "elasticnet": 7.5,
-     "bayesian_ridge": 4.5,
-     "lightgbm": 19.3,
-     "lstm": 38.3,
-     "nbeats": 15.0
-    },
-    {
-     "h": "h=6",
-     "naive": 0.0,
-     "seasonal_naive": 2.8,
-     "ets": 5.5,
-     "elasticnet": 12.8,
-     "bayesian_ridge": 14.5,
-     "lightgbm": 19.5,
-     "lstm": 35.7,
-     "nbeats": 9.2
-    }
-   ],
+   "bands_gauss": {
+    "1": 82.1,
+    "2": 71.8,
+    "3": 61.5,
+    "4": 60.3,
+    "5": 57.7,
+    "6": 56.4
+   },
    "regimes": [
     {
-     "name": "Calm (2018-2019)",
+     "name": "Calm",
      "n": 24,
-     "mape": 4.83,
-     "skill": 8.32,
-     "dir": 66.67,
-     "cov": 66.67
+     "mape": 2.48,
+     "skill": 4.3,
+     "dir": 54.2,
+     "cov": 70.8
     },
     {
-     "name": "COVID Shock (2020)",
+     "name": "Covid",
      "n": 12,
-     "mape": 8.41,
-     "skill": -67.62,
-     "dir": 16.67,
-     "cov": 83.33
+     "mape": 6.18,
+     "skill": 13.9,
+     "dir": 83.3,
+     "cov": 41.7
     },
     {
-     "name": "Spike / Rally (2021-2022 H1)",
+     "name": "Spike",
      "n": 18,
-     "mape": 19.57,
-     "skill": 29.98,
-     "dir": 88.89,
-     "cov": 33.33
+     "mape": 5.81,
+     "skill": 12.5,
+     "dir": 61.1,
+     "cov": 66.7
     },
     {
-     "name": "Slide / Normalization (2022 H2-2024)",
-     "n": 24,
-     "mape": 8.05,
-     "skill": 14.17,
-     "dir": 66.67,
-     "cov": 70.83
+     "name": "Slide",
+     "n": 30,
+     "mape": 2.76,
+     "skill": 1.0,
+     "dir": 60.0,
+     "cov": 93.3
+    },
+    {
+     "name": "Holdout",
+     "n": 12,
+     "mape": 2.47,
+     "skill": -14.2,
+     "dir": 50.0,
+     "cov": 91.7
     }
    ],
    "replay": {
-    "months": 66,
-    "base_price": 780.48,
-    "sb_price": 767.21,
-    "gross_pct": 1.7,
-    "net_pct": 1.68,
-    "inv_base": 45.7,
-    "inv_sb": 45.2,
-    "inv_delta": -0.5,
-    "wc_shift": -0.13,
+    "months": 78,
     "signals": {
-     "BUY NORMAL": 45,
-     "DEFER": 17,
-     "BUY NOW": 4
+     "BUY NORMAL": 59,
+     "DEFER": 14,
+     "BUY NOW": 5
     },
+    "gross_price_saving_pct": 0.45,
+    "net_saving_after_carry_pct": 0.41,
+    "permutation_p_value": 0.003,
+    "random_timing_median_pct": -0.03,
+    "perfect_foresight_net_pct": 1.31,
+    "inventory_days_baseline": 45.7,
+    "inventory_days_smartbuy": 46.2,
+    "inventory_days_change": 0.6,
+    "rupees_cr_saved_per_100cr_spend": 0.41,
+    "extra_working_capital_cr_per_100cr_spend": 0.16,
     "curve": {
      "labels": [
-      "2019-01",
-      "2019-02",
-      "2019-03",
-      "2019-04",
-      "2019-05",
-      "2019-06",
-      "2019-07",
-      "2019-08",
-      "2019-09",
-      "2019-10",
-      "2019-11",
-      "2019-12",
-      "2020-01",
-      "2020-02",
-      "2020-03",
-      "2020-04",
-      "2020-05",
-      "2020-06",
-      "2020-07",
-      "2020-08",
-      "2020-09",
-      "2020-10",
-      "2020-11",
-      "2020-12",
-      "2021-01",
-      "2021-02",
-      "2021-03",
-      "2021-04",
-      "2021-05",
-      "2021-06",
-      "2021-07",
-      "2021-08",
-      "2021-09",
-      "2021-10",
-      "2021-11",
-      "2021-12",
-      "2022-01",
-      "2022-02",
-      "2022-03",
-      "2022-04",
-      "2022-05",
-      "2022-06",
-      "2022-07",
-      "2022-08",
-      "2022-09",
-      "2022-10",
-      "2022-11",
-      "2022-12",
-      "2023-01",
-      "2023-02",
-      "2023-03",
-      "2023-04",
-      "2023-05",
-      "2023-06",
-      "2023-07",
-      "2023-08",
-      "2023-09",
-      "2023-10",
-      "2023-11",
-      "2023-12",
-      "2024-01",
-      "2024-02",
-      "2024-03",
-      "2024-04",
-      "2024-05",
-      "2024-06"
-     ],
-     "cum": [
-      0.0,
-      -0.733,
-      0.339,
-      1.598,
-      1.173,
-      1.032,
-      1.034,
-      0.667,
-      0.779,
-      0.704,
-      0.641,
-      0.608,
-      0.596,
-      0.555,
-      0.519,
-      0.487,
-      0.394,
-      0.376,
-      0.412,
-      0.345,
-      0.331,
-      0.318,
-      0.342,
-      0.295,
-      0.315,
-      0.299,
-      0.284,
-      0.27,
-      0.257,
-      0.248,
-      0.421,
-      0.253,
-      0.239,
-      0.226,
-      0.214,
-      0.039,
-      0.053,
-      1.448,
-      2.399,
-      2.3,
-      2.221,
-      2.145,
-      2.077,
-      2.015,
-      1.958,
-      2.195,
-      2.135,
-      2.08,
-      2.038,
-      2.002,
-      1.968,
-      1.853,
-      1.827,
-      1.961,
-      1.931,
-      1.9,
-      1.869,
-      1.84,
-      1.813,
-      1.788,
-      2.099,
-      1.88,
-      1.772,
-      1.747,
-      1.723,
-      1.7
+      "Jan 18",
+      "Feb 18",
+      "Mar 18",
+      "Apr 18",
+      "May 18",
+      "Jun 18",
+      "Jul 18",
+      "Aug 18",
+      "Sep 18",
+      "Oct 18",
+      "Nov 18",
+      "Dec 18",
+      "Jan 19",
+      "Feb 19",
+      "Mar 19",
+      "Apr 19",
+      "May 19",
+      "Jun 19",
+      "Jul 19",
+      "Aug 19",
+      "Sep 19",
+      "Oct 19",
+      "Nov 19",
+      "Dec 19",
+      "Jan 20",
+      "Feb 20",
+      "Mar 20",
+      "Apr 20",
+      "May 20",
+      "Jun 20",
+      "Jul 20",
+      "Aug 20",
+      "Sep 20",
+      "Oct 20",
+      "Nov 20",
+      "Dec 20",
+      "Jan 21",
+      "Feb 21",
+      "Mar 21",
+      "Apr 21",
+      "May 21",
+      "Jun 21",
+      "Jul 21",
+      "Aug 21",
+      "Sep 21",
+      "Oct 21",
+      "Nov 21",
+      "Dec 21",
+      "Jan 22",
+      "Feb 22",
+      "Mar 22",
+      "Apr 22",
+      "May 22",
+      "Jun 22",
+      "Jul 22",
+      "Aug 22",
+      "Sep 22",
+      "Oct 22",
+      "Nov 22",
+      "Dec 22",
+      "Jan 23",
+      "Feb 23",
+      "Mar 23",
+      "Apr 23",
+      "May 23",
+      "Jun 23",
+      "Jul 23",
+      "Aug 23",
+      "Sep 23",
+      "Oct 23",
+      "Nov 23",
+      "Dec 23",
+      "Jan 24",
+      "Feb 24",
+      "Mar 24",
+      "Apr 24",
+      "May 24",
+      "Jun 24"
      ],
      "signal": [
       "BUY NORMAL",
-      "BUY NOW",
-      "BUY NORMAL",
-      "DEFER",
-      "DEFER",
-      "DEFER",
-      "BUY NORMAL",
-      "DEFER",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "DEFER",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
-      "DEFER",
-      "DEFER",
       "BUY NORMAL",
-      "DEFER",
-      "DEFER",
-      "DEFER",
       "BUY NORMAL",
-      "DEFER",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
@@ -2992,24 +3316,12 @@ td.r,th.r{text-align:right}
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
-      "BUY NOW",
-      "BUY NOW",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
-      "BUY NORMAL",
       "BUY NORMAL",
       "DEFER",
       "DEFER",
       "DEFER",
       "BUY NORMAL",
       "BUY NORMAL",
-      "BUY NORMAL",
-      "DEFER",
-      "DEFER",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
@@ -3018,6 +3330,41 @@ td.r,th.r{text-align:right}
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NOW",
+      "BUY NOW",
+      "BUY NOW",
+      "BUY NORMAL",
+      "BUY NOW",
+      "BUY NOW",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "DEFER",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "DEFER",
+      "DEFER",
+      "DEFER",
+      "DEFER",
+      "DEFER",
+      "DEFER",
+      "DEFER",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "DEFER",
+      "DEFER",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
+      "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
       "BUY NORMAL",
@@ -3025,352 +3372,334 @@ td.r,th.r{text-align:right}
       "BUY NORMAL"
      ],
      "price": [
-      631.5,
-      653.5,
-      663.3,
-      682.7,
-      676.2,
-      633.4,
-      636.6,
-      620.0,
-      624.0,
-      620.0,
-      626.8,
-      641.7,
-      632.9,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      620.0,
-      859.5,
-      888.9,
-      883.6,
-      919.5,
-      722.1,
-      744.0,
-      734.5,
-      1245.0,
-      1361.8,
-      1262.9,
-      755.9,
-      830.7,
-      1121.9,
-      1327.4,
-      1263.6,
-      1086.2,
-      1126.1,
-      1090.1,
-      1042.1,
-      1016.7,
-      1002.9,
-      959.5,
-      934.7,
-      794.6,
-      725.2,
-      694.4,
-      723.2,
-      665.7,
-      649.2,
-      672.7,
-      706.6,
-      747.0,
-      721.7,
-      677.8,
-      663.7,
-      663.7,
-      678.7,
-      690.6,
-      712.9,
-      681.9,
-      680.1
+      236.4,
+      240.3,
+      238.3,
+      241.9,
+      243.8,
+      248.5,
+      252.3,
+      250.2,
+      251.2,
+      246.7,
+      242.4,
+      235.9,
+      230.8,
+      226.6,
+      225.0,
+      227.4,
+      223.9,
+      223.9,
+      224.7,
+      224.2,
+      224.6,
+      222.0,
+      217.3,
+      216.8,
+      220.9,
+      220.1,
+      207.9,
+      201.5,
+      202.4,
+      206.3,
+      212.1,
+      214.1,
+      223.7,
+      224.7,
+      229.7,
+      237.7,
+      249.9,
+      274.0,
+      289.7,
+      298.5,
+      311.4,
+      320.2,
+      326.9,
+      325.8,
+      326.7,
+      323.2,
+      313.8,
+      304.4,
+      304.6,
+      304.7,
+      316.9,
+      322.4,
+      326.3,
+      319.8,
+      309.9,
+      306.8,
+      299.7,
+      283.8,
+      280.4,
+      275.8,
+      282.0,
+      284.5,
+      289.1,
+      285.9,
+      280.4,
+      270.7,
+      267.6,
+      267.3,
+      266.0,
+      266.5,
+      265.4,
+      262.3,
+      268.0,
+      265.4,
+      268.2,
+      267.9,
+      267.3,
+      271.5
      ]
+    },
+    "holdout": {
+     "months": 17,
+     "signals": {
+      "BUY NORMAL": 14,
+      "DEFER": 2,
+      "BUY NOW": 1
+     },
+     "gross_price_saving_pct": -0.9,
+     "net_saving_after_carry_pct": -0.08,
+     "permutation_p_value": 0.439,
+     "random_timing_median_pct": -0.11,
+     "perfect_foresight_net_pct": 1.67,
+     "inventory_days_baseline": 45.7,
+     "inventory_days_smartbuy": 46.6,
+     "inventory_days_change": 0.9,
+     "rupees_cr_saved_per_100cr_spend": -0.08,
+     "extra_working_capital_cr_per_100cr_spend": 0.25
     }
-   },
-   "err_corr": {
-    "mean_off_diag": 0.786,
-    "nbeats_vs_rest": 0.562
    }
   }
  },
  "hypotheses": {
-  "H1_Coal_and_Stocks_Lead_Aluminium": {
-   "hypothesis": "China coal and LME stocks lead aluminium by 1 to 3 months.",
-   "coal_evidence": "peak rho = 0.1409 at lag 3M | Granger p(raw) = 0.1199, p(FDR) = 0.1713",
-   "stocks_evidence": "peak rho = -0.0777 at lag 6M | Granger p(raw) = 0.0007, p(FDR) = 0.0035",
-   "verdict": "PARTIALLY SUPPORTED",
-   "narrative": "LME stocks strongly Granger-cause aluminium price movements (FDR p = 0.007). Coal shows leading cross-correlation (peak at lag 3M), but raw linear Granger causality (FDR p = 0.200) indicates non-linear interaction with power curbs, which LightGBM and N-BEATS capture."
+  "H1": {
+   "hypothesis": "China coal and LME stocks lead aluminium by 1-3 months.",
+   "coal (Australian thermal, proxy)": "best lead 0m, rho=+0.36; Granger(3) p=0.724, FDR q=0.827 -> NOT SUPPORTED",
+   "LME stocks": "NOT TESTABLE: no free historical LME stock series. The Round 2 'stocks' series was computed from the aluminium price itself.",
+   "verdict": "NOT SUPPORTED (coal only; stocks not testable)"
   },
-  "H2_Ethylene_and_Exports_Lead_PVC": {
-   "hypothesis": "Ethylene monomer and China export offers lead PVC by 1 to 2 months.",
-   "ethylene_evidence": "peak rho = 0.1366 at lag 4M | Granger p(raw) = 0.0223, p(FDR) = 0.0476",
-   "export_evidence": "peak rho = 0.3924 at lag 1M | Granger p(raw) = 0.0, p(FDR) = 0.0",
-   "verdict": "SUPPORTED",
-   "narrative": "Both China PVC export supply trends (FDR p = 0.000) and Ethylene monomer feedstock (FDR p = 0.056) Granger-cause Asian PVC spot price movements with 1\u20134 months lead."
+  "H2": {
+   "hypothesis": "Ethylene/VCM and China export offers lead PVC by 1-2 months.",
+   "monomers (US PPI basic organic chemicals, proxy)": "best lead 6m, rho=-0.23; Granger(3) p=0.465, FDR q=0.626 -> NOT SUPPORTED",
+   "Brent crude": "best lead 1m, rho=+0.41; Granger(3) p=0.000, FDR q=0.000 -> SUPPORTED",
+   "China export offers": "NOT TESTABLE with free data. The Round 2 'exports' series was the PVC price lagged two months.",
+   "verdict": "PARTIAL (monomer proxy: NOT SUPPORTED; Brent: SUPPORTED; exports not testable)"
   },
-  "H3_PMI_Leads_Both_Materials": {
-   "hypothesis": "Manufacturing PMIs lead both materials by 0 to 2 months.",
-   "al_pmi_evidence": "peak rho = 0.2176 at lag 0M | Granger p(FDR) = 0.2978",
-   "pvc_pmi_evidence": "peak rho = 0.1154 at lag 2M | Granger p(FDR) = 0.2673",
-   "verdict": "PARTIALLY SUPPORTED",
-   "narrative": "Manufacturing PMIs show positive contemporaneous/short correlation (rho = +0.22 at lag 0 for AL, rho = +0.12 at lag 2 for PVC), but do not Granger-cause prices linearly after FDR correction. PMI acts as a regime state indicator rather than a stand-alone linear predictor."
+  "H3": {
+   "hypothesis": "Manufacturing activity leads both materials by 0-2 months.",
+   "aluminium vs OECD China CLI": "best lead 2m, rho=+0.20; Granger(3) p=0.005, FDR q=0.019 -> SUPPORTED",
+   "aluminium vs US industrial production": "best lead 0m, rho=+0.23; Granger(3) p=0.698, FDR q=0.827 -> PARTIAL",
+   "PVC vs OECD China CLI": "best lead 2m, rho=+0.18; Granger(3) p=0.001, FDR q=0.004 -> SUPPORTED",
+   "PVC vs US industrial production": "best lead 0m, rho=+0.26; Granger(3) p=0.416, FDR q=0.624 -> PARTIAL",
+   "note": "PMIs are paywalled; the OECD China CLI and US industrial production are free activity proxies.",
+   "verdict": "see per-row verdicts"
   },
-  "H4_USD_INR_Contemporaneous_PassThrough": {
-   "hypothesis": "USD/INR moves the landed price in the same month.",
-   "al_fx_evidence": "peak rho = -0.1641 | Granger p(FDR) = 0.1498",
-   "pvc_fx_evidence": "peak rho = -0.1161 | Granger p(FDR) = 0.2396",
-   "verdict": "SUPPORTED",
-   "narrative": "Currency movements pass through to domestic Indian landed parity contemporaneously (lag 0). Indian buyers experience FX fluctuations directly on import parity pricing."
+  "H4": {
+   "hypothesis": "USD/INR moves the landed (rupee) price in the same month.",
+   "share of monthly rupee-price variance due to USD/INR, aluminium": "1.3%",
+   "share of monthly rupee-price variance due to USD/INR, PVC proxy": "35.8%",
+   "does USD/INR forecast the US$ price? aluminium": "best lead 0m, rho=-0.30; Granger(3) p=0.152, FDR q=0.365",
+   "does USD/INR forecast the US$ price? PVC": "best lead 1m, rho=-0.23; Granger(3) p=0.000, FDR q=0.002",
+   "verdict": "PARTIAL. Pass-through is one-for-one by construction (rupee price = US$ price x USD/INR), but USD/INR explains only 1% of aluminium's monthly rupee-price variance (the US$ price dominates) and 36% for the less volatile PVC index. Handle FX in the landed-cost overlay; as a predictor of the US$ price it is significant for PVC and not significant for aluminium."
+  },
+  "extra": {
+   "copper -> aluminium": "best lead 0m, rho=+0.68; Granger(3) p=0.022, FDR q=0.075"
   }
  },
- "meta": {
-  "folds": 78,
-  "window": "Jan 2018 - Jun 2024",
-  "obs": 181,
-  "carrying_cost_pct": 1.0
- }
+ "generated": "04 Oct 2026"
 }</script>
 <script>
 const D = JSON.parse(document.getElementById('payload').textContent);
 let MAT = 'aluminium', H = 3, fcChart, btChart, rpChart;
 const $ = id => document.getElementById(id);
 const fmt = (v,d=0) => v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const pct = (v,d=1) => (v>0?'+':'') + v.toFixed(d) + '%';
+const pct = (v,d=1) => v==null?'—':(v>0?'+':'') + v.toFixed(d) + '%';
 const CSS = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const P = (m,v) => m.cur + fmt(v, m.cur ? 0 : 1);
 
-/* horizon buttons */
 $('hSeg').innerHTML = [1,2,3,4,5,6].map(h =>
   `<button data-h="${h}" aria-pressed="${h===3}">${h}M</button>`).join('');
-$('hSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
-  H = +b.dataset.h; render(); };
-$('matSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
-  MAT = b.dataset.mat; render(); };
+$('hSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return; H = +b.dataset.h; render(); };
+$('matSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return; MAT = b.dataset.mat; render(); };
+$('genDate').textContent = D.generated;
 
 function render(){
   const m = D.materials[MAT], hz = m.horizons[H];
-  document.querySelectorAll('#matSeg button').forEach(b =>
-    b.setAttribute('aria-pressed', b.dataset.mat===MAT));
-  document.querySelectorAll('#hSeg button').forEach(b =>
-    b.setAttribute('aria-pressed', +b.dataset.h===H));
-
+  document.querySelectorAll('#matSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mat===MAT));
+  document.querySelectorAll('#hSeg button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.h===H));
+  const dev = m.scorecard.filter(r=>r.window==='development'&&r.h===3)[0];
   $('mOrigin').textContent = m.origin;
-  $('fcTitle').textContent = m.name + ' — six-month forecast';
+  $('mFolds').textContent = (dev?dev.n:'—') + ' scored origins, 2018–2024' + (m.scorecard.some(r=>r.window==='holdout')?' + 2025–26 holdout':'');
+  $('fcTitle').textContent = m.name;
+  $('fcSub').textContent = m.unit + ' · 80% band (P10–P90)';
   $('decH').textContent = H + (H===1?' month ahead':' months ahead');
+  $('staleBox').style.display = m.stale ? '' : 'none';
+  $('staleTxt').innerHTML = '<b>Data needs refreshing.</b> ' + m.stale;
 
-  /* decision */
   const cls = hz.signal==='BUY NOW'?'buy':hz.signal==='DEFER'?'defer':'hold';
-  $('decBand').className = 'decband ' + cls;
-  $('decSig').className = 'decsig ' + cls;
+  $('decBand').className = 'decband ' + cls; $('decSig').className = 'decsig ' + cls;
   $('decSig').textContent = hz.signal;
   $('decSub').textContent = hz.signal==='BUY NOW'
     ? `Forward-cover ${hz.cover.toFixed(1)} months. Expected rise beats the cost of carry.`
-    : hz.signal==='DEFER'
-    ? `Minimum safety cover ${hz.cover.toFixed(1)} month. Re-run next month.`
+    : hz.signal==='DEFER' ? `Minimum safety cover ${hz.cover.toFixed(1)} month. Re-run next month.`
     : `Buy the BoM requirement, ${hz.cover.toFixed(1)} months cover. No timing bet.`;
   $('decSav').textContent = pct(hz.exp_saving_pct,2);
   $('decSav').className = 'v ' + (hz.exp_saving_pct>0?'pos':'neg');
   $('decPup').textContent = hz.p_up.toFixed(1) + '%';
   $('decCov').textContent = hz.cover.toFixed(1) + ' mo';
-  $('decBandR').textContent = fmt(hz.p10) + ' – ' + fmt(hz.p90);
+  $('decBandR').textContent = P(m,hz.p10) + ' – ' + P(m,hz.p90);
+  $('decModels').textContent = hz.models ? hz.models.split('|').join(', ') : 'none: naïve fallback';
 
-  /* price cells */
-  $('pSpot').textContent = '$' + fmt(m.spot);
-  $('pOrigin').textContent = 'as of ' + m.origin;
-  $('pP50').textContent = '$' + fmt(hz.p50);
-  $('pChg').textContent = pct(hz.change_pct,2) + ' vs spot';
+  $('pSpot').textContent = P(m,m.spot); $('pOrigin').textContent = 'as of ' + m.origin;
+  $('pP50').textContent = P(m,hz.p50); $('pChg').textContent = pct(hz.change_pct,2) + ' vs latest';
   $('pChg').style.color = hz.change_pct>0 ? CSS('--buy') : CSS('--acg');
-  $('pP10').textContent = '$' + fmt(hz.p10);
-  $('pP90').textContent = '$' + fmt(hz.p90);
+  $('pP10').textContent = P(m,hz.p10); $('pP90').textContent = P(m,hz.p90);
+
+  $('noteTxt').textContent = m.note;
+  if (m.landed){ $('landedTxt').style.display='';
+    $('landedTxt').innerHTML = `<b>Rupee view.</b> At USD/INR ${m.landed.usd_inr_latest} (${m.landed.usd_inr_month}) the latest LME price is ₹${fmt(m.landed.lme_in_inr_per_t)}/t before premium, freight and duties. ${m.landed.note}`;
+  } else $('landedTxt').style.display='none';
+  const mx = Math.max(...m.shap.map(s=>Math.abs(s.contribution_pct)), 0.01);
+  $('shapList').innerHTML = m.shap.map(s=>`<div class="dr"><div class="n">${s.driver}</div>
+    <div class="l num">${pct(s.contribution_pct,2)}</div>
+    <div class="bar"><i class="${s.contribution_pct>0?'p':'n'}" style="width:${Math.abs(s.contribution_pct)/mx*50}%"></i></div></div>`).join('');
 
   drawForecast(m); drawBacktest(m); drawReplay(m);
-  fillScorecard(m); fillLadder(m); fillDrivers(m); fillRegimes(m); fillReplay(m);
-  calc();
+  fillScorecard(m); fillLadder(m); fillDrivers(m); fillRegimes(m); fillReplay(m); calc();
 }
 
-/* ---------- charts ---------- */
-const baseOpts = () => ({responsive:true,maintainAspectRatio:false,
-  interaction:{mode:'index',intersect:false},
+const baseOpts = () => ({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
   plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,
-      font:{family:"'IBM Plex Sans'",size:11},color:CSS('--ink2'),padding:14,usePointStyle:true}},
-    tooltip:{backgroundColor:'#16181d',padding:10,cornerRadius:3,titleFont:{size:11},
-      bodyFont:{family:"'IBM Plex Mono'",size:11}}},
-  scales:{x:{grid:{display:false},ticks:{font:{size:10},color:CSS('--mute'),maxRotation:0,
-      autoSkipPadding:22}},
-    y:{grid:{color:CSS('--rule2')},border:{display:false},
-      ticks:{font:{family:"'IBM Plex Mono'",size:10},color:CSS('--mute')}}}});
+      font:{family:"'IBM Plex Sans'",size:11},color:CSS('--ink2'),padding:14,usePointStyle:true,
+      filter:i=>!['P10','P90'].includes(i.text)}},
+    tooltip:{backgroundColor:'#16181d',padding:10,cornerRadius:3,titleFont:{size:11},bodyFont:{family:"'IBM Plex Mono'",size:11}}},
+  scales:{x:{grid:{display:false},ticks:{font:{size:10},color:CSS('--mute'),maxRotation:0,autoSkipPadding:22}},
+    y:{grid:{color:CSS('--rule2')},border:{display:false},ticks:{font:{family:"'IBM Plex Mono'",size:10},color:CSS('--mute')}}}});
 
 function drawForecast(m){
-  const s = m.series;
-  fcChart && fcChart.destroy();
+  const s = m.series; fcChart && fcChart.destroy();
   fcChart = new Chart($('fcChart'), {type:'line', data:{labels:s.labels, datasets:[
-    {label:'P90',data:s.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.09)',
-     fill:'+1',pointRadius:0,tension:.25},
-    {label:'P10',data:s.p10,borderColor:'transparent',backgroundColor:'transparent',
-     pointRadius:0,tension:.25},
-    {label:'Actual',data:s.actual,borderColor:CSS('--ink'),borderWidth:1.8,
-     pointRadius:0,tension:.2},
-    {label:'Forecast P50',data:s.p50,borderColor:CSS('--acg'),borderWidth:2.2,
-     borderDash:[5,3],pointRadius:0,tension:.25},
-    {label:'Naïve',data:s.naive,borderColor:CSS('--mute'),borderWidth:1.2,
-     borderDash:[2,3],pointRadius:0}
-  ]}, options:{...baseOpts(),
-    plugins:{...baseOpts().plugins,
-      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
-        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+    {label:'P90',data:s.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.09)',fill:'+1',pointRadius:0,tension:.25},
+    {label:'P10',data:s.p10,borderColor:'transparent',backgroundColor:'transparent',pointRadius:0,tension:.25},
+    {label:'Actual',data:s.actual,borderColor:CSS('--ink'),borderWidth:1.8,pointRadius:0,tension:.2},
+    {label:'Forecast P50',data:s.p50,borderColor:CSS('--acg'),borderWidth:2.2,borderDash:[5,3],pointRadius:0,tension:.25},
+    {label:'Naïve',data:s.naive,borderColor:CSS('--mute'),borderWidth:1.2,borderDash:[2,3],pointRadius:0}
+  ]}, options:baseOpts()});
 }
-
 function drawBacktest(m){
-  const b = m.backtest;
-  btChart && btChart.destroy();
+  const b = m.backtest; btChart && btChart.destroy();
   btChart = new Chart($('btChart'), {type:'line', data:{labels:b.labels, datasets:[
-    {label:'P90',data:b.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.08)',
-     fill:'+1',pointRadius:0,tension:.2},
+    {label:'P90',data:b.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.08)',fill:'+1',pointRadius:0,tension:.2},
     {label:'P10',data:b.p10,borderColor:'transparent',pointRadius:0,tension:.2},
-    {label:'Realised',data:b.actual,borderColor:CSS('--ink'),borderWidth:1.8,
-     pointRadius:0,tension:.2},
-    {label:'Forecast made 3 months earlier',data:b.pred,borderColor:CSS('--acg'),
-     borderWidth:1.6,pointRadius:0,tension:.2}
-  ]}, options:{...baseOpts(),
-    plugins:{...baseOpts().plugins,
-      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
-        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+    {label:'Realised',data:b.actual,borderColor:CSS('--ink'),borderWidth:1.8,pointRadius:0,tension:.2},
+    {label:'Forecast made 3 months earlier',data:b.pred,borderColor:CSS('--acg'),borderWidth:1.6,pointRadius:0,tension:.2}
+  ]}, options:baseOpts()});
 }
-
 function drawReplay(m){
-  const c = m.replay.curve;
-  rpChart && rpChart.destroy();
+  const c = m.replay.curve; rpChart && rpChart.destroy();
+  const pts = k => c.price.map((p,i)=>c.signal[i]===k?p:null);
   rpChart = new Chart($('rpChart'), {type:'line', data:{labels:c.labels, datasets:[
-    {label:'Cumulative saving vs buy-every-month (%)',data:c.cum,
-     borderColor:CSS('--buy'),backgroundColor:'rgba(15,107,63,.10)',
-     borderWidth:2,fill:true,pointRadius:0,tension:.25}
-  ]}, options:{...baseOpts(),
-    scales:{...baseOpts().scales,
-      y:{...baseOpts().scales.y,ticks:{...baseOpts().scales.y.ticks,
-        callback:v=>v.toFixed(1)+'%'}}}}});
+    {label:'Purchase price',data:c.price,borderColor:CSS('--ink'),borderWidth:1.6,pointRadius:0,tension:.2},
+    {label:'BUY NOW',data:pts('BUY NOW'),showLine:false,pointRadius:5,pointBackgroundColor:CSS('--buy'),borderColor:CSS('--buy')},
+    {label:'DEFER',data:pts('DEFER'),showLine:false,pointRadius:5,pointBackgroundColor:CSS('--defer'),borderColor:CSS('--defer')}
+  ]}, options:baseOpts()});
 }
 
-/* ---------- tables ---------- */
 function fillScorecard(m){
-  const gates = {1:10,2:12,3:15,4:12,5:10,6:10};
-  const dirGates = {1:65,2:63,3:62,4:60,5:59,6:58};
-  $('scTable').querySelector('tbody').innerHTML = m.scorecard.map(r=>{
-    const pass = r.skill >= gates[r.h];
-    return `<tr class="${r.h===H?'hl':''}">
-      <td>${r.h} month${r.h>1?'s':''}</td>
-      <td class="r num">${r.ens.toFixed(2)}%</td>
-      <td class="r num">${r.naive.toFixed(2)}%</td>
-      <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r num">${r.dm_p.toFixed(4)}</td>
-      <td class="r"><span class="chip ${pass?'ok':'no'}">${pass?'pass':'miss'}</span></td></tr>`;
-  }).join('');
+  const rows = w => m.scorecard.filter(r=>r.window===w).map(r=>{
+    const pass = r.skill >= r.gate_skill;
+    return `<tr class="${r.h===H?'hl':''}"><td>${r.h} month${r.h>1?'s':''}</td><td class="r num">${r.n}</td>
+      <td class="r num">${r.ens.toFixed(2)}%</td><td class="r num">${r.naive.toFixed(2)}%</td>
+      <td class="r num" style="color:${r.skill>0?CSS('--buy'):r.skill<0?CSS('--acg'):CSS('--mute')}">${pct(r.skill)}</td>
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td>
+      <td class="r num">${r.dm_p==null?'—':r.dm_p.toFixed(3)}</td>
+      <td class="r"><span class="chip ${pass?'ok':'no'}">≥${r.gate_skill}% ${pass?'pass':'miss'}</span></td></tr>`;}).join('');
+  const ho = rows('holdout');
+  $('scTable').querySelector('tbody').innerHTML =
+    '<tr class="sep"><td colspan="8">Development, origins 2018–2024</td></tr>' + rows('development') +
+    (ho ? '<tr class="sep"><td colspan="8">Holdout, origins 2025 onward (scored once)</td></tr>' + ho : '');
+  const d3 = m.scorecard.filter(r=>r.window==='development'&&r.h===3)[0];
+  $('scSub').textContent = 'Smart Buy headline ensemble · gates set in Round 1';
+  const sig = d3.dm_p!=null && d3.dm_p<0.10;
+  $('scFlag').innerHTML = `<b>At the 3-month decision horizon the skill is ${pct(d3.skill)} against a ≥15% gate${d3.skill>=15?' (pass)':' (missed)'}; the improvement over naïve is ${sig?'':'<u>not</u> '}statistically significant (DM p = ${d3.dm_p==null?'—':d3.dm_p.toFixed(3)}).</b> Gates are reported unchanged from Round 1.`;
 }
-
 function fillLadder(m){
   $('ldTable').querySelector('tbody').innerHTML = m.ladder.map(r=>`
-    <tr class="${r.is_ensemble?'hl':''} ${r.weight===0&&!r.is_ensemble?'dim':''}">
-      <td>${r.model}</td>
+    <tr class="${r.is_headline?'hl':''} ${r.weight===0?'dim':''}"><td>${r.model}</td>
       <td class="r num">${r.mape.toFixed(2)}%</td>
       <td class="r num" style="color:${r.skill>0?CSS('--buy'):r.skill<0?CSS('--acg'):CSS('--mute')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r">${r.is_ensemble?'—':
-        r.weight===0?'<span class="chip zero">gated out</span>':
-        '<span class="num">'+r.weight.toFixed(1)+'%</span>'}</td></tr>`).join('');
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td>
+      <td class="r num">${r.dm_p==null?'—':r.dm_p.toFixed(3)}</td>
+      <td class="r">${r.weight==null?'—':r.weight===0?'<span class="chip zero">gated out</span>':'<span class="num">'+r.weight.toFixed(1)+'%</span>'}</td></tr>`).join('');
   const e = m.err_corr;
-  $('ldNote').innerHTML = `Mean error correlation between members <b class="num">${e.mean_off_diag}</b>;
-    N-BEATS against the rest <b class="num">${e.nbeats_vs_rest}</b>. N-BEATS is the only genuine
-    diversifier, which is why it carries the ensemble. Models that fail the naïve gate receive
-    zero weight automatically.`;
+  $('ldNote').innerHTML = `Weight = average share of the headline ensemble over the development months (a model earns a share only in months when it had beaten naïve on its own past forecasts). Naïve was used alone in <b class="num">${m.fallback_pct}%</b> of months. Mean error correlation between members is <b class="num">${e.mean_off_diag}</b>; the most independent member is ${e.most_diversifying} (<b class="num">${e.its_mean_corr}</b>).`;
 }
-
 function fillDrivers(m){
   const mx = Math.max(...m.drivers.map(d=>Math.abs(d.rho)));
-  $('drvList').innerHTML = m.drivers.map(d=>{
-    const w = Math.abs(d.rho)/mx*50;
-    return `<div class="dr">
-      <div class="n" title="${d.name}">${d.name}
-        ${d.sig?'<span class="chip ok" style="margin-left:5px">granger</span>':''}</div>
+  $('drvList').innerHTML = m.drivers.map(d=>`<div class="dr">
+      <div class="n" title="${d.name}">${d.name}${d.sig?' <span class="chip ok" style="margin-left:5px">granger</span>':''}</div>
       <div class="l">${d.lead===0?'same mo':'lead '+d.lead}</div>
-      <div class="bar"><i class="${d.rho>0?'p':'n'}" style="width:${w}%"></i></div></div>`;
-  }).join('');
+      <div class="bar"><i class="${d.rho>0?'p':'n'}" style="width:${Math.abs(d.rho)/mx*50}%"></i></div></div>`).join('');
 }
-
 function fillRegimes(m){
   $('rgTable').querySelector('tbody').innerHTML = m.regimes.map(r=>`
-    <tr><td>${r.name}</td><td class="r num">${r.n}</td>
-      <td class="r num">${r.mape.toFixed(2)}%</td>
+    <tr><td>${r.name}</td><td class="r num">${r.n}</td><td class="r num">${r.mape.toFixed(2)}%</td>
       <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r num">${r.cov.toFixed(1)}%</td></tr>`).join('');
-  $('bdTable').querySelector('tbody').innerHTML = m.bands.map(r=>{
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td><td class="r num">${r.cov.toFixed(1)}%</td></tr>`).join('');
+  const dv = m.bands.filter(r=>r.window==='development');
+  $('bdTable').querySelector('tbody').innerHTML = dv.map(r=>{
     const ok = r.cov>=75 && r.cov<=85;
-    return `<tr class="${r.h==='h='+H?'hl':''}"><td>${r.h.replace('h=','')} month${r.h==='h=1'?'':'s'}</td>
-      <td class="r num">${r.cov.toFixed(1)}%</td>
+    return `<tr class="${r.h===H?'hl':''}"><td>${r.h} month${r.h===1?'':'s'}</td>
+      <td class="r num">${r.cov.toFixed(1)}%</td><td class="r num">${m.bands_gauss[r.h]!=null?m.bands_gauss[r.h].toFixed(1)+'%':'—'}</td>
       <td class="r num">${r.width.toFixed(1)}%</td>
-      <td class="r num">${pct(r.bias,2)}</td>
-      <td class="r"><span class="chip ${ok?'ok':r.cov>=55?'warn':'no'}">${ok?'pass':'miss'}</span></td></tr>`;
-  }).join('');
+      <td class="r"><span class="chip ${ok?'ok':'no'}">${ok?'pass':'miss'}</span></td></tr>`;}).join('');
+  const lo = Math.min(...dv.map(r=>r.cov)), hi = Math.max(...dv.map(r=>r.cov));
+  const npass = dv.filter(r=>r.cov>=75&&r.cov<=85).length;
+  $('bdFlag').innerHTML = `<b>Calibrated coverage runs ${lo.toFixed(0)}–${hi.toFixed(0)}% against the 75–85% gate (${npass} of 6 horizons pass).</b> Round 2 reported 55–65% with no calibration step; the conformal step is now real.`;
 }
-
 function fillReplay(m){
-  const r = m.replay;
+  const r = m.replay, tot = Object.values(r.signals).reduce((a,b)=>a+b,0);
+  $('rpTitle').textContent = `Buying replay, development window (${r.months} months)`;
+  const wc = r.extra_working_capital_cr_per_100cr_spend;
   $('rpKpis').innerHTML = `
-    <div class="kpi"><div class="k">Average price paid</div>
-      <div class="v">$${fmt(r.sb_price)}</div>
-      <div class="f">vs $${fmt(r.base_price)} buying monthly</div></div>
-    <div class="kpi"><div class="k">Gross price saving</div>
-      <div class="v" style="color:${CSS('--buy')}">${pct(r.gross_pct,2)}</div>
-      <div class="f">before carrying cost</div></div>
     <div class="kpi"><div class="k">Net saving after carry</div>
-      <div class="v" style="color:${CSS('--buy')}">${pct(r.net_pct,2)}</div>
-      <div class="f">₹${r.net_pct.toFixed(2)} Cr per ₹100 Cr spend</div></div>
-    <div class="kpi"><div class="k">Average cover</div>
-      <div class="v">${r.inv_sb.toFixed(1)} d</div>
-      <div class="f" style="color:${r.inv_delta>0?CSS('--defer'):CSS('--buy')}">
-        ${pct(r.inv_delta,1)} days vs baseline</div></div>
+      <div class="v" style="color:${r.net_saving_after_carry_pct>0?CSS('--buy'):CSS('--acg')}">${pct(r.net_saving_after_carry_pct,2)}</div>
+      <div class="f">₹${r.net_saving_after_carry_pct.toFixed(2)} Cr per ₹100 Cr spend</div></div>
+    <div class="kpi"><div class="k">Better than random timing?</div>
+      <div class="v">p = ${r.permutation_p_value.toFixed(3)}</div>
+      <div class="f">random placement of the same signals: median ${pct(r.random_timing_median_pct,2)}</div></div>
+    <div class="kpi"><div class="k">Perfect-foresight ceiling</div>
+      <div class="v">${pct(r.perfect_foresight_net_pct,2)}</div><div class="f">same rule, actual prices known</div></div>
+    <div class="kpi"><div class="k">Gross price saving</div>
+      <div class="v">${pct(r.gross_price_saving_pct,2)}</div><div class="f">before carrying cost</div></div>
+    <div class="kpi"><div class="k">Inventory cover</div>
+      <div class="v">${r.inventory_days_smartbuy.toFixed(1)} d</div>
+      <div class="f">${pct(r.inventory_days_change,1)} days vs ${r.inventory_days_baseline.toFixed(1)}</div></div>
     <div class="kpi"><div class="k">Working capital</div>
-      <div class="v">${r.wc_shift>0?'−':'+'}₹${Math.abs(r.wc_shift).toFixed(2)} Cr</div>
-      <div class="f">per ₹100 Cr of spend</div></div>
-    <div class="kpi"><div class="k">Months replayed</div>
-      <div class="v">${r.months}</div><div class="f">Jan 2018 – Jun 2024</div></div>`;
-
-  const tot = Object.values(r.signals).reduce((a,b)=>a+b,0);
+      <div class="v">${wc>0?'+':wc<0?'−':''}₹${Math.abs(wc).toFixed(2)} Cr</div>
+      <div class="f">${wc>0?'more tied up':wc<0?'released':'unchanged'}, per ₹100 Cr</div></div>`;
   $('rpSignals').innerHTML = '<div style="font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-bottom:9px">Signals fired</div>' +
-    Object.entries(r.signals).map(([k,v])=>`
-      <div class="dr" style="grid-template-columns:1fr 46px 96px">
-        <div class="n">${k}</div><div class="l">${v} mo</div>
-        <div class="bar"><i class="p" style="left:0;width:${v/tot*100}%;
-          background:${k==='DEFER'?CSS('--defer'):k==='BUY NOW'?CSS('--buy'):CSS('--hold')}"></i></div>
-      </div>`).join('') +
-    `<div style="font-size:11px;color:var(--mute);margin-top:10px">The rule stays silent
-      ${(r.signals['BUY NORMAL']/tot*100).toFixed(0)}% of the time. It only acts when expected
-      saving clears carry and confidence clears 60%.</div>`;
-
-  $('rpNote').innerHTML = `Cover rises from ${r.inv_base.toFixed(0)} to
-    ${r.inv_sb.toFixed(1)} days, so the rule <b>trades inventory days for price capture</b>.
-    That trade is already paid for: carrying cost at 1% per month is subtracted inside the
-    signal, and the net figure above is after carry.`;
+    ['BUY NOW','BUY NORMAL','DEFER'].map(k=>{ const v=r.signals[k]||0; return `
+      <div class="dr" style="grid-template-columns:1fr 46px 96px"><div class="n">${k}</div><div class="l">${v} mo</div>
+      <div class="bar"><i class="p" style="left:0;width:${v/tot*100}%;background:${k==='DEFER'?CSS('--defer'):k==='BUY NOW'?CSS('--buy'):CSS('--hold')}"></i></div></div>`;}).join('') +
+    `<div style="font-size:11px;color:var(--mute);margin-top:10px">The rule stays at BUY NORMAL ${((r.signals['BUY NORMAL']||0)/tot*100).toFixed(0)}% of the time.</div>`;
+  const ho = r.holdout;
+  $('rpNote').innerHTML = `Monthly requirement held constant (no ACG demand data). Leftover inventory is valued at the final price so both policies are compared on equal consumption. `
+    + `A permutation p-value above 0.10 means the saving cannot be told apart from luck in timing.`
+    + (ho ? ` <b>Holdout (${ho.months} months):</b> net ${pct(ho.net_saving_after_carry_pct,2)}, permutation p = ${ho.permutation_p_value.toFixed(3)}.` : '');
 }
 
-/* ---------- calculator ---------- */
 ['bom','oh','it'].forEach(id => $(id).addEventListener('input', calc));
 function calc(){
   const m = D.materials[MAT], cover = m.horizons[H].cover;
   const bom = +$('bom').value||0, oh = +$('oh').value||0, it = +$('it').value||0;
   const qty = Math.max(0, Math.round(cover*bom - oh - it));
   $('calcQty').textContent = fmt(qty) + ' t';
-  $('calcFormula').textContent =
-    `${cover.toFixed(1)} × ${fmt(bom)} − ${fmt(oh)} − ${fmt(it)} = ${fmt(qty)} t`
-    + (qty===0 ? ' · cover already met' : ` · ≈ $${fmt(qty*m.spot/1000)}k at spot`);
+  $('calcFormula').textContent = `${cover.toFixed(1)} × ${fmt(bom)} − ${fmt(oh)} − ${fmt(it)} = ${fmt(qty)} t`
+    + (qty===0 ? ' · cover already met' : (m.cur ? ` · ≈ $${fmt(qty*m.spot/1000)}k at latest price` : ''));
 }
-
 render();
 </script>
 </body>

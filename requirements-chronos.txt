@@ -1,0 +1,3 @@
+# Optional: only for src/sb/chronos_local.py (zero-shot foundation model)
+torch
+chronos-forecasting

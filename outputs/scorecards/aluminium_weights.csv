@@ -1,0 +1,7 @@
+material,h,share_months_naive_fallback_pct,seasonal_naive,drift,ets,arima,vecm,enet,lgb_local,lgb_global,nbeats
+aluminium,1,0.0,0.0,2.0,29.3,14.2,0.0,25.1,4.4,16.6,8.4
+aluminium,2,0.0,0.0,0.0,3.3,25.5,0.0,20.9,25.5,13.5,11.3
+aluminium,3,0.0,0.0,0.0,19.7,19.7,0.0,1.5,19.7,19.7,19.7
+aluminium,4,0.0,0.0,0.0,20.3,20.3,0.0,0.0,20.3,18.7,20.3
+aluminium,5,0.0,0.0,0.0,22.6,22.6,0.0,1.5,7.9,22.6,22.6
+aluminium,6,0.0,0.0,0.0,24.9,24.9,0.0,0.0,0.5,24.9,24.9

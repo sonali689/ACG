@@ -1,0 +1,238 @@
+{
+ "aluminium": {
+  "origin": "Dec 2024",
+  "spot": 2541.0,
+  "unit": "US$/t",
+  "display": "LME aluminium (World Bank monthly average)",
+  "horizons": {
+   "1": {
+    "target_month": "Jan 2025",
+    "p50": 2539.0,
+    "p10": 2420.5,
+    "p90": 2663.2,
+    "change_pct": -0.08,
+    "p_up": 0.491,
+    "expected_saving_net_pct": -1.08,
+    "signal": "BUY NORMAL",
+    "eligible_models": "arima|enet|lgb_global|nbeats"
+   },
+   "2": {
+    "target_month": "Feb 2025",
+    "p50": 2553.3,
+    "p10": 2314.6,
+    "p90": 2816.7,
+    "change_pct": 0.48,
+    "p_up": 0.525,
+    "expected_saving_net_pct": -1.52,
+    "signal": "BUY NORMAL",
+    "eligible_models": "arima|enet|lgb_local|lgb_global|nbeats"
+   },
+   "3": {
+    "target_month": "Mar 2025",
+    "p50": 2551.1,
+    "p10": 2249.6,
+    "p90": 2893.0,
+    "change_pct": 0.4,
+    "p_up": 0.516,
+    "expected_saving_net_pct": -2.6,
+    "signal": "BUY NORMAL",
+    "eligible_models": "arima|lgb_local|lgb_global|nbeats"
+   },
+   "4": {
+    "target_month": "Apr 2025",
+    "p50": 2532.6,
+    "p10": 2207.1,
+    "p90": 2906.0,
+    "change_pct": -0.33,
+    "p_up": 0.488,
+    "expected_saving_net_pct": -4.33,
+    "signal": "BUY NORMAL",
+    "eligible_models": "ets|arima|lgb_local|lgb_global|nbeats"
+   },
+   "5": {
+    "target_month": "May 2025",
+    "p50": 2521.3,
+    "p10": 2159.5,
+    "p90": 2943.6,
+    "change_pct": -0.78,
+    "p_up": 0.474,
+    "expected_saving_net_pct": -5.78,
+    "signal": "BUY NORMAL",
+    "eligible_models": "ets|arima|lgb_local|lgb_global|nbeats"
+   },
+   "6": {
+    "target_month": "Jun 2025",
+    "p50": 2512.9,
+    "p10": 2089.1,
+    "p90": 3022.7,
+    "change_pct": -1.11,
+    "p_up": 0.469,
+    "expected_saving_net_pct": -7.11,
+    "signal": "BUY NORMAL",
+    "eligible_models": "ets|arima|lgb_local|lgb_global|nbeats"
+   }
+  },
+  "shap_drivers_h3": [
+   {
+    "driver": "copper",
+    "contribution_pct": -1.38
+   },
+   {
+    "driver": "China leading indicator",
+    "contribution_pct": 0.81
+   },
+   {
+    "driver": "own price momentum",
+    "contribution_pct": -0.79
+   },
+   {
+    "driver": "US sector output",
+    "contribution_pct": 0.38
+   },
+   {
+    "driver": "nickel",
+    "contribution_pct": 0.36
+   },
+   {
+    "driver": "zinc",
+    "contribution_pct": -0.26
+   },
+   {
+    "driver": "seasonality",
+    "contribution_pct": 0.24
+   },
+   {
+    "driver": "policy uncertainty",
+    "contribution_pct": 0.2
+   }
+  ],
+  "note": "LME aluminium (World Bank monthly average): latest Dec 2024 = 2,541.0 US$/t. Three-month median forecast 2,551.1 (+0.4%), 80% range 2,249.6 to 2,893.0. Probability the price is higher: 52%. After 3% carrying cost, buying ahead now is worth -2.6% (threshold +/-2%, confidence 52% vs 60% needed): BUY NORMAL. Largest pushes in the tree model: copper (-1.4%), China leading indicator (+0.8%), own price momentum (-0.8%). Models currently trusted at this horizon: arima, lgb_local, lgb_global, nbeats. Caution: some driver inputs are stale (see warning).",
+  "landed": {
+   "usd_inr_latest": 95.45,
+   "usd_inr_month": "Aug 2026",
+   "lme_in_inr_per_t": 242533.0,
+   "note": "Index converted at latest USD/INR only. Premium, freight, BCD, SWS and ADD to be calibrated on ACG POs."
+  },
+  "stale_warning": "Latest published price is Dec 2024. Refresh data/raw to forecast from today. These driver inputs are more than 3 months older than the forecast date and are treated as missing, so the driver models are running blind on them: OECD China leading indicator. Refresh data/raw (see SETUP.md).",
+  "stale_inputs": [
+   "OECD China leading indicator"
+  ]
+ },
+ "pvc": {
+  "origin": "Aug 2026",
+  "spot": 280.6,
+  "unit": "index (1982=100)",
+  "display": "US PPI, plastic resins & materials (BLS WPU066), PVC proxy",
+  "horizons": {
+   "1": {
+    "target_month": "Sep 2026",
+    "p50": 279.3,
+    "p10": 271.0,
+    "p90": 287.8,
+    "change_pct": -0.47,
+    "p_up": 0.421,
+    "expected_saving_net_pct": -1.47,
+    "signal": "BUY NORMAL",
+    "eligible_models": "ets|arima|vecm|enet|lgb_local|lgb_global|nbeats"
+   },
+   "2": {
+    "target_month": "Oct 2026",
+    "p50": 278.3,
+    "p10": 263.3,
+    "p90": 294.1,
+    "change_pct": -0.81,
+    "p_up": 0.426,
+    "expected_saving_net_pct": -2.81,
+    "signal": "BUY NORMAL",
+    "eligible_models": "ets|arima|vecm|enet|lgb_local|lgb_global|nbeats"
+   },
+   "3": {
+    "target_month": "Nov 2026",
+    "p50": 278.6,
+    "p10": 257.4,
+    "p90": 301.6,
+    "change_pct": -0.69,
+    "p_up": 0.455,
+    "expected_saving_net_pct": -3.69,
+    "signal": "BUY NORMAL",
+    "eligible_models": "enet|lgb_local|nbeats"
+   },
+   "4": {
+    "target_month": "Dec 2026",
+    "p50": 280.2,
+    "p10": 251.9,
+    "p90": 311.7,
+    "change_pct": -0.13,
+    "p_up": 0.494,
+    "expected_saving_net_pct": -4.13,
+    "signal": "BUY NORMAL",
+    "eligible_models": "nbeats"
+   },
+   "5": {
+    "target_month": "Jan 2027",
+    "p50": 279.1,
+    "p10": 248.4,
+    "p90": 313.6,
+    "change_pct": -0.52,
+    "p_up": 0.477,
+    "expected_saving_net_pct": -5.52,
+    "signal": "BUY NORMAL",
+    "eligible_models": "arima|nbeats"
+   },
+   "6": {
+    "target_month": "Feb 2027",
+    "p50": 281.9,
+    "p10": 249.7,
+    "p90": 318.2,
+    "change_pct": 0.46,
+    "p_up": 0.519,
+    "expected_saving_net_pct": -5.54,
+    "signal": "BUY NORMAL",
+    "eligible_models": "nbeats"
+   }
+  },
+  "shap_drivers_h3": [
+   {
+    "driver": "seasonality",
+    "contribution_pct": -1.13
+   },
+   {
+    "driver": "own price momentum",
+    "contribution_pct": -0.38
+   },
+   {
+    "driver": "Brent crude",
+    "contribution_pct": -0.34
+   },
+   {
+    "driver": "geopolitical risk",
+    "contribution_pct": -0.31
+   },
+   {
+    "driver": "China leading indicator",
+    "contribution_pct": -0.26
+   },
+   {
+    "driver": "energy index",
+    "contribution_pct": -0.16
+   },
+   {
+    "driver": "policy uncertainty",
+    "contribution_pct": -0.14
+   },
+   {
+    "driver": "US sector output",
+    "contribution_pct": -0.09
+   }
+  ],
+  "note": "US PPI, plastic resins & materials (BLS WPU066), PVC proxy: latest Aug 2026 = 280.6 index (1982=100). Three-month median forecast 278.6 (-0.7%), 80% range 257.4 to 301.6. Probability the price is higher: 46%. After 3% carrying cost, buying ahead now is worth -3.7% (threshold +/-2%, confidence 54% vs 60% needed): BUY NORMAL. Largest pushes in the tree model: own price momentum (-0.4%), Brent crude (-0.3%), geopolitical risk (-0.3%). Models currently trusted at this horizon: enet, lgb_local, nbeats. Caution: some driver inputs are stale (see warning).",
+  "landed": null,
+  "stale_warning": "These driver inputs are more than 3 months older than the forecast date and are treated as missing, so the driver models are running blind on them: Brent crude (US$/bbl); OECD China leading indicator; US natural gas (US$/mmbtu); WB energy price index. Refresh data/raw (see SETUP.md).",
+  "stale_inputs": [
+   "Brent crude (US$/bbl)",
+   "OECD China leading indicator",
+   "US natural gas (US$/mmbtu)",
+   "WB energy price index"
+  ]
+ }
+}

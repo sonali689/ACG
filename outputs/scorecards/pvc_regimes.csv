@@ -1,0 +1,6 @@
+material,regime,n,mape,naive_mape,skill_pct,dir_acc_pct,call_rate_pct,bias_pct,dm_p_one_sided,dm_p_two_sided,band_coverage_pct
+pvc,calm,24,2.48,2.59,4.3,54.2,100.0,1.42,0.3234,0.6468,70.8
+pvc,covid,12,6.18,7.18,13.9,83.3,100.0,-3.23,0.0186,0.0372,41.7
+pvc,spike,18,5.81,6.64,12.5,61.1,100.0,-0.42,0.2885,0.5769,66.7
+pvc,slide,30,2.76,2.79,1.0,60.0,100.0,0.98,0.4781,0.9561,93.3
+pvc,holdout,12,2.47,2.16,-14.2,50.0,100.0,1.19,0.8234,0.3532,91.7

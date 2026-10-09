@@ -1,0 +1,5 @@
+material,regime,n,mape,naive_mape,skill_pct,dir_acc_pct,call_rate_pct,bias_pct,dm_p_one_sided,dm_p_two_sided,band_coverage_pct
+aluminium,calm,24,4.83,4.88,1.1,58.3,100.0,3.17,0.4496,0.8992,79.2
+aluminium,covid,12,10.15,11.13,8.8,75.0,100.0,-3.77,0.092,0.184,50.0
+aluminium,spike,18,13.41,14.24,5.8,77.8,100.0,1.01,0.1988,0.3976,55.6
+aluminium,slide,27,5.8,5.71,-1.6,55.6,100.0,-0.75,0.6647,0.6706,88.9

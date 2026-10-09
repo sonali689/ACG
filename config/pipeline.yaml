@@ -1,0 +1,103 @@
+# =============================================================================
+# Smart Buy v2 - PRE-REGISTERED PIPELINE CONFIGURATION
+# Every choice below was fixed before the first backtest was run.
+# Changing anything here after seeing results must be disclosed in CHANGES.md.
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Targets. Both are REAL published series. Nothing is simulated.
+# ---------------------------------------------------------------------------
+materials:
+  aluminium:
+    target: aluminium            # World Bank Pink Sheet "Aluminum" = LME cash, monthly avg, US$/t
+    display: "LME aluminium (World Bank monthly average)"
+    unit: "US$/t"
+    # Forecast is made on the 1st working day of month t+1. The month-t average
+    # is computable from daily LME prices by then.
+    origin_convention: "1st working day of the month after the last observed month"
+  pvc:
+    target: ppi_plastic_resins   # BLS PPI WPU066 Plastic resins & materials (via FRED), index
+    display: "US PPI, plastic resins & materials (BLS WPU066), PVC proxy"
+    unit: "index (1982=100)"
+    # Forecast is made on BLS PPI release day (~mid month t+1), when month t is published.
+    origin_convention: "BLS PPI release day for the last observed month (~15th of next month)"
+
+# ---------------------------------------------------------------------------
+# Publication lags (months), per material, because the two materials have
+# different forecast days. Lag k means: at origin month t, the latest usable
+# value of the series is month t-k.
+# ---------------------------------------------------------------------------
+lags:
+  aluminium:     # origin = 1st of month t+1
+    pinksheet: 0           # market prices; monthly averages of public daily quotes
+    wb_index: 0
+    usd_inr: 0
+    gpr: 1
+    epu: 1
+    cli: 1
+    fred_ppi: 1            # BLS releases ~mid-month
+    fred_ip: 1             # Fed G.17 ~mid-month
+    freight_tsi: 2         # BTS releases with ~2 month delay
+  pvc:           # origin = ~15th of month t+1
+    pinksheet: 0
+    wb_index: 0
+    usd_inr: 0
+    gpr: 0
+    epu: 0
+    cli: 0
+    fred_ppi: 0            # released together with the target
+    fred_ip: 1             # G.17 comes out just after PPI; be conservative
+    freight_tsi: 2
+
+# ---------------------------------------------------------------------------
+# Backtest windows
+# ---------------------------------------------------------------------------
+backtest:
+  first_origin: "2015-01-01"     # 2015-2017 = warm-up for ensemble gate & conformal calibration (never scored)
+  score_start: "2018-01-01"
+  dev_end: "2024-06-01"          # development window: origins 2018-01 .. 2024-06 (same as the Round 2 deck)
+  holdout_start: "2025-01-01"    # holdout: origins >= 2025-01, scored once, as promised in Round 1
+  horizons: [1, 2, 3, 4, 5, 6]
+  decision_horizon: 3
+  min_realised_for_gate: 12      # a model needs >= 12 realised past forecasts before it can earn weight
+  embargo: true                  # training rows must have target_date <= origin. Non-negotiable.
+  history_months_stat: 120       # ETS / ARIMA / VECM / GARCH fit on the last 10 years
+  global_refit_every_months: 3   # global LightGBM refit quarterly (always on past data only)
+  nbeats_refit_every_months: 12  # N-BEATS refit every January
+
+# ---------------------------------------------------------------------------
+# Headline forecast (pre-specified): equal-weight average of every model that
+# beat naive on its own realised past forecasts. If none did, the forecast is naive.
+# Other combinations are reported alongside, but are not the headline.
+# ---------------------------------------------------------------------------
+headline_combo: gated_equal_weight
+
+# ---------------------------------------------------------------------------
+# Uncertainty bands (pre-specified): normalised split-conformal around the
+# headline forecast, scaled by a GARCH(1,1) volatility forecast, using only
+# forecasts whose outcome was known at the origin.
+# ---------------------------------------------------------------------------
+bands:
+  nominal_coverage: 0.80
+  vol_model: garch11            # fallback: EWMA lambda=0.94
+  ewma_lambda: 0.94
+
+# ---------------------------------------------------------------------------
+# Decision rule - unchanged from Round 1
+# ---------------------------------------------------------------------------
+decision:
+  carrying_cost_per_month: 0.010
+  buy_now_threshold: 0.02
+  defer_threshold: -0.02
+  min_confidence: 0.60
+  cover_buy_now: 3.0
+  cover_normal: 1.5
+  cover_defer: 1.0
+  lead_time_months: 1
+  permutation_draws: 2000
+
+drivers:
+  max_lead: 6
+  granger_lag: 3                # fixed in advance (no lag shopping)
+  fdr_q: 0.10
+  sample_end: "2024-12-01"

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Buy · Procurement Decision Desk · ACG Films &amp; Foils</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --paper:#ffffff; --shell:#f4f4f6; --ink:#16181d; --ink2:#4a4d55; --mute:#7c8089;
+  --rule:#e2e3e7; --rule2:#eeeff1;
+  --acg:#c8102e; --acg-dk:#a00d25; --acg-wash:#fdf2f4;
+  --buy:#0f6b3f; --buy-wash:#eef6f1;
+  --defer:#8a5a00; --defer-wash:#fbf5e9;
+  --hold:#3f4a5c; --hold-wash:#f1f3f6;
+  --fail:#c8102e;
+  --disp:'Poppins',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--shell);color:var(--ink);font-family:var(--body);
+     font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* ---------- masthead ---------- */
+.mast{background:var(--acg);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 20px 10px}
+.mast-in{max-width:1560px;margin:0 auto;display:flex;align-items:center;
+         justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:12px}
+.brand b{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:-.2px}
+.brand span{font-size:11px;opacity:.85;letter-spacing:.3px}
+.mast-meta{display:flex;gap:18px;font-size:11px;opacity:.9;align-items:center}
+.mast-meta b{font-weight:600}
+
+/* ---------- control strip ---------- */
+.strip{background:var(--paper);border-bottom:1px solid var(--rule);
+       position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.strip-in{max-width:1560px;margin:0 auto;padding:9px 20px;display:flex;
+          align-items:center;gap:22px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.seg button{font:500 12px/1 var(--body);padding:8px 15px;border:0;background:var(--paper);
+            color:var(--ink2);cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acg);color:#fff}
+.seg.small button{padding:6px 11px;font-size:11.5px}
+.striplab{font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.7px;
+          font-weight:600;margin-right:-14px}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1560px;margin:0 auto;padding:16px 20px 40px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}
+.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}
+.c9{grid-column:span 9}.c12{grid-column:span 12}
+@media(max-width:1180px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}}
+
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:4px;
+       display:flex;flex-direction:column;min-width:0}
+.ph{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    padding:10px 14px;border-bottom:1px solid var(--rule2)}
+.ph h2{margin:0;font:600 12.5px/1.3 var(--disp);letter-spacing:-.1px}
+.ph .sub{font-size:10.5px;color:var(--mute)}
+.pb{padding:14px}
+.pb.tight{padding:0}
+
+/* ---------- decision ---------- */
+.dec{padding:0}
+.decband{padding:16px 16px 14px;border-left:4px solid}
+.decband.buy{background:var(--buy-wash);border-color:var(--buy)}
+.decband.defer{background:var(--defer-wash);border-color:var(--defer)}
+.decband.hold{background:var(--hold-wash);border-color:var(--hold)}
+.dectag{font:600 10px/1 var(--body);letter-spacing:1.2px;text-transform:uppercase;opacity:.7}
+.decsig{font:700 30px/1.1 var(--disp);letter-spacing:-.6px;margin:7px 0 3px}
+.decsig.buy{color:var(--buy)}.decsig.defer{color:var(--defer)}.decsig.hold{color:var(--hold)}
+.decsub{font-size:12px;color:var(--ink2)}
+.decrows{padding:4px 16px 14px}
+.drow{display:flex;justify-content:space-between;align-items:baseline;
+      padding:9px 0;border-bottom:1px solid var(--rule2)}
+.drow:last-child{border-bottom:0}
+.drow .k{font-size:12px;color:var(--ink2)}
+.drow .v{font:600 14px/1 var(--mono);font-variant-numeric:tabular-nums}
+.pos{color:var(--buy)}.neg{color:var(--acg)}
+
+/* ---------- price header ---------- */
+.prices{display:flex;gap:0;border-bottom:1px solid var(--rule2)}
+.pcell{flex:1;padding:12px 14px;border-right:1px solid var(--rule2)}
+.pcell:last-child{border-right:0}
+.pcell .k{font-size:10px;color:var(--mute);text-transform:uppercase;
+          letter-spacing:.6px;font-weight:600}
+.pcell .v{font:600 20px/1.2 var(--mono);margin-top:4px;font-variant-numeric:tabular-nums}
+.pcell .d{font-size:11px;margin-top:2px;color:var(--mute)}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;font:600 10px/1.3 var(--body);letter-spacing:.6px;text-transform:uppercase;
+   color:var(--mute);padding:8px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:7px 12px;border-bottom:1px solid var(--rule2);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.hl td{background:var(--acg-wash);font-weight:600}
+tbody tr.dim td{color:var(--mute)}
+td.r,th.r{text-align:right}
+.tw{overflow-x:auto}
+.chip{display:inline-block;font:600 9.5px/1 var(--body);letter-spacing:.4px;
+      padding:3px 6px;border-radius:2px;text-transform:uppercase}
+.chip.ok{background:var(--buy-wash);color:var(--buy)}
+.chip.no{background:var(--acg-wash);color:var(--acg)}
+.chip.warn{background:var(--defer-wash);color:var(--defer)}
+.chip.zero{background:#f0f0f2;color:var(--mute)}
+
+/* ---------- drivers ---------- */
+.dr{display:grid;grid-template-columns:1fr 46px 96px;gap:8px;align-items:center;
+    padding:7px 0;border-bottom:1px solid var(--rule2)}
+.dr:last-child{border-bottom:0}
+.dr .n{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr .l{font:500 10.5px/1 var(--mono);color:var(--mute);text-align:right}
+.bar{position:relative;height:16px;background:var(--rule2);border-radius:1px}
+.bar i{position:absolute;top:0;bottom:0;left:50%;display:block}
+.bar i.p{background:var(--buy)}.bar i.n{background:var(--acg);left:auto;right:50%}
+.bar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;
+            width:1px;background:var(--mute);opacity:.45}
+
+/* ---------- calculator ---------- */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;color:var(--ink2);margin-bottom:4px}
+.field input{width:100%;padding:8px 10px;border:1px solid var(--rule);border-radius:3px;
+             font:500 13px/1 var(--mono);color:var(--ink);background:var(--paper)}
+.field input:focus{outline:2px solid var(--acg);outline-offset:-1px;border-color:var(--acg)}
+.calcout{margin-top:12px;padding:12px 14px;background:var(--acg-wash);
+         border:1px solid #f3d3d9;border-radius:3px}
+.calcout .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+            color:var(--acg);font-weight:600}
+.calcout .v{font:700 26px/1.1 var(--mono);margin-top:4px;color:var(--acg-dk)}
+.calcout .f{font-size:11px;color:var(--ink2);margin-top:6px}
+
+/* ---------- misc ---------- */
+.chartbox{position:relative;padding:10px 12px 12px}
+.note{font-size:11px;color:var(--mute);padding:9px 14px;border-top:1px solid var(--rule2);
+      background:#fbfbfc}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0}
+.kpi{padding:12px 14px;border-right:1px solid var(--rule2)}
+.kpi:last-child{border-right:0}
+.kpi .k{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi .v{font:600 19px/1.2 var(--mono);margin-top:4px}
+.kpi .f{font-size:10.5px;color:var(--mute);margin-top:2px}
+.foot{max-width:1560px;margin:0 auto;padding:18px 20px 30px;font-size:10.5px;
+      color:var(--mute);line-height:1.6;border-top:1px solid var(--rule)}
+.foot b{color:var(--ink2);font-weight:600}
+.flag{display:flex;gap:9px;align-items:flex-start;padding:10px 14px;
+      background:var(--acg-wash);border-top:1px solid #f3d3d9;font-size:11.5px;color:var(--ink2)}
+.flag b{color:var(--acg-dk)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="brand">
+      <b>Smart Buy</b>
+      <span>ACG Films &amp; Foils &nbsp;/&nbsp; Procurement decision desk</span>
+    </div>
+    <div class="mast-meta">
+      <span>Forecast origin <b id="mOrigin">—</b></span>
+      <span>78 walk-forward folds</span>
+      <span>Public data only</span>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="strip-in">
+    <span class="striplab">Material</span>
+    <div class="seg" id="matSeg">
+      <button data-mat="aluminium" aria-pressed="true">LME Aluminium</button>
+      <button data-mat="pvc" aria-pressed="false">PVC resin</button>
+    </div>
+    <span class="striplab">Horizon</span>
+    <div class="seg small" id="hSeg"></div>
+    <span style="margin-left:auto;font-size:11px;color:var(--mute)">
+      Carrying cost <b class="num">1.0%</b>/month · thresholds ±2%, P(dir) ≥ 60%
+    </span>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="grid">
+
+    <!-- decision -->
+    <section class="panel c4">
+      <div class="ph"><h2>Recommendation</h2><span class="sub" id="decH">3 months ahead</span></div>
+      <div class="dec">
+        <div class="decband hold" id="decBand">
+          <div class="dectag">Signal</div>
+          <div class="decsig hold" id="decSig">—</div>
+          <div class="decsub" id="decSub">—</div>
+        </div>
+        <div class="decrows">
+          <div class="drow"><span class="k">Expected saving, net of carry</span><span class="v" id="decSav">—</span></div>
+          <div class="drow"><span class="k">P(price up)</span><span class="v" id="decPup">—</span></div>
+          <div class="drow"><span class="k">Recommended cover</span><span class="v" id="decCov">—</span></div>
+          <div class="drow"><span class="k">P10 – P90 range</span><span class="v" id="decBandR">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- forecast -->
+    <section class="panel c8">
+      <div class="ph"><h2 id="fcTitle">Price and six-month forecast</h2>
+        <span class="sub">US$ / tonne · P10–P90 band</span></div>
+      <div class="prices">
+        <div class="pcell"><div class="k">Spot</div><div class="v" id="pSpot">—</div>
+          <div class="d" id="pOrigin">—</div></div>
+        <div class="pcell"><div class="k">P50, selected horizon</div><div class="v" id="pP50">—</div>
+          <div class="d" id="pChg">—</div></div>
+        <div class="pcell"><div class="k">P10</div><div class="v" id="pP10">—</div>
+          <div class="d">10th percentile</div></div>
+        <div class="pcell"><div class="k">P90</div><div class="v" id="pP90">—</div>
+          <div class="d">90th percentile</div></div>
+      </div>
+      <div class="chartbox"><canvas id="fcChart" height="118"></canvas></div>
+    </section>
+
+    <!-- order calculator -->
+    <section class="panel c4">
+      <div class="ph"><h2>Purchase order</h2><span class="sub">Enter your numbers</span></div>
+      <div class="pb">
+        <div class="field"><label for="bom">Monthly BoM requirement (t)</label>
+          <input id="bom" type="number" value="1000" min="0" step="50"></div>
+        <div class="field"><label for="oh">On hand (t)</label>
+          <input id="oh" type="number" value="600" min="0" step="50"></div>
+        <div class="field"><label for="it">In transit (t)</label>
+          <input id="it" type="number" value="400" min="0" step="50"></div>
+        <div class="calcout">
+          <div class="k">Order quantity</div>
+          <div class="v" id="calcQty">—</div>
+          <div class="f" id="calcFormula">—</div>
+        </div>
+      </div>
+      <div class="note">Cover × BoM − on-hand − in-transit, floored at zero.
+        The buyer decides; overrides are logged.</div>
+    </section>
+
+    <!-- accuracy scorecard -->
+    <section class="panel c8">
+      <div class="ph"><h2>Accuracy against the naïve forecast</h2>
+        <span class="sub">78 rolling origins, Jan 2018 – Jun 2024</span></div>
+      <div class="tw"><table id="scTable">
+        <thead><tr><th>Horizon</th><th class="r">Model MAPE</th><th class="r">Naïve MAPE</th>
+          <th class="r">Skill</th><th class="r">Direction</th><th class="r">DM p</th>
+          <th class="r">Gate</th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="flag"><span>⚑</span><span><b>Gate missed at h=3.</b>
+        We published a ≥15% skill threshold before modelling and report it unchanged.</span></div>
+    </section>
+
+    <!-- drivers -->
+    <section class="panel c6">
+      <div class="ph"><h2>What leads the price</h2>
+        <span class="sub">Peak cross-correlation of log-returns, lags 0–6</span></div>
+      <div class="pb" id="drvList"></div>
+      <div class="note">Bars show correlation at each driver's best lag, signed.
+        Granger p-values are FDR-corrected. Predictive precedence, not causation.</div>
+    </section>
+
+    <!-- model ladder -->
+    <section class="panel c6">
+      <div class="ph"><h2>Model ladder</h2>
+        <span class="sub">h=3, common origins, leak-free weights</span></div>
+      <div class="tw"><table id="ldTable">
+        <thead><tr><th>Model</th><th class="r">MAPE</th><th class="r">Skill</th>
+          <th class="r">Direction</th><th class="r">Weight</th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="note" id="ldNote">—</div>
+    </section>
+
+    <!-- backtest -->
+    <section class="panel c7">
+      <div class="ph"><h2>What the model actually did</h2>
+        <span class="sub">Three-month-ahead forecast vs realised, every origin</span></div>
+      <div class="chartbox"><canvas id="btChart" height="150"></canvas></div>
+    </section>
+
+    <!-- regimes + bands -->
+    <section class="panel c5">
+      <div class="ph"><h2>By regime, and band calibration</h2><span class="sub">h=3</span></div>
+      <div class="tw"><table id="rgTable">
+        <thead><tr><th>Regime</th><th class="r">n</th><th class="r">MAPE</th>
+          <th class="r">Skill</th><th class="r">Direction</th><th class="r">Coverage</th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="tw" style="border-top:1px solid var(--rule)"><table id="bdTable">
+        <thead><tr><th>Horizon</th><th class="r">P10–P90 coverage</th>
+          <th class="r">Band width</th><th class="r">Bias</th><th class="r">Gate</th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="flag"><span>⚑</span><span><b>Coverage runs 55–65% against a 75–85% gate.</b>
+        The bands are too narrow. Reported, not hidden.</span></div>
+    </section>
+
+    <!-- replay -->
+    <section class="panel c12">
+      <div class="ph"><h2>Buying replay, 2018–2024</h2>
+        <span class="sub">Signal-driven cover vs buying one month at a time</span></div>
+      <div class="kpis" id="rpKpis"></div>
+      <div class="grid" style="padding:0;gap:0;border-top:1px solid var(--rule2)">
+        <div class="c8" style="border-right:1px solid var(--rule2)">
+          <div class="chartbox"><canvas id="rpChart" height="96"></canvas></div>
+        </div>
+        <div class="c4"><div class="pb" id="rpSignals"></div></div>
+      </div>
+      <div class="note" id="rpNote">—</div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <b>Sources.</b> World Bank Commodity Price Data (Pink Sheet) · ECB reference rates ·
+  Caldara &amp; Iacoviello Geopolitical Risk index · Baker, Bloom &amp; Davis Economic Policy
+  Uncertainty · OECD composite leading indicators · UN Comtrade. Public data only.<br>
+  <b>Method.</b> Direct multi-horizon models on log-returns, one per month ahead. Every feature
+  carries its real publication lag. Ensemble weights are estimated on strictly prior folds only.
+  Bands are conformally calibrated; coverage is reported as measured. Carrying cost of 1.0% per
+  month is a placeholder pending ACG Finance inputs.<br>
+  <b>Prototype.</b> Forecast origin is the last validated walk-forward origin. Figures are model
+  outputs, not illustrations.
+</footer>
+
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('payload').textContent);
+let MAT = 'aluminium', H = 3, fcChart, btChart, rpChart;
+const $ = id => document.getElementById(id);
+const fmt = (v,d=0) => v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct = (v,d=1) => (v>0?'+':'') + v.toFixed(d) + '%';
+const CSS = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+
+/* horizon buttons */
+$('hSeg').innerHTML = [1,2,3,4,5,6].map(h =>
+  `<button data-h="${h}" aria-pressed="${h===3}">${h}M</button>`).join('');
+$('hSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
+  H = +b.dataset.h; render(); };
+$('matSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
+  MAT = b.dataset.mat; render(); };
+
+function render(){
+  const m = D.materials[MAT], hz = m.horizons[H];
+  document.querySelectorAll('#matSeg button').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.mat===MAT));
+  document.querySelectorAll('#hSeg button').forEach(b =>
+    b.setAttribute('aria-pressed', +b.dataset.h===H));
+
+  $('mOrigin').textContent = m.origin;
+  $('fcTitle').textContent = m.name + ' — six-month forecast';
+  $('decH').textContent = H + (H===1?' month ahead':' months ahead');
+
+  /* decision */
+  const cls = hz.signal==='BUY NOW'?'buy':hz.signal==='DEFER'?'defer':'hold';
+  $('decBand').className = 'decband ' + cls;
+  $('decSig').className = 'decsig ' + cls;
+  $('decSig').textContent = hz.signal;
+  $('decSub').textContent = hz.signal==='BUY NOW'
+    ? `Forward-cover ${hz.cover.toFixed(1)} months. Expected rise beats the cost of carry.`
+    : hz.signal==='DEFER'
+    ? `Minimum safety cover ${hz.cover.toFixed(1)} month. Re-run next month.`
+    : `Buy the BoM requirement, ${hz.cover.toFixed(1)} months cover. No timing bet.`;
+  $('decSav').textContent = pct(hz.exp_saving_pct,2);
+  $('decSav').className = 'v ' + (hz.exp_saving_pct>0?'pos':'neg');
+  $('decPup').textContent = hz.p_up.toFixed(1) + '%';
+  $('decCov').textContent = hz.cover.toFixed(1) + ' mo';
+  $('decBandR').textContent = fmt(hz.p10) + ' – ' + fmt(hz.p90);
+
+  /* price cells */
+  $('pSpot').textContent = '$' + fmt(m.spot);
+  $('pOrigin').textContent = 'as of ' + m.origin;
+  $('pP50').textContent = '$' + fmt(hz.p50);
+  $('pChg').textContent = pct(hz.change_pct,2) + ' vs spot';
+  $('pChg').style.color = hz.change_pct>0 ? CSS('--buy') : CSS('--acg');
+  $('pP10').textContent = '$' + fmt(hz.p10);
+  $('pP90').textContent = '$' + fmt(hz.p90);
+
+  drawForecast(m); drawBacktest(m); drawReplay(m);
+  fillScorecard(m); fillLadder(m); fillDrivers(m); fillRegimes(m); fillReplay(m);
+  calc();
+}
+
+/* ---------- charts ---------- */
+const baseOpts = () => ({responsive:true,maintainAspectRatio:false,
+  interaction:{mode:'index',intersect:false},
+  plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,
+      font:{family:"'IBM Plex Sans'",size:11},color:CSS('--ink2'),padding:14,usePointStyle:true}},
+    tooltip:{backgroundColor:'#16181d',padding:10,cornerRadius:3,titleFont:{size:11},
+      bodyFont:{family:"'IBM Plex Mono'",size:11}}},
+  scales:{x:{grid:{display:false},ticks:{font:{size:10},color:CSS('--mute'),maxRotation:0,
+      autoSkipPadding:22}},
+    y:{grid:{color:CSS('--rule2')},border:{display:false},
+      ticks:{font:{family:"'IBM Plex Mono'",size:10},color:CSS('--mute')}}}});
+
+function drawForecast(m){
+  const s = m.series;
+  fcChart && fcChart.destroy();
+  fcChart = new Chart($('fcChart'), {type:'line', data:{labels:s.labels, datasets:[
+    {label:'P90',data:s.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.09)',
+     fill:'+1',pointRadius:0,tension:.25},
+    {label:'P10',data:s.p10,borderColor:'transparent',backgroundColor:'transparent',
+     pointRadius:0,tension:.25},
+    {label:'Actual',data:s.actual,borderColor:CSS('--ink'),borderWidth:1.8,
+     pointRadius:0,tension:.2},
+    {label:'Forecast P50',data:s.p50,borderColor:CSS('--acg'),borderWidth:2.2,
+     borderDash:[5,3],pointRadius:0,tension:.25},
+    {label:'Naïve',data:s.naive,borderColor:CSS('--mute'),borderWidth:1.2,
+     borderDash:[2,3],pointRadius:0}
+  ]}, options:{...baseOpts(),
+    plugins:{...baseOpts().plugins,
+      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
+        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+}
+
+function drawBacktest(m){
+  const b = m.backtest;
+  btChart && btChart.destroy();
+  btChart = new Chart($('btChart'), {type:'line', data:{labels:b.labels, datasets:[
+    {label:'P90',data:b.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.08)',
+     fill:'+1',pointRadius:0,tension:.2},
+    {label:'P10',data:b.p10,borderColor:'transparent',pointRadius:0,tension:.2},
+    {label:'Realised',data:b.actual,borderColor:CSS('--ink'),borderWidth:1.8,
+     pointRadius:0,tension:.2},
+    {label:'Forecast made 3 months earlier',data:b.pred,borderColor:CSS('--acg'),
+     borderWidth:1.6,pointRadius:0,tension:.2}
+  ]}, options:{...baseOpts(),
+    plugins:{...baseOpts().plugins,
+      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
+        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+}
+
+function drawReplay(m){
+  const c = m.replay.curve;
+  rpChart && rpChart.destroy();
+  rpChart = new Chart($('rpChart'), {type:'line', data:{labels:c.labels, datasets:[
+    {label:'Cumulative saving vs buy-every-month (%)',data:c.cum,
+     borderColor:CSS('--buy'),backgroundColor:'rgba(15,107,63,.10)',
+     borderWidth:2,fill:true,pointRadius:0,tension:.25}
+  ]}, options:{...baseOpts(),
+    scales:{...baseOpts().scales,
+      y:{...baseOpts().scales.y,ticks:{...baseOpts().scales.y.ticks,
+        callback:v=>v.toFixed(1)+'%'}}}}});
+}
+
+/* ---------- tables ---------- */
+function fillScorecard(m){
+  const gates = {1:10,2:12,3:15,4:12,5:10,6:10};
+  const dirGates = {1:65,2:63,3:62,4:60,5:59,6:58};
+  $('scTable').querySelector('tbody').innerHTML = m.scorecard.map(r=>{
+    const pass = r.skill >= gates[r.h];
+    return `<tr class="${r.h===H?'hl':''}">
+      <td>${r.h} month${r.h>1?'s':''}</td>
+      <td class="r num">${r.ens.toFixed(2)}%</td>
+      <td class="r num">${r.naive.toFixed(2)}%</td>
+      <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
+      <td class="r num">${r.dir.toFixed(1)}%</td>
+      <td class="r num">${r.dm_p.toFixed(4)}</td>
+      <td class="r"><span class="chip ${pass?'ok':'no'}">${pass?'pass':'miss'}</span></td></tr>`;
+  }).join('');
+}
+
+function fillLadder(m){
+  $('ldTable').querySelector('tbody').innerHTML = m.ladder.map(r=>`
+    <tr class="${r.is_ensemble?'hl':''} ${r.weight===0&&!r.is_ensemble?'dim':''}">
+      <td>${r.model}</td>
+      <td class="r num">${r.mape.toFixed(2)}%</td>
+      <td class="r num" style="color:${r.skill>0?CSS('--buy'):r.skill<0?CSS('--acg'):CSS('--mute')}">${pct(r.skill)}</td>
+      <td class="r num">${r.dir.toFixed(1)}%</td>
+      <td class="r">${r.is_ensemble?'—':
+        r.weight===0?'<span class="chip zero">gated out</span>':
+        '<span class="num">'+r.weight.toFixed(1)+'%</span>'}</td></tr>`).join('');
+  const e = m.err_corr;
+  $('ldNote').innerHTML = `Mean error correlation between members <b class="num">${e.mean_off_diag}</b>;
+    N-BEATS against the rest <b class="num">${e.nbeats_vs_rest}</b>. N-BEATS is the only genuine
+    diversifier, which is why it carries the ensemble. Models that fail the naïve gate receive
+    zero weight automatically.`;
+}
+
+function fillDrivers(m){
+  const mx = Math.max(...m.drivers.map(d=>Math.abs(d.rho)));
+  $('drvList').innerHTML = m.drivers.map(d=>{
+    const w = Math.abs(d.rho)/mx*50;
+    return `<div class="dr">
+      <div class="n" title="${d.name}">${d.name}
+        ${d.sig?'<span class="chip ok" style="margin-left:5px">granger</span>':''}</div>
+      <div class="l">${d.lead===0?'same mo':'lead '+d.lead}</div>
+      <div class="bar"><i class="${d.rho>0?'p':'n'}" style="width:${w}%"></i></div></div>`;
+  }).join('');
+}
+
+function fillRegimes(m){
+  $('rgTable').querySelector('tbody').innerHTML = m.regimes.map(r=>`
+    <tr><td>${r.name}</td><td class="r num">${r.n}</td>
+      <td class="r num">${r.mape.toFixed(2)}%</td>
+      <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
+      <td class="r num">${r.dir.toFixed(1)}%</td>
+      <td class="r num">${r.cov.toFixed(1)}%</td></tr>`).join('');
+  $('bdTable').querySelector('tbody').innerHTML = m.bands.map(r=>{
+    const ok = r.cov>=75 && r.cov<=85;
+    return `<tr class="${r.h==='h='+H?'hl':''}"><td>${r.h.replace('h=','')} month${r.h==='h=1'?'':'s'}</td>
+      <td class="r num">${r.cov.toFixed(1)}%</td>
+      <td class="r num">${r.width.toFixed(1)}%</td>
+      <td class="r num">${pct(r.bias,2)}</td>
+      <td class="r"><span class="chip ${ok?'ok':r.cov>=55?'warn':'no'}">${ok?'pass':'miss'}</span></td></tr>`;
+  }).join('');
+}
+
+function fillReplay(m){
+  const r = m.replay;
+  $('rpKpis').innerHTML = `
+    <div class="kpi"><div class="k">Average price paid</div>
+      <div class="v">$${fmt(r.sb_price)}</div>
+      <div class="f">vs $${fmt(r.base_price)} buying monthly</div></div>
+    <div class="kpi"><div class="k">Gross price saving</div>
+      <div class="v" style="color:${CSS('--buy')}">${pct(r.gross_pct,2)}</div>
+      <div class="f">before carrying cost</div></div>
+    <div class="kpi"><div class="k">Net saving after carry</div>
+      <div class="v" style="color:${CSS('--buy')}">${pct(r.net_pct,2)}</div>
+      <div class="f">₹${r.net_pct.toFixed(2)} Cr per ₹100 Cr spend</div></div>
+    <div class="kpi"><div class="k">Average cover</div>
+      <div class="v">${r.inv_sb.toFixed(1)} d</div>
+      <div class="f" style="color:${r.inv_delta>0?CSS('--defer'):CSS('--buy')}">
+        ${pct(r.inv_delta,1)} days vs baseline</div></div>
+    <div class="kpi"><div class="k">Working capital</div>
+      <div class="v">${r.wc_shift>0?'−':'+'}₹${Math.abs(r.wc_shift).toFixed(2)} Cr</div>
+      <div class="f">per ₹100 Cr of spend</div></div>
+    <div class="kpi"><div class="k">Months replayed</div>
+      <div class="v">${r.months}</div><div class="f">Jan 2018 – Jun 2024</div></div>`;
+
+  const tot = Object.values(r.signals).reduce((a,b)=>a+b,0);
+  $('rpSignals').innerHTML = '<div style="font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-bottom:9px">Signals fired</div>' +
+    Object.entries(r.signals).map(([k,v])=>`
+      <div class="dr" style="grid-template-columns:1fr 46px 96px">
+        <div class="n">${k}</div><div class="l">${v} mo</div>
+        <div class="bar"><i class="p" style="left:0;width:${v/tot*100}%;
+          background:${k==='DEFER'?CSS('--defer'):k==='BUY NOW'?CSS('--buy'):CSS('--hold')}"></i></div>
+      </div>`).join('') +
+    `<div style="font-size:11px;color:var(--mute);margin-top:10px">The rule stays silent
+      ${(r.signals['BUY NORMAL']/tot*100).toFixed(0)}% of the time. It only acts when expected
+      saving clears carry and confidence clears 60%.</div>`;
+
+  $('rpNote').innerHTML = `Cover rises from ${r.inv_base.toFixed(0)} to
+    ${r.inv_sb.toFixed(1)} days, so the rule <b>trades inventory days for price capture</b>.
+    That trade is already paid for: carrying cost at 1% per month is subtracted inside the
+    signal, and the net figure above is after carry.`;
+}
+
+/* ---------- calculator ---------- */
+['bom','oh','it'].forEach(id => $(id).addEventListener('input', calc));
+function calc(){
+  const m = D.materials[MAT], cover = m.horizons[H].cover;
+  const bom = +$('bom').value||0, oh = +$('oh').value||0, it = +$('it').value||0;
+  const qty = Math.max(0, Math.round(cover*bom - oh - it));
+  $('calcQty').textContent = fmt(qty) + ' t';
+  $('calcFormula').textContent =
+    `${cover.toFixed(1)} × ${fmt(bom)} − ${fmt(oh)} − ${fmt(it)} = ${fmt(qty)} t`
+    + (qty===0 ? ' · cover already met' : ` · ≈ $${fmt(qty*m.spot/1000)}k at spot`);
+}
+
+render();
+</script>
+</body>
+</html>

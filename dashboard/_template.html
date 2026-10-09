@@ -157,178 +157,193 @@ td.r,th.r{text-align:right}
 .flag b{color:var(--acg-dk)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<style>
+.chip.ok{white-space:nowrap}.sep td{background:var(--shell);font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--mute);font-weight:600}
+.notebox{padding:14px 18px;font-size:13px;line-height:1.6;color:var(--ink2)}
+.shapl{padding:4px 18px 14px}
+</style>
 </head>
 <body>
 
 <header class="mast">
-  <div class="mast-in">
-    <div class="brand">
-      <b>Smart Buy</b>
-      <span>ACG Films &amp; Foils &nbsp;/&nbsp; Procurement decision desk</span>
-    </div>
-    <div class="mast-meta">
-      <span>Forecast origin <b id="mOrigin">—</b></span>
-      <span>78 walk-forward folds</span>
-      <span>Public data only</span>
-    </div>
-  </div>
+<div class="mast-in">
+<div class="brand">
+<b>Smart Buy</b>
+<span>ACG Films &amp; Foils &nbsp;/&nbsp; Procurement decision desk</span>
+</div>
+<div class="mast-meta">
+<span>Forecast origin <b id="mOrigin">—</b></span>
+<span id="mFolds">—</span>
+<span>Public data only · leakage-tested</span>
+</div>
+</div>
 </header>
 
 <div class="strip">
-  <div class="strip-in">
-    <span class="striplab">Material</span>
-    <div class="seg" id="matSeg">
-      <button data-mat="aluminium" aria-pressed="true">LME Aluminium</button>
-      <button data-mat="pvc" aria-pressed="false">PVC resin</button>
-    </div>
-    <span class="striplab">Horizon</span>
-    <div class="seg small" id="hSeg"></div>
-    <span style="margin-left:auto;font-size:11px;color:var(--mute)">
-      Carrying cost <b class="num">1.0%</b>/month · thresholds ±2%, P(dir) ≥ 60%
-    </span>
-  </div>
+<div class="strip-in">
+<span class="striplab">Material</span>
+<div class="seg" id="matSeg">
+<button data-mat="aluminium" aria-pressed="true">LME Aluminium</button>
+<button data-mat="pvc" aria-pressed="false">PVC proxy (US resin PPI)</button>
+</div>
+<span class="striplab">Horizon</span>
+<div class="seg small" id="hSeg"></div>
+<span style="margin-left:auto;font-size:11px;color:var(--mute)">
+Carrying cost <b class="num">1.0%</b>/month · thresholds ±2%, P(dir) ≥ 60%
+</span>
+</div>
 </div>
 
 <main class="wrap">
-  <div class="grid">
+<div class="grid">
 
-    <!-- decision -->
-    <section class="panel c4">
-      <div class="ph"><h2>Recommendation</h2><span class="sub" id="decH">3 months ahead</span></div>
-      <div class="dec">
-        <div class="decband hold" id="decBand">
-          <div class="dectag">Signal</div>
-          <div class="decsig hold" id="decSig">—</div>
-          <div class="decsub" id="decSub">—</div>
-        </div>
-        <div class="decrows">
-          <div class="drow"><span class="k">Expected saving, net of carry</span><span class="v" id="decSav">—</span></div>
-          <div class="drow"><span class="k">P(price up)</span><span class="v" id="decPup">—</span></div>
-          <div class="drow"><span class="k">Recommended cover</span><span class="v" id="decCov">—</span></div>
-          <div class="drow"><span class="k">P10 – P90 range</span><span class="v" id="decBandR">—</span></div>
-        </div>
-      </div>
-    </section>
+<section class="panel c12" id="staleBox" style="display:none">
+<div class="flag"><span>⚑</span><span id="staleTxt"></span></div>
+</section>
 
-    <!-- forecast -->
-    <section class="panel c8">
-      <div class="ph"><h2 id="fcTitle">Price and six-month forecast</h2>
-        <span class="sub">US$ / tonne · P10–P90 band</span></div>
-      <div class="prices">
-        <div class="pcell"><div class="k">Spot</div><div class="v" id="pSpot">—</div>
-          <div class="d" id="pOrigin">—</div></div>
-        <div class="pcell"><div class="k">P50, selected horizon</div><div class="v" id="pP50">—</div>
-          <div class="d" id="pChg">—</div></div>
-        <div class="pcell"><div class="k">P10</div><div class="v" id="pP10">—</div>
-          <div class="d">10th percentile</div></div>
-        <div class="pcell"><div class="k">P90</div><div class="v" id="pP90">—</div>
-          <div class="d">90th percentile</div></div>
-      </div>
-      <div class="chartbox"><canvas id="fcChart" height="118"></canvas></div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>Recommendation</h2><span class="sub" id="decH">3 months ahead</span></div>
+<div class="dec">
+<div class="decband hold" id="decBand">
+<div class="dectag">Signal</div>
+<div class="decsig hold" id="decSig">—</div>
+<div class="decsub" id="decSub">—</div>
+</div>
+<div class="decrows">
+<div class="drow"><span class="k">Expected saving, net of carry</span><span class="v" id="decSav">—</span></div>
+<div class="drow"><span class="k">P(price up)</span><span class="v" id="decPup">—</span></div>
+<div class="drow"><span class="k">Recommended cover</span><span class="v" id="decCov">—</span></div>
+<div class="drow"><span class="k">P10 – P90 range</span><span class="v" id="decBandR">—</span></div>
+<div class="drow"><span class="k">Models trusted at this horizon</span><span class="v" id="decModels" style="font-size:11px;text-align:right">—</span></div>
+</div>
+</div>
+</section>
 
-    <!-- order calculator -->
-    <section class="panel c4">
-      <div class="ph"><h2>Purchase order</h2><span class="sub">Enter your numbers</span></div>
-      <div class="pb">
-        <div class="field"><label for="bom">Monthly BoM requirement (t)</label>
-          <input id="bom" type="number" value="1000" min="0" step="50"></div>
-        <div class="field"><label for="oh">On hand (t)</label>
-          <input id="oh" type="number" value="600" min="0" step="50"></div>
-        <div class="field"><label for="it">In transit (t)</label>
-          <input id="it" type="number" value="400" min="0" step="50"></div>
-        <div class="calcout">
-          <div class="k">Order quantity</div>
-          <div class="v" id="calcQty">—</div>
-          <div class="f" id="calcFormula">—</div>
-        </div>
-      </div>
-      <div class="note">Cover × BoM − on-hand − in-transit, floored at zero.
-        The buyer decides; overrides are logged.</div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2 id="fcTitle">Price and six-month forecast</h2>
+<span class="sub" id="fcSub">—</span></div>
+<div class="prices">
+<div class="pcell"><div class="k">Latest</div><div class="v" id="pSpot">—</div>
+<div class="d" id="pOrigin">—</div></div>
+<div class="pcell"><div class="k">P50, selected horizon</div><div class="v" id="pP50">—</div>
+<div class="d" id="pChg">—</div></div>
+<div class="pcell"><div class="k">P10</div><div class="v" id="pP10">—</div>
+<div class="d">10th percentile</div></div>
+<div class="pcell"><div class="k">P90</div><div class="v" id="pP90">—</div>
+<div class="d">90th percentile</div></div>
+</div>
+<div class="chartbox"><canvas id="fcChart" height="118"></canvas></div>
+</section>
 
-    <!-- accuracy scorecard -->
-    <section class="panel c8">
-      <div class="ph"><h2>Accuracy against the naïve forecast</h2>
-        <span class="sub">78 rolling origins, Jan 2018 – Jun 2024</span></div>
-      <div class="tw"><table id="scTable">
-        <thead><tr><th>Horizon</th><th class="r">Model MAPE</th><th class="r">Naïve MAPE</th>
-          <th class="r">Skill</th><th class="r">Direction</th><th class="r">DM p</th>
-          <th class="r">Gate</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="flag"><span>⚑</span><span><b>Gate missed at h=3.</b>
-        We published a ≥15% skill threshold before modelling and report it unchanged.</span></div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2>Why: the note the buyer receives</h2><span class="sub">generated from the model outputs</span></div>
+<div class="notebox" id="noteTxt">—</div>
+<div class="note" id="landedTxt" style="display:none"></div>
+</section>
 
-    <!-- drivers -->
-    <section class="panel c6">
-      <div class="ph"><h2>What leads the price</h2>
-        <span class="sub">Peak cross-correlation of log-returns, lags 0–6</span></div>
-      <div class="pb" id="drvList"></div>
-      <div class="note">Bars show correlation at each driver's best lag, signed.
-        Granger p-values are FDR-corrected. Predictive precedence, not causation.</div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>What pushed the 3-month forecast</h2><span class="sub">SHAP, LightGBM + drivers</span></div>
+<div class="pb shapl" id="shapList"></div>
+<div class="note">TreeSHAP contributions to the predicted 3-month change, grouped by driver.
+They explain one member of the ensemble, not the ensemble itself.</div>
+</section>
 
-    <!-- model ladder -->
-    <section class="panel c6">
-      <div class="ph"><h2>Model ladder</h2>
-        <span class="sub">h=3, common origins, leak-free weights</span></div>
-      <div class="tw"><table id="ldTable">
-        <thead><tr><th>Model</th><th class="r">MAPE</th><th class="r">Skill</th>
-          <th class="r">Direction</th><th class="r">Weight</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="note" id="ldNote">—</div>
-    </section>
+<section class="panel c4">
+<div class="ph"><h2>Purchase order</h2><span class="sub">Enter your numbers</span></div>
+<div class="pb">
+<div class="field"><label for="bom">Monthly BoM requirement (t)</label>
+<input id="bom" type="number" value="1000" min="0" step="50"></div>
+<div class="field"><label for="oh">On hand (t)</label>
+<input id="oh" type="number" value="600" min="0" step="50"></div>
+<div class="field"><label for="it">In transit (t)</label>
+<input id="it" type="number" value="400" min="0" step="50"></div>
+<div class="calcout">
+<div class="k">Order quantity</div>
+<div class="v" id="calcQty">—</div>
+<div class="f" id="calcFormula">—</div>
+</div>
+</div>
+<div class="note">Cover × BoM − on-hand − in-transit, floored at zero.
+The buyer decides; overrides are logged.</div>
+</section>
 
-    <!-- backtest -->
-    <section class="panel c7">
-      <div class="ph"><h2>What the model actually did</h2>
-        <span class="sub">Three-month-ahead forecast vs realised, every origin</span></div>
-      <div class="chartbox"><canvas id="btChart" height="150"></canvas></div>
-    </section>
+<section class="panel c8">
+<div class="ph"><h2>Accuracy against the naïve forecast</h2>
+<span class="sub" id="scSub">—</span></div>
+<div class="tw"><table id="scTable">
+<thead><tr><th>Horizon</th><th class="r">n</th><th class="r">Model MAPE</th><th class="r">Naïve MAPE</th>
+<th class="r">Skill</th><th class="r">Direction</th><th class="r">DM p</th>
+<th class="r">Skill gate</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="flag"><span>⚑</span><span id="scFlag">—</span></div>
+</section>
 
-    <!-- regimes + bands -->
-    <section class="panel c5">
-      <div class="ph"><h2>By regime, and band calibration</h2><span class="sub">h=3</span></div>
-      <div class="tw"><table id="rgTable">
-        <thead><tr><th>Regime</th><th class="r">n</th><th class="r">MAPE</th>
-          <th class="r">Skill</th><th class="r">Direction</th><th class="r">Coverage</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="tw" style="border-top:1px solid var(--rule)"><table id="bdTable">
-        <thead><tr><th>Horizon</th><th class="r">P10–P90 coverage</th>
-          <th class="r">Band width</th><th class="r">Bias</th><th class="r">Gate</th></tr></thead>
-        <tbody></tbody></table></div>
-      <div class="flag"><span>⚑</span><span><b>Coverage runs 55–65% against a 75–85% gate.</b>
-        The bands are too narrow. Reported, not hidden.</span></div>
-    </section>
+<section class="panel c6">
+<div class="ph"><h2>What leads the price</h2>
+<span class="sub">Real series, 2000–2024, monthly log-returns</span></div>
+<div class="pb" id="drvList"></div>
+<div class="note">Bar = correlation at each driver's best lead (0–6 months).
+"Granger" = significant at a fixed 3-month lag after FDR correction (q &lt; 0.10).
+"Same month" relationships explain moves but cannot forecast them.</div>
+</section>
 
-    <!-- replay -->
-    <section class="panel c12">
-      <div class="ph"><h2>Buying replay, 2018–2024</h2>
-        <span class="sub">Signal-driven cover vs buying one month at a time</span></div>
-      <div class="kpis" id="rpKpis"></div>
-      <div class="grid" style="padding:0;gap:0;border-top:1px solid var(--rule2)">
-        <div class="c8" style="border-right:1px solid var(--rule2)">
-          <div class="chartbox"><canvas id="rpChart" height="96"></canvas></div>
-        </div>
-        <div class="c4"><div class="pb" id="rpSignals"></div></div>
-      </div>
-      <div class="note" id="rpNote">—</div>
-    </section>
+<section class="panel c6">
+<div class="ph"><h2>Model ladder</h2>
+<span class="sub">h=3, development window</span></div>
+<div class="tw"><table id="ldTable">
+<thead><tr><th>Model</th><th class="r">MAPE</th><th class="r">Skill</th>
+<th class="r">Direction</th><th class="r">DM p</th><th class="r">Weight</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="note" id="ldNote">—</div>
+</section>
 
-  </div>
+<section class="panel c7">
+<div class="ph"><h2>What the model actually did</h2>
+<span class="sub">Three-month-ahead forecast vs realised, every origin, with the 80% band</span></div>
+<div class="chartbox"><canvas id="btChart" height="150"></canvas></div>
+</section>
+
+<section class="panel c5">
+<div class="ph"><h2>By regime, and band calibration</h2><span class="sub">h=3</span></div>
+<div class="tw"><table id="rgTable">
+<thead><tr><th>Regime</th><th class="r">n</th><th class="r">MAPE</th>
+<th class="r">Skill</th><th class="r">Direction</th><th class="r">Coverage</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="tw" style="border-top:1px solid var(--rule)"><table id="bdTable">
+<thead><tr><th>Horizon</th><th class="r">Coverage, calibrated</th><th class="r">Uncalibrated</th>
+<th class="r">Width</th><th class="r">Gate 75–85%</th></tr></thead>
+<tbody></tbody></table></div>
+<div class="flag"><span>⚑</span><span id="bdFlag">—</span></div>
+</section>
+
+<section class="panel c12">
+<div class="ph"><h2 id="rpTitle">Buying replay</h2>
+<span class="sub">Signal-driven cover vs buying the normal 1.5 months every month · execution at next month's price</span></div>
+<div class="kpis" id="rpKpis"></div>
+<div class="grid" style="padding:0;gap:0;border-top:1px solid var(--rule2)">
+<div class="c8" style="border-right:1px solid var(--rule2)">
+<div class="chartbox"><canvas id="rpChart" height="96"></canvas></div>
+</div>
+<div class="c4"><div class="pb" id="rpSignals"></div></div>
+</div>
+<div class="note" id="rpNote">—</div>
+</section>
+
+</div>
 </main>
 
 <footer class="foot">
-  <b>Sources.</b> World Bank Commodity Price Data (Pink Sheet) · ECB reference rates ·
-  Caldara &amp; Iacoviello Geopolitical Risk index · Baker, Bloom &amp; Davis Economic Policy
-  Uncertainty · OECD composite leading indicators · UN Comtrade. Public data only.<br>
-  <b>Method.</b> Direct multi-horizon models on log-returns, one per month ahead. Every feature
-  carries its real publication lag. Ensemble weights are estimated on strictly prior folds only.
-  Bands are conformally calibrated; coverage is reported as measured. Carrying cost of 1.0% per
-  month is a placeholder pending ACG Finance inputs.<br>
-  <b>Prototype.</b> Forecast origin is the last validated walk-forward origin. Figures are model
-  outputs, not illustrations.
+<b>Sources.</b> World Bank Commodity Price Data (Pink Sheet) · BLS producer price indices and
+Federal Reserve industrial production via FRED · BTS freight index via FRED · ECB reference rates ·
+Caldara &amp; Iacoviello Geopolitical Risk index · Baker, Bloom &amp; Davis Economic Policy Uncertainty ·
+OECD composite leading indicators. Public data only; no simulated series.<br>
+<b>Method.</b> Direct multi-horizon models on log-returns. Every feature carries its publication lag,
+and every training row is embargoed: its outcome must have been published before the forecast day.
+A future-perturbation test confirms no forecast changes when post-origin data is scrambled.
+Models earn ensemble weight only by beating naïve on their own realised past forecasts.
+Bands: split-conformal, scaled by a GARCH(1,1) volatility forecast; coverage reported as measured.
+Carrying cost of 1.0% per month is a placeholder pending ACG Finance inputs.<br>
+<b>Generated</b> <span id="genDate">—</span> from the pipeline outputs. No value on this page is typed by hand.
 </footer>
 
 <script id="payload" type="application/json">__DATA__</script>
@@ -337,235 +352,191 @@ const D = JSON.parse(document.getElementById('payload').textContent);
 let MAT = 'aluminium', H = 3, fcChart, btChart, rpChart;
 const $ = id => document.getElementById(id);
 const fmt = (v,d=0) => v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const pct = (v,d=1) => (v>0?'+':'') + v.toFixed(d) + '%';
+const pct = (v,d=1) => v==null?'—':(v>0?'+':'') + v.toFixed(d) + '%';
 const CSS = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const P = (m,v) => m.cur + fmt(v, m.cur ? 0 : 1);
 
-/* horizon buttons */
 $('hSeg').innerHTML = [1,2,3,4,5,6].map(h =>
   `<button data-h="${h}" aria-pressed="${h===3}">${h}M</button>`).join('');
-$('hSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
-  H = +b.dataset.h; render(); };
-$('matSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return;
-  MAT = b.dataset.mat; render(); };
+$('hSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return; H = +b.dataset.h; render(); };
+$('matSeg').onclick = e => { const b=e.target.closest('button'); if(!b) return; MAT = b.dataset.mat; render(); };
+$('genDate').textContent = D.generated;
 
 function render(){
   const m = D.materials[MAT], hz = m.horizons[H];
-  document.querySelectorAll('#matSeg button').forEach(b =>
-    b.setAttribute('aria-pressed', b.dataset.mat===MAT));
-  document.querySelectorAll('#hSeg button').forEach(b =>
-    b.setAttribute('aria-pressed', +b.dataset.h===H));
-
+  document.querySelectorAll('#matSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mat===MAT));
+  document.querySelectorAll('#hSeg button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.h===H));
+  const dev = m.scorecard.filter(r=>r.window==='development'&&r.h===3)[0];
   $('mOrigin').textContent = m.origin;
-  $('fcTitle').textContent = m.name + ' — six-month forecast';
+  $('mFolds').textContent = (dev?dev.n:'—') + ' scored origins, 2018–2024' + (m.scorecard.some(r=>r.window==='holdout')?' + 2025–26 holdout':'');
+  $('fcTitle').textContent = m.name;
+  $('fcSub').textContent = m.unit + ' · 80% band (P10–P90)';
   $('decH').textContent = H + (H===1?' month ahead':' months ahead');
+  $('staleBox').style.display = m.stale ? '' : 'none';
+  $('staleTxt').innerHTML = '<b>Data needs refreshing.</b> ' + m.stale;
 
-  /* decision */
   const cls = hz.signal==='BUY NOW'?'buy':hz.signal==='DEFER'?'defer':'hold';
-  $('decBand').className = 'decband ' + cls;
-  $('decSig').className = 'decsig ' + cls;
+  $('decBand').className = 'decband ' + cls; $('decSig').className = 'decsig ' + cls;
   $('decSig').textContent = hz.signal;
   $('decSub').textContent = hz.signal==='BUY NOW'
     ? `Forward-cover ${hz.cover.toFixed(1)} months. Expected rise beats the cost of carry.`
-    : hz.signal==='DEFER'
-    ? `Minimum safety cover ${hz.cover.toFixed(1)} month. Re-run next month.`
+    : hz.signal==='DEFER' ? `Minimum safety cover ${hz.cover.toFixed(1)} month. Re-run next month.`
     : `Buy the BoM requirement, ${hz.cover.toFixed(1)} months cover. No timing bet.`;
   $('decSav').textContent = pct(hz.exp_saving_pct,2);
   $('decSav').className = 'v ' + (hz.exp_saving_pct>0?'pos':'neg');
   $('decPup').textContent = hz.p_up.toFixed(1) + '%';
   $('decCov').textContent = hz.cover.toFixed(1) + ' mo';
-  $('decBandR').textContent = fmt(hz.p10) + ' – ' + fmt(hz.p90);
+  $('decBandR').textContent = P(m,hz.p10) + ' – ' + P(m,hz.p90);
+  $('decModels').textContent = hz.models ? hz.models.split('|').join(', ') : 'none: naïve fallback';
 
-  /* price cells */
-  $('pSpot').textContent = '$' + fmt(m.spot);
-  $('pOrigin').textContent = 'as of ' + m.origin;
-  $('pP50').textContent = '$' + fmt(hz.p50);
-  $('pChg').textContent = pct(hz.change_pct,2) + ' vs spot';
+  $('pSpot').textContent = P(m,m.spot); $('pOrigin').textContent = 'as of ' + m.origin;
+  $('pP50').textContent = P(m,hz.p50); $('pChg').textContent = pct(hz.change_pct,2) + ' vs latest';
   $('pChg').style.color = hz.change_pct>0 ? CSS('--buy') : CSS('--acg');
-  $('pP10').textContent = '$' + fmt(hz.p10);
-  $('pP90').textContent = '$' + fmt(hz.p90);
+  $('pP10').textContent = P(m,hz.p10); $('pP90').textContent = P(m,hz.p90);
+
+  $('noteTxt').textContent = m.note;
+  if (m.landed){ $('landedTxt').style.display='';
+    $('landedTxt').innerHTML = `<b>Rupee view.</b> At USD/INR ${m.landed.usd_inr_latest} (${m.landed.usd_inr_month}) the latest LME price is ₹${fmt(m.landed.lme_in_inr_per_t)}/t before premium, freight and duties. ${m.landed.note}`;
+  } else $('landedTxt').style.display='none';
+  const mx = Math.max(...m.shap.map(s=>Math.abs(s.contribution_pct)), 0.01);
+  $('shapList').innerHTML = m.shap.map(s=>`<div class="dr"><div class="n">${s.driver}</div>
+    <div class="l num">${pct(s.contribution_pct,2)}</div>
+    <div class="bar"><i class="${s.contribution_pct>0?'p':'n'}" style="width:${Math.abs(s.contribution_pct)/mx*50}%"></i></div></div>`).join('');
 
   drawForecast(m); drawBacktest(m); drawReplay(m);
-  fillScorecard(m); fillLadder(m); fillDrivers(m); fillRegimes(m); fillReplay(m);
-  calc();
+  fillScorecard(m); fillLadder(m); fillDrivers(m); fillRegimes(m); fillReplay(m); calc();
 }
 
-/* ---------- charts ---------- */
-const baseOpts = () => ({responsive:true,maintainAspectRatio:false,
-  interaction:{mode:'index',intersect:false},
+const baseOpts = () => ({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
   plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,
-      font:{family:"'IBM Plex Sans'",size:11},color:CSS('--ink2'),padding:14,usePointStyle:true}},
-    tooltip:{backgroundColor:'#16181d',padding:10,cornerRadius:3,titleFont:{size:11},
-      bodyFont:{family:"'IBM Plex Mono'",size:11}}},
-  scales:{x:{grid:{display:false},ticks:{font:{size:10},color:CSS('--mute'),maxRotation:0,
-      autoSkipPadding:22}},
-    y:{grid:{color:CSS('--rule2')},border:{display:false},
-      ticks:{font:{family:"'IBM Plex Mono'",size:10},color:CSS('--mute')}}}});
+      font:{family:"'IBM Plex Sans'",size:11},color:CSS('--ink2'),padding:14,usePointStyle:true,
+      filter:i=>!['P10','P90'].includes(i.text)}},
+    tooltip:{backgroundColor:'#16181d',padding:10,cornerRadius:3,titleFont:{size:11},bodyFont:{family:"'IBM Plex Mono'",size:11}}},
+  scales:{x:{grid:{display:false},ticks:{font:{size:10},color:CSS('--mute'),maxRotation:0,autoSkipPadding:22}},
+    y:{grid:{color:CSS('--rule2')},border:{display:false},ticks:{font:{family:"'IBM Plex Mono'",size:10},color:CSS('--mute')}}}});
 
 function drawForecast(m){
-  const s = m.series;
-  fcChart && fcChart.destroy();
+  const s = m.series; fcChart && fcChart.destroy();
   fcChart = new Chart($('fcChart'), {type:'line', data:{labels:s.labels, datasets:[
-    {label:'P90',data:s.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.09)',
-     fill:'+1',pointRadius:0,tension:.25},
-    {label:'P10',data:s.p10,borderColor:'transparent',backgroundColor:'transparent',
-     pointRadius:0,tension:.25},
-    {label:'Actual',data:s.actual,borderColor:CSS('--ink'),borderWidth:1.8,
-     pointRadius:0,tension:.2},
-    {label:'Forecast P50',data:s.p50,borderColor:CSS('--acg'),borderWidth:2.2,
-     borderDash:[5,3],pointRadius:0,tension:.25},
-    {label:'Naïve',data:s.naive,borderColor:CSS('--mute'),borderWidth:1.2,
-     borderDash:[2,3],pointRadius:0}
-  ]}, options:{...baseOpts(),
-    plugins:{...baseOpts().plugins,
-      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
-        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+    {label:'P90',data:s.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.09)',fill:'+1',pointRadius:0,tension:.25},
+    {label:'P10',data:s.p10,borderColor:'transparent',backgroundColor:'transparent',pointRadius:0,tension:.25},
+    {label:'Actual',data:s.actual,borderColor:CSS('--ink'),borderWidth:1.8,pointRadius:0,tension:.2},
+    {label:'Forecast P50',data:s.p50,borderColor:CSS('--acg'),borderWidth:2.2,borderDash:[5,3],pointRadius:0,tension:.25},
+    {label:'Naïve',data:s.naive,borderColor:CSS('--mute'),borderWidth:1.2,borderDash:[2,3],pointRadius:0}
+  ]}, options:baseOpts()});
 }
-
 function drawBacktest(m){
-  const b = m.backtest;
-  btChart && btChart.destroy();
+  const b = m.backtest; btChart && btChart.destroy();
   btChart = new Chart($('btChart'), {type:'line', data:{labels:b.labels, datasets:[
-    {label:'P90',data:b.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.08)',
-     fill:'+1',pointRadius:0,tension:.2},
+    {label:'P90',data:b.p90,borderColor:'transparent',backgroundColor:'rgba(200,16,46,.08)',fill:'+1',pointRadius:0,tension:.2},
     {label:'P10',data:b.p10,borderColor:'transparent',pointRadius:0,tension:.2},
-    {label:'Realised',data:b.actual,borderColor:CSS('--ink'),borderWidth:1.8,
-     pointRadius:0,tension:.2},
-    {label:'Forecast made 3 months earlier',data:b.pred,borderColor:CSS('--acg'),
-     borderWidth:1.6,pointRadius:0,tension:.2}
-  ]}, options:{...baseOpts(),
-    plugins:{...baseOpts().plugins,
-      legend:{...baseOpts().plugins.legend,labels:{...baseOpts().plugins.legend.labels,
-        filter:i=>!['P10','P90'].includes(i.text)}}}}});
+    {label:'Realised',data:b.actual,borderColor:CSS('--ink'),borderWidth:1.8,pointRadius:0,tension:.2},
+    {label:'Forecast made 3 months earlier',data:b.pred,borderColor:CSS('--acg'),borderWidth:1.6,pointRadius:0,tension:.2}
+  ]}, options:baseOpts()});
 }
-
 function drawReplay(m){
-  const c = m.replay.curve;
-  rpChart && rpChart.destroy();
+  const c = m.replay.curve; rpChart && rpChart.destroy();
+  const pts = k => c.price.map((p,i)=>c.signal[i]===k?p:null);
   rpChart = new Chart($('rpChart'), {type:'line', data:{labels:c.labels, datasets:[
-    {label:'Cumulative saving vs buy-every-month (%)',data:c.cum,
-     borderColor:CSS('--buy'),backgroundColor:'rgba(15,107,63,.10)',
-     borderWidth:2,fill:true,pointRadius:0,tension:.25}
-  ]}, options:{...baseOpts(),
-    scales:{...baseOpts().scales,
-      y:{...baseOpts().scales.y,ticks:{...baseOpts().scales.y.ticks,
-        callback:v=>v.toFixed(1)+'%'}}}}});
+    {label:'Purchase price',data:c.price,borderColor:CSS('--ink'),borderWidth:1.6,pointRadius:0,tension:.2},
+    {label:'BUY NOW',data:pts('BUY NOW'),showLine:false,pointRadius:5,pointBackgroundColor:CSS('--buy'),borderColor:CSS('--buy')},
+    {label:'DEFER',data:pts('DEFER'),showLine:false,pointRadius:5,pointBackgroundColor:CSS('--defer'),borderColor:CSS('--defer')}
+  ]}, options:baseOpts()});
 }
 
-/* ---------- tables ---------- */
 function fillScorecard(m){
-  const gates = {1:10,2:12,3:15,4:12,5:10,6:10};
-  const dirGates = {1:65,2:63,3:62,4:60,5:59,6:58};
-  $('scTable').querySelector('tbody').innerHTML = m.scorecard.map(r=>{
-    const pass = r.skill >= gates[r.h];
-    return `<tr class="${r.h===H?'hl':''}">
-      <td>${r.h} month${r.h>1?'s':''}</td>
-      <td class="r num">${r.ens.toFixed(2)}%</td>
-      <td class="r num">${r.naive.toFixed(2)}%</td>
-      <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r num">${r.dm_p.toFixed(4)}</td>
-      <td class="r"><span class="chip ${pass?'ok':'no'}">${pass?'pass':'miss'}</span></td></tr>`;
-  }).join('');
+  const rows = w => m.scorecard.filter(r=>r.window===w).map(r=>{
+    const pass = r.skill >= r.gate_skill;
+    return `<tr class="${r.h===H?'hl':''}"><td>${r.h} month${r.h>1?'s':''}</td><td class="r num">${r.n}</td>
+      <td class="r num">${r.ens.toFixed(2)}%</td><td class="r num">${r.naive.toFixed(2)}%</td>
+      <td class="r num" style="color:${r.skill>0?CSS('--buy'):r.skill<0?CSS('--acg'):CSS('--mute')}">${pct(r.skill)}</td>
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td>
+      <td class="r num">${r.dm_p==null?'—':r.dm_p.toFixed(3)}</td>
+      <td class="r"><span class="chip ${pass?'ok':'no'}">≥${r.gate_skill}% ${pass?'pass':'miss'}</span></td></tr>`;}).join('');
+  const ho = rows('holdout');
+  $('scTable').querySelector('tbody').innerHTML =
+    '<tr class="sep"><td colspan="8">Development, origins 2018–2024</td></tr>' + rows('development') +
+    (ho ? '<tr class="sep"><td colspan="8">Holdout, origins 2025 onward (scored once)</td></tr>' + ho : '');
+  const d3 = m.scorecard.filter(r=>r.window==='development'&&r.h===3)[0];
+  $('scSub').textContent = 'Smart Buy headline ensemble · gates set in Round 1';
+  const sig = d3.dm_p!=null && d3.dm_p<0.10;
+  $('scFlag').innerHTML = `<b>At the 3-month decision horizon the skill is ${pct(d3.skill)} against a ≥15% gate${d3.skill>=15?' (pass)':' (missed)'}; the improvement over naïve is ${sig?'':'<u>not</u> '}statistically significant (DM p = ${d3.dm_p==null?'—':d3.dm_p.toFixed(3)}).</b> Gates are reported unchanged from Round 1.`;
 }
-
 function fillLadder(m){
   $('ldTable').querySelector('tbody').innerHTML = m.ladder.map(r=>`
-    <tr class="${r.is_ensemble?'hl':''} ${r.weight===0&&!r.is_ensemble?'dim':''}">
-      <td>${r.model}</td>
+    <tr class="${r.is_headline?'hl':''} ${r.weight===0?'dim':''}"><td>${r.model}</td>
       <td class="r num">${r.mape.toFixed(2)}%</td>
       <td class="r num" style="color:${r.skill>0?CSS('--buy'):r.skill<0?CSS('--acg'):CSS('--mute')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r">${r.is_ensemble?'—':
-        r.weight===0?'<span class="chip zero">gated out</span>':
-        '<span class="num">'+r.weight.toFixed(1)+'%</span>'}</td></tr>`).join('');
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td>
+      <td class="r num">${r.dm_p==null?'—':r.dm_p.toFixed(3)}</td>
+      <td class="r">${r.weight==null?'—':r.weight===0?'<span class="chip zero">gated out</span>':'<span class="num">'+r.weight.toFixed(1)+'%</span>'}</td></tr>`).join('');
   const e = m.err_corr;
-  $('ldNote').innerHTML = `Mean error correlation between members <b class="num">${e.mean_off_diag}</b>;
-    N-BEATS against the rest <b class="num">${e.nbeats_vs_rest}</b>. N-BEATS is the only genuine
-    diversifier, which is why it carries the ensemble. Models that fail the naïve gate receive
-    zero weight automatically.`;
+  $('ldNote').innerHTML = `Weight = average share of the headline ensemble over the development months (a model earns a share only in months when it had beaten naïve on its own past forecasts). Naïve was used alone in <b class="num">${m.fallback_pct}%</b> of months. Mean error correlation between members is <b class="num">${e.mean_off_diag}</b>; the most independent member is ${e.most_diversifying} (<b class="num">${e.its_mean_corr}</b>).`;
 }
-
 function fillDrivers(m){
   const mx = Math.max(...m.drivers.map(d=>Math.abs(d.rho)));
-  $('drvList').innerHTML = m.drivers.map(d=>{
-    const w = Math.abs(d.rho)/mx*50;
-    return `<div class="dr">
-      <div class="n" title="${d.name}">${d.name}
-        ${d.sig?'<span class="chip ok" style="margin-left:5px">granger</span>':''}</div>
+  $('drvList').innerHTML = m.drivers.map(d=>`<div class="dr">
+      <div class="n" title="${d.name}">${d.name}${d.sig?' <span class="chip ok" style="margin-left:5px">granger</span>':''}</div>
       <div class="l">${d.lead===0?'same mo':'lead '+d.lead}</div>
-      <div class="bar"><i class="${d.rho>0?'p':'n'}" style="width:${w}%"></i></div></div>`;
-  }).join('');
+      <div class="bar"><i class="${d.rho>0?'p':'n'}" style="width:${Math.abs(d.rho)/mx*50}%"></i></div></div>`).join('');
 }
-
 function fillRegimes(m){
   $('rgTable').querySelector('tbody').innerHTML = m.regimes.map(r=>`
-    <tr><td>${r.name}</td><td class="r num">${r.n}</td>
-      <td class="r num">${r.mape.toFixed(2)}%</td>
+    <tr><td>${r.name}</td><td class="r num">${r.n}</td><td class="r num">${r.mape.toFixed(2)}%</td>
       <td class="r num" style="color:${r.skill>0?CSS('--buy'):CSS('--acg')}">${pct(r.skill)}</td>
-      <td class="r num">${r.dir.toFixed(1)}%</td>
-      <td class="r num">${r.cov.toFixed(1)}%</td></tr>`).join('');
-  $('bdTable').querySelector('tbody').innerHTML = m.bands.map(r=>{
+      <td class="r num">${r.dir==null?'—':r.dir.toFixed(1)+'%'}</td><td class="r num">${r.cov.toFixed(1)}%</td></tr>`).join('');
+  const dv = m.bands.filter(r=>r.window==='development');
+  $('bdTable').querySelector('tbody').innerHTML = dv.map(r=>{
     const ok = r.cov>=75 && r.cov<=85;
-    return `<tr class="${r.h==='h='+H?'hl':''}"><td>${r.h.replace('h=','')} month${r.h==='h=1'?'':'s'}</td>
-      <td class="r num">${r.cov.toFixed(1)}%</td>
+    return `<tr class="${r.h===H?'hl':''}"><td>${r.h} month${r.h===1?'':'s'}</td>
+      <td class="r num">${r.cov.toFixed(1)}%</td><td class="r num">${m.bands_gauss[r.h]!=null?m.bands_gauss[r.h].toFixed(1)+'%':'—'}</td>
       <td class="r num">${r.width.toFixed(1)}%</td>
-      <td class="r num">${pct(r.bias,2)}</td>
-      <td class="r"><span class="chip ${ok?'ok':r.cov>=55?'warn':'no'}">${ok?'pass':'miss'}</span></td></tr>`;
-  }).join('');
+      <td class="r"><span class="chip ${ok?'ok':'no'}">${ok?'pass':'miss'}</span></td></tr>`;}).join('');
+  const lo = Math.min(...dv.map(r=>r.cov)), hi = Math.max(...dv.map(r=>r.cov));
+  const npass = dv.filter(r=>r.cov>=75&&r.cov<=85).length;
+  $('bdFlag').innerHTML = `<b>Calibrated coverage runs ${lo.toFixed(0)}–${hi.toFixed(0)}% against the 75–85% gate (${npass} of 6 horizons pass).</b> Round 2 reported 55–65% with no calibration step; the conformal step is now real.`;
 }
-
 function fillReplay(m){
-  const r = m.replay;
+  const r = m.replay, tot = Object.values(r.signals).reduce((a,b)=>a+b,0);
+  $('rpTitle').textContent = `Buying replay, development window (${r.months} months)`;
+  const wc = r.extra_working_capital_cr_per_100cr_spend;
   $('rpKpis').innerHTML = `
-    <div class="kpi"><div class="k">Average price paid</div>
-      <div class="v">$${fmt(r.sb_price)}</div>
-      <div class="f">vs $${fmt(r.base_price)} buying monthly</div></div>
-    <div class="kpi"><div class="k">Gross price saving</div>
-      <div class="v" style="color:${CSS('--buy')}">${pct(r.gross_pct,2)}</div>
-      <div class="f">before carrying cost</div></div>
     <div class="kpi"><div class="k">Net saving after carry</div>
-      <div class="v" style="color:${CSS('--buy')}">${pct(r.net_pct,2)}</div>
-      <div class="f">₹${r.net_pct.toFixed(2)} Cr per ₹100 Cr spend</div></div>
-    <div class="kpi"><div class="k">Average cover</div>
-      <div class="v">${r.inv_sb.toFixed(1)} d</div>
-      <div class="f" style="color:${r.inv_delta>0?CSS('--defer'):CSS('--buy')}">
-        ${pct(r.inv_delta,1)} days vs baseline</div></div>
+      <div class="v" style="color:${r.net_saving_after_carry_pct>0?CSS('--buy'):CSS('--acg')}">${pct(r.net_saving_after_carry_pct,2)}</div>
+      <div class="f">₹${r.net_saving_after_carry_pct.toFixed(2)} Cr per ₹100 Cr spend</div></div>
+    <div class="kpi"><div class="k">Better than random timing?</div>
+      <div class="v">p = ${r.permutation_p_value.toFixed(3)}</div>
+      <div class="f">random placement of the same signals: median ${pct(r.random_timing_median_pct,2)}</div></div>
+    <div class="kpi"><div class="k">Perfect-foresight ceiling</div>
+      <div class="v">${pct(r.perfect_foresight_net_pct,2)}</div><div class="f">same rule, actual prices known</div></div>
+    <div class="kpi"><div class="k">Gross price saving</div>
+      <div class="v">${pct(r.gross_price_saving_pct,2)}</div><div class="f">before carrying cost</div></div>
+    <div class="kpi"><div class="k">Inventory cover</div>
+      <div class="v">${r.inventory_days_smartbuy.toFixed(1)} d</div>
+      <div class="f">${pct(r.inventory_days_change,1)} days vs ${r.inventory_days_baseline.toFixed(1)}</div></div>
     <div class="kpi"><div class="k">Working capital</div>
-      <div class="v">${r.wc_shift>0?'−':'+'}₹${Math.abs(r.wc_shift).toFixed(2)} Cr</div>
-      <div class="f">per ₹100 Cr of spend</div></div>
-    <div class="kpi"><div class="k">Months replayed</div>
-      <div class="v">${r.months}</div><div class="f">Jan 2018 – Jun 2024</div></div>`;
-
-  const tot = Object.values(r.signals).reduce((a,b)=>a+b,0);
+      <div class="v">${wc>0?'+':wc<0?'−':''}₹${Math.abs(wc).toFixed(2)} Cr</div>
+      <div class="f">${wc>0?'more tied up':wc<0?'released':'unchanged'}, per ₹100 Cr</div></div>`;
   $('rpSignals').innerHTML = '<div style="font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-bottom:9px">Signals fired</div>' +
-    Object.entries(r.signals).map(([k,v])=>`
-      <div class="dr" style="grid-template-columns:1fr 46px 96px">
-        <div class="n">${k}</div><div class="l">${v} mo</div>
-        <div class="bar"><i class="p" style="left:0;width:${v/tot*100}%;
-          background:${k==='DEFER'?CSS('--defer'):k==='BUY NOW'?CSS('--buy'):CSS('--hold')}"></i></div>
-      </div>`).join('') +
-    `<div style="font-size:11px;color:var(--mute);margin-top:10px">The rule stays silent
-      ${(r.signals['BUY NORMAL']/tot*100).toFixed(0)}% of the time. It only acts when expected
-      saving clears carry and confidence clears 60%.</div>`;
-
-  $('rpNote').innerHTML = `Cover rises from ${r.inv_base.toFixed(0)} to
-    ${r.inv_sb.toFixed(1)} days, so the rule <b>trades inventory days for price capture</b>.
-    That trade is already paid for: carrying cost at 1% per month is subtracted inside the
-    signal, and the net figure above is after carry.`;
+    ['BUY NOW','BUY NORMAL','DEFER'].map(k=>{ const v=r.signals[k]||0; return `
+      <div class="dr" style="grid-template-columns:1fr 46px 96px"><div class="n">${k}</div><div class="l">${v} mo</div>
+      <div class="bar"><i class="p" style="left:0;width:${v/tot*100}%;background:${k==='DEFER'?CSS('--defer'):k==='BUY NOW'?CSS('--buy'):CSS('--hold')}"></i></div></div>`;}).join('') +
+    `<div style="font-size:11px;color:var(--mute);margin-top:10px">The rule stays at BUY NORMAL ${((r.signals['BUY NORMAL']||0)/tot*100).toFixed(0)}% of the time.</div>`;
+  const ho = r.holdout;
+  $('rpNote').innerHTML = `Monthly requirement held constant (no ACG demand data). Leftover inventory is valued at the final price so both policies are compared on equal consumption. `
+    + `A permutation p-value above 0.10 means the saving cannot be told apart from luck in timing.`
+    + (ho ? ` <b>Holdout (${ho.months} months):</b> net ${pct(ho.net_saving_after_carry_pct,2)}, permutation p = ${ho.permutation_p_value.toFixed(3)}.` : '');
 }
 
-/* ---------- calculator ---------- */
 ['bom','oh','it'].forEach(id => $(id).addEventListener('input', calc));
 function calc(){
   const m = D.materials[MAT], cover = m.horizons[H].cover;
   const bom = +$('bom').value||0, oh = +$('oh').value||0, it = +$('it').value||0;
   const qty = Math.max(0, Math.round(cover*bom - oh - it));
   $('calcQty').textContent = fmt(qty) + ' t';
-  $('calcFormula').textContent =
-    `${cover.toFixed(1)} × ${fmt(bom)} − ${fmt(oh)} − ${fmt(it)} = ${fmt(qty)} t`
-    + (qty===0 ? ' · cover already met' : ` · ≈ $${fmt(qty*m.spot/1000)}k at spot`);
+  $('calcFormula').textContent = `${cover.toFixed(1)} × ${fmt(bom)} − ${fmt(oh)} − ${fmt(it)} = ${fmt(qty)} t`
+    + (qty===0 ? ' · cover already met' : (m.cur ? ` · ≈ $${fmt(qty*m.spot/1000)}k at latest price` : ''));
 }
-
 render();
 </script>
 </body>

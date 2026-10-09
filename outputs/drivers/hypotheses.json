@@ -1,0 +1,35 @@
+{
+ "H1": {
+  "hypothesis": "China coal and LME stocks lead aluminium by 1-3 months.",
+  "coal (Australian thermal, proxy)": "best lead 0m, rho=+0.36; Granger(3) p=0.724, FDR q=0.827 -> NOT SUPPORTED",
+  "LME stocks": "NOT TESTABLE: no free historical LME stock series. The Round 2 'stocks' series was computed from the aluminium price itself.",
+  "verdict": "NOT SUPPORTED (coal only; stocks not testable)"
+ },
+ "H2": {
+  "hypothesis": "Ethylene/VCM and China export offers lead PVC by 1-2 months.",
+  "monomers (US PPI basic organic chemicals, proxy)": "best lead 6m, rho=-0.23; Granger(3) p=0.465, FDR q=0.626 -> NOT SUPPORTED",
+  "Brent crude": "best lead 1m, rho=+0.41; Granger(3) p=0.000, FDR q=0.000 -> SUPPORTED",
+  "China export offers": "NOT TESTABLE with free data. The Round 2 'exports' series was the PVC price lagged two months.",
+  "verdict": "PARTIAL (monomer proxy: NOT SUPPORTED; Brent: SUPPORTED; exports not testable)"
+ },
+ "H3": {
+  "hypothesis": "Manufacturing activity leads both materials by 0-2 months.",
+  "aluminium vs OECD China CLI": "best lead 2m, rho=+0.20; Granger(3) p=0.005, FDR q=0.019 -> SUPPORTED",
+  "aluminium vs US industrial production": "best lead 0m, rho=+0.23; Granger(3) p=0.698, FDR q=0.827 -> PARTIAL",
+  "PVC vs OECD China CLI": "best lead 2m, rho=+0.18; Granger(3) p=0.001, FDR q=0.004 -> SUPPORTED",
+  "PVC vs US industrial production": "best lead 0m, rho=+0.26; Granger(3) p=0.416, FDR q=0.624 -> PARTIAL",
+  "note": "PMIs are paywalled; the OECD China CLI and US industrial production are free activity proxies.",
+  "verdict": "see per-row verdicts"
+ },
+ "H4": {
+  "hypothesis": "USD/INR moves the landed (rupee) price in the same month.",
+  "share of monthly rupee-price variance due to USD/INR, aluminium": "1.3%",
+  "share of monthly rupee-price variance due to USD/INR, PVC proxy": "35.8%",
+  "does USD/INR forecast the US$ price? aluminium": "best lead 0m, rho=-0.30; Granger(3) p=0.152, FDR q=0.365",
+  "does USD/INR forecast the US$ price? PVC": "best lead 1m, rho=-0.23; Granger(3) p=0.000, FDR q=0.002",
+  "verdict": "PARTIAL. Pass-through is one-for-one by construction (rupee price = US$ price x USD/INR), but USD/INR explains only 1% of aluminium's monthly rupee-price variance (the US$ price dominates) and 36% for the less volatile PVC index. Handle FX in the landed-cost overlay; as a predictor of the US$ price it is significant for PVC and not significant for aluminium."
+ },
+ "extra": {
+  "copper -> aluminium": "best lead 0m, rho=+0.68; Granger(3) p=0.022, FDR q=0.075"
+ }
+}

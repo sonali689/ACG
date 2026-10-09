@@ -1,0 +1,13 @@
+material,window,h,band,coverage_pct,mean_width_pct,n
+aluminium,development,1,conf,78.2,10.8,78
+aluminium,development,1,gauss,76.9,10.4,78
+aluminium,development,2,conf,73.1,19.4,78
+aluminium,development,2,gauss,65.4,14.7,78
+aluminium,development,3,conf,71.8,24.0,78
+aluminium,development,3,gauss,65.4,18.1,78
+aluminium,development,4,conf,71.8,26.5,78
+aluminium,development,4,gauss,64.1,20.9,78
+aluminium,development,5,conf,71.8,31.2,78
+aluminium,development,5,gauss,60.3,23.4,78
+aluminium,development,6,conf,70.5,35.4,78
+aluminium,development,6,gauss,57.7,25.5,78

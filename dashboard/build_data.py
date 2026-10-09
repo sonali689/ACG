@@ -1,8 +1,4 @@
-"""Build dashboard_data.json from the real walk-forward outputs.
-
-Uses the CORRECTED expanding-ensemble figures from fix_pack, not the
-earlier leaked ones. Nothing in the dashboard is typed by hand.
-"""
+"""Assemble dashboard/data.json from the v2 pipeline outputs. Nothing is typed by hand."""
 import json
 from pathlib import Path
 
@@ -11,159 +7,116 @@ import pandas as pd
 
 BASE = Path(__file__).resolve().parents[1]
 OUT = BASE / "outputs"
-MODELS = ["naive", "seasonal_naive", "ets", "elasticnet",
-          "bayesian_ridge", "lightgbm", "lstm", "nbeats"]
-PRETTY = {"naive": "Naive", "seasonal_naive": "Seasonal naive", "ets": "Holt-Winters ETS",
-          "elasticnet": "ElasticNet", "bayesian_ridge": "Bayesian ridge",
-          "lightgbm": "LightGBM", "lstm": "LSTM", "nbeats": "N-BEATS",
-          "ensemble": "Smart Buy ensemble"}
+SC = OUT / "scorecards"
+D = json.loads((OUT / "forecast_now.json").read_text())
+RP = json.loads((OUT / "replay_summary.json").read_text())
+DRV = pd.read_csv(OUT / "drivers" / "lead_lag_granger.csv")
+GATES = {"skill": {1: 10, 2: 12, 3: 15, 4: 12, 5: 10, 6: 10},
+         "dir": {1: 65, 2: 63, 3: 62, 4: 60, 5: 59, 6: 58}}
+COVER = {"BUY NOW": 3.0, "BUY NORMAL": 1.5, "DEFER": 1.0}
+NAMES = {"naive": "Naïve (no change)", "seasonal_naive": "Seasonal naïve", "drift": "Drift",
+         "ets": "ETS (damped)", "arima": "ARIMA", "vecm": "VECM (cost drivers)",
+         "enet": "ElasticNet + drivers", "lgb_local": "LightGBM + drivers",
+         "lgb_global": "LightGBM, global panel", "nbeats": "N-BEATS, global panel",
+         "chronos": "Chronos (zero-shot)", "gated_equal_weight": "Smart Buy ensemble (headline)",
+         "gated_inv_mse": "Ensemble, inverse-MSE", "all_equal": "Average of all, no gate"}
 
-data = {"materials": {}}
-master = pd.read_csv(BASE / "data/processed/master_dataset.csv", parse_dates=["date"])
 
-for mat, key, pcol in [("aluminium", "aluminium", "lme_aluminium"),
-                       ("pvc", "pvc", "pvc_asia_spot")]:
-    wf = pd.read_csv(OUT / f"scorecards/{mat}_walk_forward_predictions.csv",
-                     parse_dates=["origin_date", "target_date"])
-    hz = pd.read_csv(OUT / f"scorecards/{mat}_horizon_scorecard_leakfree.csv")
-    wts = pd.read_csv(OUT / f"scorecards/{mat}_ensemble_weights_leakfree.csv")
-    LF = json.loads((OUT / "replay_leakfree.json").read_text())[mat]
-    rg = pd.read_csv(OUT / f"scorecards/{mat}_regime_scorecard.csv")
-    dr = pd.read_csv(OUT / f"{mat}_driver_study.csv")
-    rp = pd.read_csv(OUT / f"{mat}_buying_replay.csv", parse_dates=["date"])
-    summ = json.loads((OUT / f"{mat}_replay_summary.json").read_text())
-    up = mat.upper() if mat != "aluminium" else "ALUMINIUM"
-    ladder = pd.read_csv(OUT / f"tables/ladder_common_origins_{up}_h3.csv")
-    band = pd.read_csv(OUT / f"tables/band_coverage_by_horizon_{up}.csv")
-    inv = pd.read_csv(OUT / f"tables/inventory_and_net_savings_{up}.csv").iloc[0]
-    ecorr = pd.read_csv(OUT / f"tables/error_corr_{up}_h3.csv", index_col=0)
+def r(x, d=2):
+    try:
+        if x is None or np.isnan(float(x)):
+            return None
+    except (TypeError, ValueError):
+        return None
+    return round(float(x), d)
 
-    # ---- latest validated origin: the real forecast the model produced -----
-    last_origin = wf.origin_date.max()
-    cur = wf[wf.origin_date == last_origin].sort_values("horizon")
-    p0 = float(cur.current_price.iloc[0])
 
-    horizons = {}
-    for _, r in cur.iterrows():
-        h = int(r.horizon)
-        p50 = float(r.pred_price_ensemble)
-        p10, p90 = float(r.p10_price), float(r.p90_price)
-        # P(up): share of the fitted quantile distribution above p0
-        if p90 > p10:
-            z = (p0 - p10) / (p90 - p10)
-            p_up = float(np.clip(1 - (0.10 + 0.80 * z), 0.02, 0.98))
-        else:
-            p_up = 0.5
-        exp_sav = (p50 - p0) / p0 * 100 - 1.0 * h          # c = 1.0 %/month
-        if exp_sav > 2 and p_up >= 0.60:
-            sig, cover = "BUY NOW", 3.0
-        elif exp_sav < -2 and (1 - p_up) >= 0.60:
-            sig, cover = "DEFER", 1.0
-        else:
-            sig, cover = "BUY NORMAL", 1.5
-        horizons[h] = {"p50": round(p50, 1), "p10": round(p10, 1), "p90": round(p90, 1),
-                       "change_pct": round((p50 - p0) / p0 * 100, 2),
-                       "p_up": round(p_up * 100, 1),
-                       "exp_saving_pct": round(exp_sav, 2),
-                       "signal": sig, "cover": cover}
+def material(m):
+    f = D[m]
+    c = pd.read_csv(SC / f"{m}_combined.csv", parse_dates=["origin"])
+    sc = pd.read_csv(SC / f"{m}_scorecard.csv")
+    bd = pd.read_csv(SC / f"{m}_bands.csv")
+    rg = pd.read_csv(SC / f"{m}_regimes.csv")
+    wt = pd.read_csv(SC / f"{m}_weights.csv")
+    ec = pd.read_csv(SC / f"{m}_error_corr_h3.csv", index_col=0)
+    h1 = c[c.h == 1].set_index("origin").sort_index()
 
-    # ---- 36 months of actual history + the forward fan --------------------
-    hist = master[["date", pcol]].dropna().tail(37)
-    hist_lbl = [d.strftime("%Y-%m") for d in hist.date]
-    hist_val = [round(float(v), 1) for v in hist[pcol]]
+    T = h1.index.max()
+    hist = h1.p0.iloc[-36:]
+    fwd_lab = [(T + pd.DateOffset(months=h)).strftime("%b %y") for h in range(1, 7)]
+    n_h = len(hist)
+    hz = {}
+    for h, v in f["horizons"].items():
+        hz[h] = {"p50": v["p50"], "p10": v["p10"], "p90": v["p90"], "change_pct": v["change_pct"],
+                 "p_up": round(100 * v["p_up"], 1), "exp_saving_pct": v["expected_saving_net_pct"],
+                 "signal": v["signal"], "cover": COVER[v["signal"]], "models": v["eligible_models"]}
+    last = r(hist.iloc[-1], 1)
+    series = {"labels": [d.strftime("%b %y") for d in hist.index] + fwd_lab,
+              "actual": [r(x, 1) for x in hist.values] + [None] * 6,
+              "p50": [None] * (n_h - 1) + [last] + [hz[str(h)]["p50"] for h in range(1, 7)],
+              "p10": [None] * (n_h - 1) + [last] + [hz[str(h)]["p10"] for h in range(1, 7)],
+              "p90": [None] * (n_h - 1) + [last] + [hz[str(h)]["p90"] for h in range(1, 7)],
+              "naive": [None] * (n_h - 1) + [last] * 7}
 
-    fwd_lbl = [(last_origin + pd.DateOffset(months=h)).strftime("%Y-%m")
-               for h in range(1, 7)]
-    labels = hist_lbl + fwd_lbl
-    n_h, n_f = len(hist_lbl), len(fwd_lbl)
-    series = {
-        "labels": labels,
-        "actual": hist_val + [None] * n_f,
-        "p50": [None] * (n_h - 1) + [hist_val[-1]] + [horizons[h]["p50"] for h in range(1, 7)],
-        "p10": [None] * (n_h - 1) + [hist_val[-1]] + [horizons[h]["p10"] for h in range(1, 7)],
-        "p90": [None] * (n_h - 1) + [hist_val[-1]] + [horizons[h]["p90"] for h in range(1, 7)],
-        "naive": [None] * (n_h - 1) + [hist_val[-1]] * (n_f + 1),
-    }
+    b = c[(c.h == 3) & c.y.notna() & (c.origin >= "2018-01-01")].sort_values("origin")
+    tgt = b.origin + pd.DateOffset(months=3)
+    backtest = {"labels": [d.strftime("%b %y") for d in tgt],
+                "actual": [r(x, 1) for x in b.p0 * np.exp(b.y)],
+                "pred": [r(x, 1) for x in b.p0 * np.exp(b.f_gated_equal_weight)],
+                "p10": [r(x, 1) for x in b.p0 * np.exp(b.lo_conf)],
+                "p90": [r(x, 1) for x in b.p0 * np.exp(b.hi_conf)]}
 
-    # ---- backtest trajectory at h=3: what the model actually did ----------
-    h3 = wf[wf.horizon == 3].sort_values("target_date")
-    backtest = {
-        "labels": [d.strftime("%Y-%m") for d in h3.target_date],
-        "actual": [round(float(v), 1) for v in h3.actual_price],
-        "pred": [round(float(v), 1) for v in h3.pred_price_ensemble],
-        "p10": [round(float(v), 1) for v in h3.p10_price],
-        "p90": [round(float(v), 1) for v in h3.p90_price],
-    }
+    hd = sc[sc.model == "gated_equal_weight"]
+    scorecard = [{"window": x.window, "h": int(x.h), "n": int(x.n), "ens": x.mape, "naive": x.naive_mape,
+                  "skill": x.skill_pct, "dir": r(x.dir_acc_pct, 1), "dm_p": r(x.dm_p_one_sided, 4),
+                  "gate_skill": GATES["skill"][int(x.h)], "gate_dir": GATES["dir"][int(x.h)]}
+                 for x in hd.itertuples()]
 
-    # ---- model ladder (corrected, common origins) --------------------------
-    lad = []
-    for _, r in ladder.iterrows():
-        nm = r.model
-        lad.append({
-            "model": "Smart Buy ensemble" if "Ensemble" in nm else PRETTY.get(nm, nm),
-            "is_ensemble": "Ensemble" in nm,
-            "mape": float(r.mape),
-            "skill": float(r.skill_vs_naive_pct),
-            "dir": float(r.directional_accuracy_pct),
-            "dm_p": float(r.hac_dm_p_value),
-            "weight": round(float(r.mean_ensemble_weight) * 100, 1) if not r.get("mean_ensemble_weight") is None else 0,
-            "gated_out": float(r.skill_vs_naive_pct) <= 0 and "Ensemble" not in nm and nm != "naive",
-        })
+    dev3 = sc[(sc.window == "development") & (sc.h == 3) & sc.mape.notna()]
+    w3 = wt[wt.h == 3].iloc[0]
+    ladder = []
+    for x in dev3.sort_values("mape").itertuples():
+        ens = x.model in ("gated_equal_weight", "gated_inv_mse", "all_equal")
+        ladder.append({"model": NAMES.get(x.model, x.model), "key": x.model, "is_ensemble": ens,
+                       "is_headline": x.model == "gated_equal_weight",
+                       "mape": x.mape, "skill": x.skill_pct, "dir": r(x.dir_acc_pct, 1),
+                       "dm_p": r(x.dm_p_one_sided, 4),
+                       "weight": None if ens or x.model == "naive" else r(w3.get(x.model, 0.0), 1)})
+    off = ec.values[np.triu_indices_from(ec.values, 1)]
+    div = (ec.sum() - 1) / (len(ec) - 1)
+    most_div = div.idxmin()
 
-    # ---- drivers: SHAP-style contribution proxy from the driver study ------
-    drv = dr.head(8)
-    drivers = [{"name": r.indicator, "rho": float(r.peak_correlation),
-                "lead": int(r.optimal_lead_months),
-                "granger_p": float(r.granger_p_value),
-                "sig": bool(r.statistically_significant)}
-               for _, r in drv.iterrows()]
+    dv = DRV[DRV.material == m].sort_values("best_rho", key=np.abs, ascending=False)
+    drivers = [{"name": x.label, "rho": x.best_rho, "lead": int(x.best_lead), "q": x.granger_q_fdr,
+                "sig": bool(x.granger_sig_fdr)} for x in dv.itertuples()][:10]
 
-    data["materials"][key] = {
-        "name": "LME Aluminium" if key == "aluminium" else "PVC resin, Asia spot",
-        "short": "Aluminium" if key == "aluminium" else "PVC resin",
-        "unit": "US$ / tonne",
-        "spot": round(p0, 1),
-        "origin": last_origin.strftime("%b %Y"),
-        "horizons": horizons,
-        "series": series,
-        "backtest": backtest,
-        "ladder": lad,
-        "drivers": drivers,
-        "scorecard": [{"h": int(str(r.horizon).replace("h=", "")),
-                       "ens": float(r.ensemble_mape), "naive": float(r.naive_mape),
-                       "skill": float(r.skill_vs_naive_pct),
-                       "dir": float(r.directional_accuracy_pct),
-                       "dm_p": float(r.dm_p_value)} for _, r in hz.iterrows()],
-        "bands": [{"h": str(r.horizon),
-                   "cov": float(hz.loc[hz.horizon == r.horizon, "band_coverage_p10_p90_pct"].iloc[0]),
-                   "status": str(r.gate_status_75_85),
-                   "width": float(r.mean_bandwidth_pct),
-                   "bias": float(hz.loc[hz.horizon == r.horizon, "bias_pct"].iloc[0])}
-                  for _, r in band.iterrows()],
-        "weights": [{"h": str(r.horizon),
-                     **{m: float(r[m]) for m in ["naive","seasonal_naive","ets","elasticnet",
-                                                 "bayesian_ridge","lightgbm","lstm","nbeats"]}}
-                    for _, r in wts.iterrows()],
-        "regimes": [{"name": str(r.regime), "n": int(r.n_months),
-                     "mape": float(r.ensemble_mape), "skill": float(r.skill_vs_naive_pct),
-                     "dir": float(r.directional_accuracy_pct),
-                     "cov": float(r.band_coverage_p10_p90_pct)} for _, r in rg.iterrows()],
-        "replay": LF,
-        "err_corr": {
-            "mean_off_diag": round(float(
-                ecorr.values[np.triu_indices_from(ecorr.values, 1)].mean()), 3),
-            "nbeats_vs_rest": round(float(
-                ecorr.loc["nbeats", [c for c in ecorr.columns if c != "nbeats"]].mean()), 3),
-        },
-    }
+    bands = [{"window": x.window, "h": int(x.h), "cov": x.coverage_pct, "width": x.mean_width_pct, "n": int(x.n)}
+             for x in bd[bd.band == "conf"].itertuples()]
+    bands_gauss = {int(x.h): x.coverage_pct for x in bd[(bd.band == "gauss") & (bd.window == "development")].itertuples()}
+    regimes = [{"name": x.regime.title(), "n": int(x.n), "mape": x.mape, "skill": x.skill_pct,
+                "dir": r(x.dir_acc_pct, 1), "cov": x.band_coverage_pct} for x in rg.itertuples()]
 
-data["hypotheses"] = json.loads((OUT / "tables/h1_h4_formal_verdicts.json").read_text())
-data["meta"] = {"folds": 78, "window": "Jan 2018 - Jun 2024",
-                "obs": 181, "carrying_cost_pct": 1.0}
+    rs = pd.read_csv(OUT / "replay_signals.csv", parse_dates=["origin"])
+    rs = rs[(rs.material == m) & (rs.window == "development")].sort_values("origin")
+    replay = {**RP[m].get("development", {}),
+              "curve": {"labels": [d.strftime("%b %y") for d in rs.origin],
+                        "signal": list(rs.signal), "price": [r(x, 1) for x in rs.exec_px]},
+              "holdout": RP[m].get("holdout")}
 
-p = BASE / "dashboard/data.json"
-p.write_text(json.dumps(data, indent=1))
-print(f"wrote {p}  ({p.stat().st_size/1024:.0f} KB)")
-for k, v in data["materials"].items():
-    print(f"  {k}: spot {v['spot']}, origin {v['origin']}, "
-          f"h3 {v['horizons'][3]['signal']}, ladder {len(v['ladder'])} models")
+    return {"name": f["display"], "short": "Aluminium" if m == "aluminium" else "PVC proxy",
+            "unit": f["unit"], "cur": "$" if m == "aluminium" else "", "spot": f["spot"],
+            "origin": f["origin"], "stale": f["stale_warning"], "note": f["note"],
+            "shap": f["shap_drivers_h3"], "landed": f["landed"], "horizons": hz,
+            "series": series, "backtest": backtest, "scorecard": scorecard, "ladder": ladder,
+            "fallback_pct": r(w3.share_months_naive_fallback_pct, 1),
+            "err_corr": {"mean_off_diag": r(off.mean(), 2), "most_diversifying": NAMES.get(most_div, most_div),
+                         "its_mean_corr": r(div[most_div], 2)},
+            "drivers": drivers, "bands": bands, "bands_gauss": bands_gauss, "regimes": regimes,
+            "replay": replay}
+
+
+data = {"materials": {m: material(m) for m in ("aluminium", "pvc")},
+        "hypotheses": json.loads((OUT / "drivers" / "hypotheses.json").read_text()),
+        "generated": pd.Timestamp.now().strftime("%d %b %Y")}
+(Path(__file__).parent / "data.json").write_text(json.dumps(data, indent=1, default=str))
+print("wrote dashboard/data.json")

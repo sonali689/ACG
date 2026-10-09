@@ -1,0 +1,25 @@
+material,driver,label,source,n,rho_lead0,rho_lead1,rho_lead2,rho_lead3,rho_lead4,rho_lead5,rho_lead6,best_lead,best_rho,adf_p_max,granger_p,granger_q_fdr,granger_sig_fdr
+aluminium,coal_aus,Australian thermal coal (US$/t),World Bank Pink Sheet,299,0.356,0.131,0.014,-0.026,-0.006,-0.029,-0.107,0,0.356,0.0,0.7237,0.8271,False
+aluminium,gas_eu,Europe natural gas (US$/mmbtu),World Bank Pink Sheet,299,0.134,0.052,0.007,0.021,0.036,0.06,-0.026,0,0.134,0.0,0.9772,0.9772,False
+aluminium,wb_energy,WB energy price index,World Bank Pink Sheet,299,0.458,0.21,0.11,0.014,0.025,0.028,-0.054,0,0.458,0.0,0.3003,0.5148,False
+aluminium,brent,Brent crude (US$/bbl),World Bank Pink Sheet,299,0.437,0.201,0.121,0.012,0.003,-0.002,-0.033,0,0.437,0.0,0.2665,0.492,False
+aluminium,copper,LME copper (US$/t),World Bank Pink Sheet,299,0.677,0.279,0.205,0.092,0.133,0.064,-0.053,0,0.677,0.0,0.0218,0.0747,True
+aluminium,zinc,LME zinc (US$/t),World Bank Pink Sheet,299,0.632,0.19,0.153,0.093,0.147,0.054,-0.006,0,0.632,0.0,0.2454,0.4908,False
+aluminium,cli_china,OECD China leading indicator,OECD,288,0.073,0.1,0.2,0.113,0.035,0.054,0.038,2,0.2,0.0,0.0048,0.0192,True
+aluminium,indpro,"US industrial production, total (INDPRO)",Federal Reserve via FRED,299,0.228,0.129,0.046,0.023,0.012,0.057,-0.004,0,0.228,0.0,0.6984,0.8271,False
+aluminium,ip_aluminium,US industrial production: alumina & aluminium (IPG3313N),Federal Reserve via FRED,299,0.127,0.025,-0.007,-0.017,-0.065,-0.012,0.002,0,0.127,0.0001,0.93,0.9705,False
+aluminium,usd_inr,USD/INR,ECB reference rates,299,-0.3,-0.137,-0.154,-0.129,-0.05,0.001,-0.099,0,-0.3,0.0,0.1523,0.3655,False
+aluminium,gpr,Geopolitical Risk index,Caldara & Iacoviello,299,0.012,0.028,0.041,-0.039,-0.002,0.023,-0.08,6,-0.08,0.0,0.769,0.8389,False
+aluminium,epu,Global Economic Policy Uncertainty,"Baker, Bloom & Davis",299,-0.162,-0.044,-0.092,-0.012,-0.024,-0.038,0.049,0,-0.162,0.0,0.5013,0.6332,False
+aluminium,freight_tsi,US freight transportation services index (TSIFRGHT),BTS via FRED,299,0.148,0.153,0.038,-0.026,0.035,-0.014,0.034,1,0.153,0.0,0.3598,0.5757,False
+pvc,brent,Brent crude (US$/bbl),World Bank Pink Sheet,299,0.184,0.411,0.364,0.277,0.123,-0.009,-0.001,1,0.411,0.0,0.0,0.0,True
+pvc,ppi_organic_chem,PPI basic organic chemicals (WPU0613),BLS via FRED,299,0.176,0.062,0.039,-0.076,-0.066,-0.037,-0.228,6,-0.228,0.0,0.4652,0.6256,False
+pvc,gas_us,US natural gas (US$/mmbtu),World Bank Pink Sheet,299,0.006,0.203,0.217,0.116,0.112,-0.012,0.008,2,0.217,0.0,0.0,0.0001,True
+pvc,wb_energy,WB energy price index,World Bank Pink Sheet,299,0.192,0.442,0.397,0.289,0.133,-0.015,0.009,1,0.442,0.0,0.0,0.0,True
+pvc,cli_china,OECD China leading indicator,OECD,288,-0.099,-0.021,0.178,0.168,0.104,0.086,0.055,2,0.178,0.0,0.0007,0.0036,True
+pvc,indpro,"US industrial production, total (INDPRO)",Federal Reserve via FRED,299,0.264,0.173,0.151,0.107,0.056,0.037,-0.033,0,0.264,0.0,0.4158,0.6238,False
+pvc,ip_resin,US industrial production: resins (IPG3252N),Federal Reserve via FRED,299,0.179,0.048,0.169,0.1,0.05,-0.008,-0.027,0,0.179,0.0006,0.054,0.1619,False
+pvc,usd_inr,USD/INR,ECB reference rates,299,-0.086,-0.232,-0.122,-0.114,-0.054,-0.067,-0.195,1,-0.232,0.0,0.0003,0.002,True
+pvc,gpr,Geopolitical Risk index,Caldara & Iacoviello,299,-0.079,0.032,0.11,0.033,-0.033,-0.068,0.046,2,0.11,0.0,0.0735,0.1959,False
+pvc,epu,Global Economic Policy Uncertainty,"Baker, Bloom & Davis",299,-0.071,-0.032,-0.105,-0.037,-0.054,0.023,-0.051,2,-0.105,0.0,0.4692,0.6256,False
+pvc,freight_tsi,US freight transportation services index (TSIFRGHT),BTS via FRED,299,0.207,0.099,0.082,0.124,0.008,0.088,-0.019,0,0.207,0.0,0.1689,0.3685,False
